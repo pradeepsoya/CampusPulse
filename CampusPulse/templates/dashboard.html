@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}
+CampusPulse Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="content">
+
+    <div class="dashboard-header">
+        <h1>Smart Classroom Monitoring</h1>
+        <p>Monitor your smart classroom in real time.</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card occuppany-card">
+            <div class="icon"><i class="bi bi-people-fill"></i></div>
+            <h5>Occupancy</h5>
+            <h2>Present</h2>
+            <p class="status-normal">Occupied</p>
+        </div>
+
+        <div class="card temperature-card">
+            <div class="icon"><i class="bi bi-thermometer-sun"></i></div>
+            <h5>Temperature</h5>
+            <h2>28°C</h2>
+            <p class="status-normal">Normal</p>
+        </div>
+
+        <div class="card humidity-card">
+            <div class="icon"><i class="bi bi-droplet-fill"></i></div>
+            <h5>Humidity</h5>
+            <h2>67%</h2>
+            <p class="status-normal">Normal</p>
+        </div>
+
+        <div class="card light-intensity-card">
+            <div class="icon"><i class="bi bi-brightness-high-fill"></i></div>
+            <h5>Light Intensity</h5>
+            <h2>420 Lux</h2>
+            <p class="status-normal">Normal</p>
+        </div>
+
+        <div class="card light-status-card">
+            <div class="icon"><i class="bi bi-lightbulb-fill"></i></div>
+            <h5>Light Status</h5>
+            <h2>ON</h2>
+            <p class="status-normal">Active</p>
+        </div>
+
+        <div class="card fan-status-card">
+            <div class="icon"><i class="bi bi-fan"></i></div>
+            <h5>Fan Status</h5>
+            <h2>OFF</h2>
+            <p class="status-normal">Standby</p>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusPulse | Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+<body>
+
+<div class="split-screen">
+
+    <!-- ======================= -->
+    <!--       LEFT PANEL        -->
+    <!-- ======================= -->
+
+    <div class="left-panel">
+
+        <div class="bg-glow glow-one"></div>
+        <div class="bg-glow glow-two"></div>
+        <div class="grid-overlay"></div>
+
+        <div class="floating-icons-left">
+            <span class="float-icon-soft fis-1"><i class="bi bi-wifi"></i></span>
+            <span class="float-icon-soft fis-2"><i class="bi bi-cloud-fill"></i></span>
+            <span class="float-icon-soft fis-3"><i class="bi bi-thermometer-half"></i></span>
+            <span class="float-icon-soft fis-4"><i class="bi bi-brightness-high-fill"></i></span>
+            <span class="float-icon-soft fis-5"><i class="bi bi-person-walking"></i></span>
+        </div>
+
+        <div class="login-card">
+
+            <div class="logo">
+                <span class="logo-ring"></span>
+                <i class="bi bi-cpu-fill"></i>
+                <h2>CampusPulse</h2>
+                <p class="eyebrow">Smart Classroom Monitoring Platform</p>
+            </div>
+
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                System Online
+            </div>
+
+            <div class="welcome-block">
+                <p>Sign in to continue monitoring your smart classroom.</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" id="loginForm" novalidate>
+
+                {% csrf_token %}
+
+                <div class="input-group" id="usernameGroup">
+                    <i class="bi bi-person-fill"></i>
+                    <input
+                        type="text"
+                        name="username"
+                        id="usernameField"
+                        placeholder="Username">
+                </div>
+                <span class="field-error" id="usernameError"></span>
+
+                <div class="input-group password-group" id="passwordGroup">
+                    <i class="bi bi-lock-fill"></i>
+                    <input
+                        type="password"
+                        name="password"
+                        id="passwordField"
+                        placeholder="Password">
+                    <button type="button" class="toggle-eye" id="toggleEyeBtn" aria-label="Show password">
+                        <i class="bi bi-eye-fill eye-show"></i>
+                        <i class="bi bi-eye-slash-fill eye-hide d-none"></i>
+                    </button>
+                </div>
+                <span class="field-error" id="passwordError"></span>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="btn-text">Login</span>
+                    <i class="bi bi-arrow-right btn-arrow"></i>
+                    <span class="btn-spinner d-none"></span>
+                </button>
+
+            </form>
+
+            <div class="card-footer">
+                <span>© 2026 CampusPulse</span>
+                <span class="dot">•</span>
+                <span>Version 1.0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ======================= -->
+    <!--       RIGHT PANEL       -->
+    <!-- ======================= -->
+
+    <div class="right-panel">
+
+        <div class="floating-icons">
+            <span class="float-icon fi-1"><i class="bi bi-thermometer-sun"></i></span>
+            <span class="float-icon fi-2"><i class="bi bi-droplet-fill"></i></span>
+            <span class="float-icon fi-3"><i class="bi bi-person-walking"></i></span>
+            <span class="float-icon fi-4"><i class="bi bi-lightbulb-fill"></i></span>
+            <span class="float-icon fi-5"><i class="bi bi-lightning-charge-fill"></i></span>
+            <span class="float-icon fi-6"><i class="bi bi-wifi"></i></span>
+        </div>
+
+        <div class="right-inner">
+
+            <div class="architecture">
+
+                <div class="arch-node node-cloud">
+                    <i class="bi bi-cloud-fill"></i>
+                    <span>Cloud</span>
+                </div>
+
+                <svg class="arch-line line-single" viewBox="0 0 4 50" preserveAspectRatio="none">
+                    <line x1="2" y1="0" x2="2" y2="50" />
+                    <circle class="flow-dot" r="2.2">
+                        <animateMotion dur="5s" repeatCount="indefinite" path="M 2 0 L 2 50" />
+                    </circle>
+                </svg>
+
+                <div class="arch-node node-esp">
+                    <i class="bi bi-broadcast-pin"></i>
+                    <span>ESP32</span>
+                </div>
+
+                <svg class="fan-lines" viewBox="0 0 560 60" preserveAspectRatio="none">
+                    <path d="M 280 0 Q 175 30 70 60" />
+                    <path d="M 280 0 Q 258 30 235 60" />
+                    <path d="M 280 0 Q 302 30 325 60" />
+                    <path d="M 280 0 Q 385 30 490 60" />
+                    <circle class="flow-dot" r="2">
+                        <animateMotion dur="5.2s" begin="0s" repeatCount="indefinite" path="M 280 0 Q 175 30 70 60" />
+                    </circle>
+                    <circle class="flow-dot" r="2">
+                        <animateMotion dur="5.2s" begin="0.6s" repeatCount="indefinite" path="M 280 0 Q 258 30 235 60" />
+                    </circle>
+                    <circle class="flow-dot" r="2">
+                        <animateMotion dur="5.2s" begin="1.2s" repeatCount="indefinite" path="M 280 0 Q 302 30 325 60" />
+                    </circle>
+                    <circle class="flow-dot" r="2">
+                        <animateMotion dur="5.2s" begin="1.8s" repeatCount="indefinite" path="M 280 0 Q 385 30 490 60" />
+                    </circle>
+                </svg>
+
+                <div class="sensor-row">
+
+                    <div class="arch-node node-sensor sensor-temp">
+                        <i class="bi bi-thermometer-half"></i>
+                        <span>Temperature</span>
+                    </div>
+
+                    <div class="arch-node node-sensor sensor-humidity">
+                        <i class="bi bi-droplet-half"></i>
+                        <span>Humidity</span>
+                    </div>
+
+                    <div class="arch-node node-sensor sensor-pir">
+                        <i class="bi bi-person-bounding-box"></i>
+                        <span>PIR Motion</span>
+                    </div>
+
+                    <div class="arch-node node-sensor sensor-light">
+                        <i class="bi bi-brightness-high-fill"></i>
+                        <span>Light</span>
+                    </div>
+
+                </div>
+
+                <svg class="fan-lines fan-lines-in" viewBox="0 0 560 60" preserveAspectRatio="none">
+                    <path d="M 70 0 Q 175 30 280 60" />
+                    <path d="M 235 0 Q 258 30 280 60" />
+                    <path d="M 325 0 Q 302 30 280 60" />
+                    <path d="M 490 0 Q 385 30 280 60" />
+                    <circle class="flow-dot" r="2">
+                        <animateMotion dur="5.6s" begin="0.4s" repeatCount="indefinite" path="M 70 0 Q 175 30 280 60" />
+                    </circle>
+                    <circle class="flow-dot" r="2">
+                        <animateMotion dur="5.6s" begin="1s" repeatCount="indefinite" path="M 235 0 Q 258 30 280 60" />
+                    </circle>
+                    <circle class="flow-dot" r="2">
+                        <animateMotion dur="5.6s" begin="1.6s" repeatCount="indefinite" path="M 325 0 Q 302 30 280 60" />
+                    </circle>
+                    <circle class="flow-dot" r="2">
+                        <animateMotion dur="5.6s" begin="2.2s" repeatCount="indefinite" path="M 490 0 Q 385 30 280 60" />
+                    </circle>
+                </svg>
+
+                <div class="arch-node node-dashboard">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </div>
+
+            </div>
+
+            <!-- Signature element: live telemetry readout card -->
+            <div class="telemetry-card">
+                <div class="telemetry-head">
+                    <span class="telemetry-head-left">
+                        <span class="live-badge">
+                            <span class="live-dot live-dot-sm"></span>
+                            Live
+                        </span>
+                        <span>Block A / Room 204</span>
+                    </span>
+                    <span class="telemetry-updated">
+                        Updated <em>just now</em>
+                    </span>
+                </div>
+                <div class="telemetry-grid">
+                    <div class="telemetry-item">
+                        <i class="bi bi-thermometer-half"></i>
+                        <div>
+                            <strong>24.6°C</strong>
+                            <span>Temperature</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <i class="bi bi-droplet-half"></i>
+                        <div>
+                            <strong>48%</strong>
+                            <span>Humidity</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <i class="bi bi-person-bounding-box"></i>
+                        <div>
+                            <strong>Occupied</strong>
+                            <span>Motion Status</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <i class="bi bi-brightness-high-fill"></i>
+                        <div>
+                            <strong>342 lux</strong>
+                            <span>Ambient Light</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Real-time Classroom Monitoring
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Automated Energy Management
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Occupancy Detection
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Cloud Connected
+                </div>
+            </div>
+
+            <!-- Mobile-only simplified illustration: replaces the full
+                 diagram + telemetry card below 768px so the product
+                 identity still reads without the extra weight. -->
+            <div class="mobile-iot-strip">
+                <div class="miot-icons">
+                    <span class="miot-icon"><i class="bi bi-cloud-fill"></i></span>
+                    <span class="miot-line"></span>
+                    <span class="miot-icon"><i class="bi bi-broadcast-pin"></i></span>
+                    <span class="miot-line"></span>
+                    <span class="miot-icon"><i class="bi bi-cpu-fill"></i></span>
+                    <span class="miot-line"></span>
+                    <span class="miot-icon"><i class="bi bi-grid-1x2-fill"></i></span>
+                </div>
+                <div class="miot-caption">
+                    <span class="live-dot live-dot-sm"></span>
+                    Room 204 · 24.6°C · Occupied
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{% static 'js/login.js' %}"></script>
+
+</body>
+</html>
