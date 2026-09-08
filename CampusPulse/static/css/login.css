@@ -1,1149 +1,471 @@
-:root{
-    --bg:#0B0E13;
-    --panel-1:#0D1119;
-    --card-bg:rgba(16,20,28,.72);
-    --border-soft:rgba(255,255,255,.08);
-    --text:#EAECEF;
-    --muted:#9AA1AF;
-    --dim:#5B6472;
+:root {
+    --bg: #0D0B14;
+    --bg-panel: #14111F;
+    --card-bg-start: #191526;
+    --card-bg-end: #150F1F;
+    --border-soft: rgba(255, 255, 255, 0.06);
+    --border-hover: rgba(139, 124, 246, 0.45);
+    
+    --text: #F1EEFB;
+    --muted: #8B85A0;
+    --dim: #665F7A;
 
-    --mint:#7CFFB2;
-    --mint-deep:#31D67A;
-    --cyan:#5EC8F2;
-    --amber:#FFB020;
-    --coral:#FF8A5B;
-    --violet:#C9A6FF;
+    /* Theme Accents */
+    --violet: #8B7CF6;
+    --violet-deep: #7C3AED;
+    --violet-glow: rgba(139, 124, 246, 0.35);
+    --cyan: #38BDF8;
+    --rose: #FB7185;
+    --amber: #FBBF24;
+    --teal: #2DD4BF;
+    --mint: #5EE6A0;
 
-    --radius-lg:20px;
-    --radius-md:14px;
-    --radius-sm:10px;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --radius-pill: 999px;
 
-    --font-display:'Space Grotesk', sans-serif;
-    --font-body:'Poppins', sans-serif;
-    --font-mono:'JetBrains Mono', monospace;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:var(--font-body);
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-body);
 }
 
-html, body{
-    height:100%;
+html, body {
+    height: 100%;
 }
 
-body{
-    background:var(--bg);
-    color:var(--text);
-    overflow-x:hidden;
+body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    min-height: 100dvh;
+    position: relative;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
 }
 
-/* =======================
-        Split Layout
-======================= */
+/* ============ Background Layers ============ */
 
-/* Desktop/laptop: the whole experience is one fixed viewport — no
-   scrolling. Content scales down via clamp() instead of overflowing.
-   Tablet/mobile switch this to a natural stacked flow further down. */
-
-.split-screen{
-    display:flex;
-    height:100vh;
-    height:100dvh;
-    width:100%;
-    position:relative;
-    overflow:hidden;
-}
-
-/* Bridging glow so the seam between the two panels feels connected
-   rather than abrupt. Widened now that the hard divider is gone, so
-   the two panels read as one continuous surface. */
-.split-screen::before{
-    content:'';
-    position:absolute;
-    top:0;
-    bottom:0;
-    left:35%;
-    width:280px;
-    transform:translateX(-140px);
-    background:radial-gradient(ellipse at center, rgba(124,255,178,.05), rgba(94,200,242,.045) 55%, transparent 78%);
-    filter:blur(60px);
-    pointer-events:none;
-    z-index:1;
-}
-
-.left-panel{
-    width:35%;
-    height:100%;
-
-    position:relative;
-    overflow:hidden;
-
-    background:
-        radial-gradient(circle at 28% 18%, rgba(124,255,178,.057), transparent 45%),
-        linear-gradient(160deg, var(--bg) 0%, var(--panel-1) 60%, var(--bg) 100%);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:clamp(16px, 4vh, 40px) clamp(20px, 3vw, 40px);
-}
-
-/* Divider removed intentionally — the background now flows naturally
-   between the two panels instead of splitting them into two surfaces. */
-
-.right-panel{
-    width:65%;
-    height:100%;
-
-    position:relative;
-    overflow:hidden;
-
-    background:
-        radial-gradient(circle at 78% 12%, rgba(94,200,242,.08), transparent 50%),
-        radial-gradient(circle at 15% 88%, rgba(124,255,178,.057), transparent 50%),
-        var(--panel-1);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:clamp(20px, 5vh, 56px) clamp(18px, 3vw, 40px);
-}
-
-.right-inner{
-    position:relative;
-    z-index:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    width:100%;
-    max-width:460px;
-    max-height:100%;
-}
-
-/* Subtle PCB-style grid texture, grounds the "circuit board" identity */
-.grid-overlay{
-    position:absolute;
-    inset:0;
-    z-index:0;
-    pointer-events:none;
-    opacity:.5;
+.bg-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.45;
     background-image:
-        linear-gradient(rgba(124,255,178,.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(124,255,178,.035) 1px, transparent 1px);
-    background-size:34px 34px;
-    -webkit-mask-image:radial-gradient(circle at 30% 25%, rgba(0,0,0,.9), transparent 62%);
-    mask-image:radial-gradient(circle at 30% 25%, rgba(0,0,0,.9), transparent 62%);
+        linear-gradient(rgba(139, 124, 246, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 124, 246, 0.04) 1px, transparent 1px);
+    background-size: 36px 36px;
+    -webkit-mask-image: radial-gradient(circle at 50% 40%, rgba(0,0,0,0.9), transparent 70%);
+    mask-image: radial-gradient(circle at 50% 40%, rgba(0,0,0,0.9), transparent 70%);
 }
 
-/* Faint left-panel IoT iconography — pure background texture, kept
-   extremely subtle so it never competes with the login card */
-.floating-icons-left{
-    position:absolute;
-    inset:0;
-    z-index:0;
-    pointer-events:none;
+.bg-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
 }
 
-.float-icon-soft{
-    position:absolute;
-    font-size:22px;
-    color:var(--mint);
-    opacity:.035;
-    animation:floatIcon 14s ease-in-out infinite;
+.glow-a {
+    width: 440px;
+    height: 440px;
+    background: var(--violet);
+    opacity: 0.12;
+    top: -140px;
+    left: -120px;
 }
 
-.fis-1{ top:10%; left:12%; animation-delay:0s; }
-.fis-2{ top:20%; right:14%; animation-delay:2s; color:var(--cyan); }
-.fis-3{ bottom:22%; left:9%; animation-delay:4s; color:var(--coral); }
-.fis-4{ bottom:14%; right:16%; animation-delay:1s; color:var(--amber); }
-.fis-5{ top:52%; right:8%; animation-delay:3s; }
-
-/* =======================
-    Ambient glow circles
-======================= */
-
-.bg-glow{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(90px);
-    pointer-events:none;
-    z-index:0;
-    animation:drift 22s ease-in-out infinite;
+.glow-b {
+    width: 380px;
+    height: 380px;
+    background: var(--cyan);
+    opacity: 0.08;
+    bottom: -140px;
+    right: -100px;
 }
 
-.glow-one{
-    width:340px;
-    height:340px;
-    background:var(--mint);
-    top:-100px;
-    left:-100px;
-    opacity:.266;
+.bg-icons {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
 }
 
-.glow-two{
-    width:240px;
-    height:240px;
-    background:var(--cyan);
-    bottom:-90px;
-    right:-70px;
-    opacity:.276;
-    animation:drift 26s ease-in-out infinite;
-    animation-delay:6s;
+.bg-icon {
+    position: absolute;
+    font-size: 26px;
+    color: var(--violet);
+    opacity: 0.06;
 }
 
-@keyframes drift{
-    0%, 100%{ transform:translate(0, 0) scale(1); }
-    50%{ transform:translate(24px, 16px) scale(1.06); }
+.i1 { top: 12%; left: 16%; color: var(--rose); }
+.i2 { top: 18%; right: 14%; color: var(--cyan); }
+.i3 { bottom: 20%; left: 10%; color: var(--amber); }
+.i4 { bottom: 16%; right: 12%; color: var(--violet); }
+.i5 { top: 50%; left: 6%; color: var(--cyan); }
+.i6 { top: 46%; right: 7%; color: var(--teal); }
+
+/* ============ Login Card Module ============ */
+
+.login-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-/* =======================
-        Login Card
-======================= */
+.login-card {
+    --accent: var(--violet);
 
-.login-card{
-    width:100%;
-    max-width:325px;
-    max-height:100%;
-    position:relative;
-    z-index:1;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    overflow: hidden;
 
-    background:rgba(16,20,28,.22);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
+    background: linear-gradient(180deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 
-    border:1px solid rgba(255,255,255,.035);
-    border-radius:24px;
-    padding:clamp(18px, 4vh, 52px) clamp(22px, 3vw, 34px) clamp(14px, 3vh, 30px);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    padding: 38px 32px 28px;
 
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.22),
-        0 0 24px rgba(124,255,178,.02),
-        0 1px 0 rgba(255,255,255,.03) inset;
-
-    opacity:0;
-    transform:translateY(18px);
-    animation:cardIn .7s cubic-bezier(.22,1,.36,1) forwards, float 7s ease-in-out .7s infinite;
+    box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.6);
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.login-card::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:20%;
-    right:20%;
-    height:1px;
-    background:linear-gradient(90deg, transparent, rgba(124,255,178,.25), transparent);
+.login-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 42px -12px rgba(0, 0, 0, 0.7);
 }
 
-@keyframes cardIn{
-    to{
-        opacity:1;
-        transform:translateY(0);
+/* Status Indicator Dot (Top Right) */
+.login-card::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+    animation: blink 2.4s ease-in-out infinite;
+}
+
+/* Animated Pulse-Trace Baseline Signature */
+.login-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 14px;
+
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpolyline points='0,10 30,10 38,10 42,2 46,18 50,10 58,10 100,10' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpolyline points='0,10 30,10 38,10 42,2 46,18 50,10 58,10 100,10' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: repeat-x;
+    mask-repeat: repeat-x;
+    -webkit-mask-size: 80px 14px;
+    mask-size: 80px 14px;
+
+    background-color: var(--accent);
+    opacity: 0.35;
+    animation: trace 3.2s linear infinite;
+}
+
+@keyframes trace {
+    from { transform: translateX(0); }
+    to { transform: translateX(-80px); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+}
+
+/* ============ Brand Header ============ */
+
+.brand {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: rgba(139, 124, 246, 0.16);
+    color: var(--violet);
+    font-size: 22px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(139, 124, 246, 0.25);
+    box-shadow: 0 4px 16px rgba(139, 124, 246, 0.15);
+}
+
+.brand h1 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.2px;
+    margin-bottom: 4px;
+}
+
+.brand-subtitle {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+    line-height: 1.5;
+    max-width: 290px;
+    margin: 0 auto;
+}
+
+/* ============ System Alert Box ============ */
+
+.alert-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(251, 113, 133, 0.08);
+    border: 1px solid rgba(251, 113, 133, 0.24);
+    color: var(--rose);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    margin-bottom: 18px;
+}
+
+.alert-box i {
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+/* ============ Input Field Groups ============ */
+
+.field-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+
+    padding: 0 14px;
+    height: 46px;
+    margin-bottom: 16px;
+
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.input-group:hover {
+    border-color: rgba(139, 124, 246, 0.35);
+}
+
+.input-group:focus-within {
+    border-color: var(--violet);
+    background: rgba(139, 124, 246, 0.04);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(139, 124, 246, 0.15);
+}
+
+.input-group i {
+    color: var(--muted);
+    font-size: 16px;
+    transition: color 0.25s ease;
+}
+
+.input-group:focus-within i {
+    color: var(--violet);
+}
+
+.input-group input {
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 13px;
+    font-family: var(--font-body);
+}
+
+.input-group input::placeholder {
+    color: var(--dim);
+}
+
+/* ============ Meta Row ============ */
+
+.form-meta {
+    display: flex;
+    justify-content: flex-end;
+    margin: -4px 0 18px;
+}
+
+.forgot-link {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--cyan);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.forgot-link:hover {
+    color: #7DD3FC;
+    text-decoration: underline;
+}
+
+/* ============ Primary Action Button ============ */
+
+.login-btn {
+    width: 100%;
+    height: 46px;
+
+    background: linear-gradient(135deg, var(--violet) 0%, var(--violet-deep) 100%);
+    border: none;
+    border-radius: var(--radius-md);
+
+    color: #FFFFFF;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    box-shadow: 0 4px 16px var(--violet-glow);
+    transition: transform 0.2s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: 0 8px 24px var(--violet-glow);
+}
+
+.login-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.login-btn:focus-visible {
+    outline: 2px solid var(--violet);
+    outline-offset: 2px;
+}
+
+/* ============ Divider & Signup Link ============ */
+
+.divider {
+    height: 1px;
+    background: var(--border-soft);
+    margin: 20px 0 16px;
+}
+
+.signup-line {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+.signup-line a {
+    color: #B3A5FF;
+    font-weight: 500;
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+.signup-line a:hover {
+    color: var(--violet);
+    text-decoration: underline;
+}
+
+/* ============ Footer Diagnostic Line ============ */
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-soft);
+
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    letter-spacing: 0.3px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--violet);
+    box-shadow: 0 0 8px var(--violet);
+    animation: blink 2s ease-in-out infinite;
+}
+
+.dot-sep {
+    margin: 0 2px;
+}
+
+/* ============ Responsive Overrides ============ */
+
+@media (max-width: 420px) {
+    .login-card {
+        padding: 30px 20px 22px;
+        border-radius: 16px;
     }
 }
 
-@keyframes float{
-    0%, 100%{ transform:translateY(0); }
-    50%{ transform:translateY(-4px); }
-}
-
-/* =======================
-          Logo
-======================= */
-
-.logo{
-    --logo-size:clamp(36px, 5vh, 50px);
-    position:relative;
-    text-align:center;
-    margin-bottom:clamp(12px, 3vh, 40px);
-    animation:logoBob 5s ease-in-out infinite;
-}
-
-@keyframes logoBob{
-    0%, 100%{ transform:translateY(0); }
-    50%{ transform:translateY(-3px); }
-}
-
-.logo i{
-    position:relative;
-    font-size:clamp(18px, 2.4vh, 27px);
-    color:var(--mint);
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:var(--logo-size);
-    height:var(--logo-size);
-    border-radius:14px;
-    background:rgba(124,255,178,.1);
-    margin-bottom:clamp(8px, 1.6vh, 18px);
-    transition:transform .3s ease, background .3s ease;
-}
-
-.logo-ring{
-    position:absolute;
-    top:0;
-    left:50%;
-    width:var(--logo-size);
-    height:var(--logo-size);
-    border-radius:14px;
-    transform:translateX(-50%);
-    box-shadow:0 0 0 0 rgba(124,255,178,.35);
-    animation:ringPulse 2.6s ease-out infinite;
-    pointer-events:none;
-}
-
-@keyframes ringPulse{
-    0%{ box-shadow:0 0 0 0 rgba(124,255,178,.35); }
-    70%{ box-shadow:0 0 0 12px rgba(124,255,178,0); }
-    100%{ box-shadow:0 0 0 0 rgba(124,255,178,0); }
-}
-
-.logo i:hover{
-    transform:rotate(3deg) scale(1.05);
-    background:rgba(124,255,178,.16);
-}
-
-.logo h2{
-    font-family:var(--font-display);
-    font-size:clamp(19px, 2.4vh, 27px);
-    font-weight:700;
-    color:var(--text);
-    margin-bottom:clamp(4px, 1vh, 10px);
-    letter-spacing:.1px;
-}
-
-.logo .eyebrow{
-    font-family:var(--font-mono);
-    font-size:9.5px;
-    letter-spacing:1.1px;
-    color:var(--dim);
-    opacity:.75;
-    text-transform:uppercase;
-}
-
-/* =======================
-       Status Badge
-======================= */
-
-.status-badge{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:7px;
-
-    width:fit-content;
-    margin:0 auto clamp(12px, 3vh, 38px);
-    padding:clamp(3px, .8vh, 5px) clamp(9px, 1.2vw, 13px);
-
-    background:rgba(124,255,178,.06);
-    border:1px solid rgba(124,255,178,.13);
-    border-radius:999px;
-    box-shadow:0 0 14px rgba(124,255,178,.05);
-
-    font-family:var(--font-mono);
-    font-size:10px;
-    font-weight:500;
-    letter-spacing:.4px;
-    color:var(--mint);
-    text-transform:uppercase;
-}
-
-.status-dot{
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:var(--mint);
-    box-shadow:0 0 6px var(--mint);
-    animation:blink 2.4s ease-in-out infinite;
-}
-
-@keyframes blink{
-    0%, 100%{ opacity:1; }
-    50%{ opacity:.35; }
-}
-
-/* =======================
-       Welcome Block
-======================= */
-
-.welcome-block{
-    text-align:center;
-    margin-bottom:clamp(12px, 3vh, 40px);
-    padding-bottom:clamp(10px, 2vh, 32px);
-    border-bottom:1px solid rgba(255,255,255,.045);
-}
-
-.welcome-block h1{
-    font-family:var(--font-display);
-    font-size:clamp(17px, 2vh, 22px);
-    font-weight:700;
-    color:var(--text);
-    letter-spacing:-.2px;
-    margin-bottom:clamp(5px, 1vh, 12px);
-}
-
-.welcome-block p{
-    font-size:clamp(11.5px, 1.3vh, 12.5px);
-    color:#B7BDC9;
-    line-height:1.7;
-}
-
-/* =======================
-          Alert
-======================= */
-
-.alert{
-    background:rgba(255,107,107,.1);
-    border:1px solid rgba(255,107,107,.25);
-    color:#FF6B6B;
-    font-size:13px;
-    padding:11px 14px;
-    border-radius:8px;
-    margin-bottom:18px;
-    text-align:center;
-}
-
-/* =======================
-       Input Fields
-======================= */
-
-.input-group{
-    position:relative;
-    display:flex;
-    align-items:center;
-    gap:12px;
-
-    background:rgba(255,255,255,.018);
-    border:1px solid rgba(255,255,255,.09);
-    border-radius:var(--radius-sm);
-    box-shadow:inset 0 1px 2px rgba(0,0,0,.16);
-
-    padding:0 14px;
-    margin-bottom:clamp(8px, 2vh, 20px);
-    height:clamp(40px, 6.2vh, 50px);
-
-    transition:border-color .35s ease, box-shadow .35s ease, transform .25s ease, background .35s ease;
-}
-
-.input-group:hover{
-    border-color:rgba(124,255,178,.3);
-    background:rgba(255,255,255,.028);
-    box-shadow:inset 0 1px 2px rgba(0,0,0,.16), 0 0 14px rgba(124,255,178,.05);
-}
-
-.input-group:focus-within{
-    border-color:var(--mint);
-    background:rgba(124,255,178,.035);
-    box-shadow:inset 0 1px 2px rgba(0,0,0,.12), 0 0 0 4px rgba(124,255,178,.1), 0 0 26px rgba(124,255,178,.14);
-    transform:scale(1.008);
-}
-
-.input-group i{
-    color:var(--muted);
-    font-size:15px;
-    transition:color .3s ease;
-}
-
-.input-group:focus-within i{
-    color:var(--mint);
-}
-
-.input-group input{
-    width:100%;
-    height:100%;
-
-    background:none;
-    border:none;
-    outline:none;
-
-    color:var(--text);
-    font-size:13.5px;
-    font-family:var(--font-body);
-    letter-spacing:.2px;
-}
-
-.input-group input::placeholder{
-    color:#8C93A2;
-    transition:color .3s ease, opacity .3s ease;
-}
-
-.input-group input:focus::placeholder{
-    opacity:.6;
-}
-
-.password-group input{
-    padding-right:30px;
-}
-
-.input-group.invalid{
-    border-color:#FF6B6B;
-}
-
-.field-error{
-    display:block;
-    min-height:0;
-    font-size:11px;
-    color:#FF8A8A;
-    margin-bottom:0;
-    margin-top:-8px;
-    padding-left:4px;
-    opacity:0;
-    transform:translateY(-2px);
-    transition:opacity .2s ease, transform .2s ease, min-height .2s ease, margin-bottom .2s ease;
-}
-
-/* Only reserve space for the error once it actually has something to
-   say — keeps the resting form more compact on short viewports. */
-.field-error.visible{
-    min-height:14px;
-    margin-bottom:clamp(4px, 1vh, 8px);
-    opacity:1;
-    transform:translateY(0);
-}
-
-/* =======================
-      Password Toggle
-======================= */
-
-.toggle-eye{
-    position:absolute;
-    right:14px;
-    top:50%;
-    transform:translateY(-50%);
-
-    width:auto;
-    padding:0;
-    margin:0;
-
-    background:none;
-    border:none;
-    color:var(--dim);
-    font-size:15px;
-    cursor:pointer;
-
-    display:flex;
-    align-items:center;
-
-    transition:color .3s ease, transform .3s ease;
-}
-
-.toggle-eye:hover{
-    color:var(--mint);
-    transform:translateY(-50%) scale(1.12);
-}
-
-.toggle-eye:active{
-    transform:translateY(-50%) scale(.94);
-}
-
-.d-none{
-    display:none;
-}
-
-/* =======================
-        Login Button
-======================= */
-
-.login-btn{
-    width:100%;
-    height:clamp(40px, 6.2vh, 49px);
-    position:relative;
-    overflow:hidden;
-
-    background:linear-gradient(135deg, #5EF38C 0%, var(--mint-deep) 100%);
-    border:none;
-    border-radius:var(--radius-sm);
-
-    color:var(--bg);
-    font-size:14px;
-    font-weight:600;
-    font-family:var(--font-body);
-
-    cursor:pointer;
-    margin-top:clamp(2px, 1vh, 6px);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-
-    transition:transform .25s ease, box-shadow .3s ease, filter .3s ease, background .3s ease;
-}
-
-.login-btn:hover{
-    transform:translateY(-2px);
-    filter:brightness(1.12);
-    background:linear-gradient(135deg, #79FFA6 0%, #3CE88A 100%);
-    box-shadow:0 12px 28px rgba(94,243,140,.3), 0 0 22px rgba(124,255,178,.25);
-}
-
-.login-btn:hover .btn-arrow{
-    transform:translateX(3px);
-}
-
-.login-btn:active{
-    transform:translateY(0) scale(.96);
-    filter:brightness(1.02);
-}
-
-.login-btn:disabled{
-    cursor:not-allowed;
-    opacity:.85;
-    transform:none;
-}
-
-.btn-ripple{
-    position:absolute;
-    border-radius:50%;
-    background:rgba(11,14,19,.28);
-    transform:scale(0);
-    animation:rippleOut .6s ease-out forwards;
-    pointer-events:none;
-}
-
-@keyframes rippleOut{
-    to{
-        transform:scale(1);
-        opacity:0;
+@media (prefers-reduced-motion: reduce) {
+    .login-btn,
+    .login-card::after { 
+        transition: none;
+        animation: none;
     }
 }
 
-.btn-arrow{
-    font-size:13px;
-    transition:transform .25s ease;
-}
-
-.btn-spinner{
-    width:16px;
-    height:16px;
-    border:2px solid rgba(11,14,19,.3);
-    border-top-color:var(--bg);
-    border-radius:50%;
-    animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-    to{ transform:rotate(360deg); }
-}
-
-/* =======================
-        Card Footer
-======================= */
-
-.card-footer{
-    text-align:center;
-    margin-top:clamp(10px, 3vh, 38px);
-    padding-top:clamp(8px, 2vh, 24px);
-    border-top:1px solid rgba(255,255,255,.045);
-
-    font-family:var(--font-mono);
-    font-size:10px;
-    letter-spacing:.3px;
-    color:var(--dim);
-}
-
-.card-footer .dot{
-    margin:0 6px;
-}
-
-/* =======================
-   RIGHT PANEL — Floating
-   background icons
-======================= */
-
-.floating-icons{
-    position:absolute;
-    inset:0;
-    z-index:0;
-    pointer-events:none;
-}
-
-.float-icon{
-    position:absolute;
-    font-size:20px;
-    color:rgba(124,255,178,.09);
-    animation:floatIcon 13s ease-in-out infinite;
-}
-
-.float-icon i{
-    display:block;
-}
-
-.fi-1{ top:14%; left:20%; animation-delay:0s; color:rgba(255,138,91,.08); }
-.fi-2{ top:18%; right:18%; animation-delay:1.5s; color:rgba(94,200,242,.09); }
-.fi-3{ bottom:46%; left:12%; animation-delay:3.2s; color:rgba(124,255,178,.08); }
-.fi-4{ top:60%; right:10%; animation-delay:1.8s; color:rgba(255,209,102,.09); }
-.fi-5{ bottom:30%; right:26%; animation-delay:4.4s; color:rgba(124,255,178,.08); }
-.fi-6{ top:44%; left:8%; animation-delay:2.6s; color:rgba(94,200,242,.08); }
-
-@keyframes floatIcon{
-    0%, 100%{ transform:translateY(0); }
-    50%{ transform:translateY(-10px); }
-}
-
-/* =======================
-   RIGHT PANEL — Architecture
-   flow diagram
-======================= */
-
-.architecture{
-    position:relative;
-    z-index:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    margin-bottom:clamp(14px, 3vh, 36px);
-    gap:2px;
-}
-
-.arch-node{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:clamp(4px, 1vh, 8px);
-
-    background:rgba(16,20,28,.6);
-    border:1px solid var(--border-soft);
-    border-radius:var(--radius-md);
-    padding:clamp(8px, 1.6vh, 13px) clamp(14px, 2vw, 20px);
-
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-
-    animation:nodeFloat 6s ease-in-out infinite;
-}
-
-.arch-node i{
-    font-size:clamp(16px, 2.2vh, 21px);
-}
-
-.arch-node span{
-    font-family:var(--font-mono);
-    font-size:clamp(9px, 1.1vh, 10.5px);
-    letter-spacing:.4px;
-    color:var(--muted);
-    text-transform:uppercase;
-    white-space:nowrap;
-}
-
-@keyframes nodeFloat{
-    0%, 100%{ transform:translateY(0); }
-    50%{ transform:translateY(-5px); }
-}
-
-.node-cloud i{ color:var(--cyan); text-shadow:0 0 14px rgba(94,200,242,.5); }
-.node-esp i{ color:var(--mint); text-shadow:0 0 14px rgba(124,255,178,.5); }
-.node-dashboard i{ color:var(--violet); text-shadow:0 0 14px rgba(201,166,255,.5); }
-
-.arch-line.line-single{
-    width:2px;
-    height:clamp(22px, 5vh, 46px);
-    overflow:visible;
-}
-
-.arch-line.line-single line{
-    stroke:rgba(124,255,178,.32);
-    stroke-width:2;
-    stroke-dasharray:6 6;
-    animation:flowLine 4.5s linear infinite;
-}
-
-@keyframes flowLine{
-    to{ stroke-dashoffset:-24; }
-}
-
-.flow-dot{
-    fill:var(--mint);
-    filter:drop-shadow(0 0 3px rgba(124,255,178,.75));
-    opacity:.6;
-}
-
-.fan-lines{
-    width:280px;
-    max-width:60%;
-    height:clamp(32px, 6vh, 58px);
-    margin:0 auto;
-    overflow:visible;
-}
-
-.fan-lines path{
-    fill:none;
-    stroke:rgba(124,255,178,.28);
-    stroke-width:1.5;
-    stroke-dasharray:5 5;
-    animation:flowLine 4.5s linear infinite;
-}
-
-.sensor-row{
-    display:flex;
-    gap:clamp(8px, 1.6vw, 16px);
-    margin:clamp(4px, 1vh, 8px) 0;
-    flex-wrap:wrap;
-    justify-content:center;
-}
-
-.node-sensor{
-    padding:clamp(7px, 1.4vh, 11px) clamp(10px, 1.6vw, 15px);
-}
-
-.node-sensor i{
-    font-size:clamp(14px, 1.8vh, 17px);
-}
-
-.sensor-temp i{ color:var(--coral); }
-.sensor-humidity i{ color:var(--cyan); }
-.sensor-pir i{ color:var(--mint); }
-.sensor-light i{ color:var(--amber); }
-
-/* =======================
-   RIGHT PANEL — Telemetry
-   signature card
-======================= */
-
-.telemetry-card{
-    position:relative;
-    z-index:1;
-    width:100%;
-
-    background:rgba(16,20,28,.55);
-    border:1px solid var(--border-soft);
-    border-radius:var(--radius-md);
-    padding:clamp(10px, 2vh, 16px) clamp(14px, 2vw, 20px) clamp(12px, 2.2vh, 18px);
-    margin-bottom:clamp(10px, 2vh, 22px);
-
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-}
-
-.telemetry-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-
-    font-family:var(--font-mono);
-    font-size:10.5px;
-    letter-spacing:.3px;
-    color:var(--muted);
-    text-transform:uppercase;
-
-    margin-bottom:clamp(8px, 1.6vh, 14px);
-    padding-bottom:clamp(6px, 1.4vh, 12px);
-    border-bottom:1px solid var(--border-soft);
-}
-
-.telemetry-head-left{
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-.live-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
-    font-family:var(--font-mono);
-    font-size:9px;
-    font-weight:600;
-    letter-spacing:.5px;
-    color:var(--mint);
-    background:rgba(124,255,178,.09);
-    border:1px solid rgba(124,255,178,.22);
-    border-radius:999px;
-    padding:2px 8px 2px 6px;
-    text-transform:uppercase;
-}
-
-.telemetry-updated{
-    display:flex;
-    align-items:center;
-    gap:6px;
-    font-size:9.5px;
-    color:var(--dim);
-    white-space:nowrap;
-}
-
-.telemetry-updated em{
-    font-style:normal;
-    color:var(--muted);
-}
-
-.live-dot{
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:var(--mint);
-    box-shadow:0 0 6px var(--mint);
-    animation:blink 2.4s ease-in-out infinite;
-    flex-shrink:0;
-}
-
-.live-dot-sm{
-    width:5px;
-    height:5px;
-}
-
-.telemetry-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:clamp(8px, 1.6vh, 14px) clamp(12px, 2vw, 18px);
-}
-
-.telemetry-item{
-    display:flex;
-    align-items:center;
-    gap:clamp(7px, 1.2vw, 11px);
-}
-
-.telemetry-item i{
-    font-size:clamp(16px, 2vh, 19px);
-    color:var(--mint);
-    flex-shrink:0;
-}
-
-.telemetry-item div{
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-}
-
-.telemetry-item strong{
-    font-family:var(--font-display);
-    font-size:15px;
-    font-weight:600;
-    color:var(--text);
-    line-height:1.1;
-}
-
-.telemetry-item strong.pulse{
-    animation:valuePulse .9s ease;
-}
-
-@keyframes valuePulse{
-    0%{ text-shadow:0 0 0 rgba(124,255,178,0); }
-    40%{ text-shadow:0 0 10px rgba(124,255,178,.55); }
-    100%{ text-shadow:0 0 0 rgba(124,255,178,0); }
-}
-
-.telemetry-item span{
-    font-family:var(--font-mono);
-    font-size:9.5px;
-    letter-spacing:.3px;
-    color:var(--dim);
-    text-transform:uppercase;
-}
-
-/* =======================
-   RIGHT PANEL — Feature list
-======================= */
-
-.feature-list{
-    position:relative;
-    z-index:1;
-    display:flex;
-    flex-wrap:wrap;
-    gap:clamp(6px, 1vh, 10px) clamp(14px, 2vw, 22px);
-    width:100%;
-    justify-content:center;
-}
-
-.feature-item{
-    display:flex;
-    align-items:center;
-    gap:9px;
-
-    font-size:12.5px;
-    color:#C4C9D4;
-    font-weight:400;
-}
-
-.feature-item i{
-    color:var(--mint);
-    font-size:14px;
-    flex-shrink:0;
-}
-
-/* =======================
-   Mobile-only simplified
-   IoT summary strip
-======================= */
-
-/* Hidden everywhere except the mobile breakpoint — replaces the full
-   architecture diagram + telemetry card with one compact row so the
-   product identity still reads before login, without the weight. */
-.mobile-iot-strip{
-    display:none;
-    position:relative;
-    z-index:1;
-    width:100%;
-    max-width:325px;
-    margin-top:22px;
-}
-
-.miot-icons{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    margin-bottom:12px;
-}
-
-.miot-icon{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:34px;
-    height:34px;
-    border-radius:10px;
-    background:rgba(124,255,178,.08);
-    border:1px solid rgba(124,255,178,.14);
-    color:var(--mint);
-    font-size:15px;
-    flex-shrink:0;
-}
-
-.miot-line{
-    width:16px;
-    height:1px;
-    background:linear-gradient(90deg, rgba(124,255,178,.5), rgba(94,200,242,.5));
-    flex-shrink:0;
-}
-
-.miot-caption{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:7px;
-    font-family:var(--font-mono);
-    font-size:10.5px;
-    letter-spacing:.3px;
-    color:var(--muted);
-    text-align:center;
-}
-
-/* =======================
-       Accessibility
-======================= */
-
-.toggle-eye:focus-visible,
-.login-btn:focus-visible,
-.input-group input:focus-visible{
-    outline:2px solid var(--mint);
-    outline-offset:2px;
-}
-
-/* =======================
-        Responsive
-======================= */
-
-/* --- Large Desktop (>1400px): default values above apply as-is --- */
-
-/* --- Laptop (1024px–1400px): two columns stay, but panel padding
-   and the right-side max-width tighten slightly so nothing feels
-   cramped against the shorter, narrower viewport. --- */
-@media (max-width: 1400px){
-    .left-panel{ padding:clamp(16px, 3.5vh, 32px) clamp(18px, 2.6vw, 32px); }
-    .right-panel{ padding:clamp(18px, 4vh, 40px) clamp(16px, 2vw, 30px); }
-    .right-inner{ max-width:420px; }
-}
-
-/* --- Short-viewport safety valve (e.g. 1366×768 laptops): the
-   fluid clamp() values above already do most of the work, but on
-   the shortest common laptop height we also drop the least-essential
-   decoration first — the feature list — and compact the live
-   telemetry card into a single tighter row, per a "simplify before
-   you shrink" priority. --- */
-@media (max-height: 800px) and (min-width: 1025px){
-    .right-panel .feature-list{
-        display:none;
-    }
-
-    .telemetry-card{ padding:10px 16px 12px; margin-bottom:0; }
-    .telemetry-head{ margin-bottom:8px; padding-bottom:8px; }
-    .telemetry-grid{
-        grid-template-columns:repeat(4, 1fr);
-        gap:6px;
-    }
-    .telemetry-item{ flex-direction:column; align-items:flex-start; gap:2px; }
-    .telemetry-item span{ display:none; }
-    .telemetry-item strong{ font-size:13px; }
-}
-
-/* --- Tablet (<1024px): stack the two panels in normal document
-   flow — CampusPulse / login, then the IoT visualization below.
-   Scrolling is fine here; only desktop/laptop must avoid it. --- */
-@media (max-width: 1024px){
-    .split-screen{
-        display:block;
-        height:auto;
-        min-height:100vh;
-        min-height:100dvh;
-        overflow:visible;
-    }
-
-    .left-panel,
-    .right-panel{
-        width:100%;
-        height:auto;
-        min-height:auto;
-        overflow:visible;
-        padding:32px 24px;
-    }
-
-    .right-inner{ max-width:460px; max-height:none; margin:0 auto; }
-
-    .split-screen::before{ display:none; }
-}
-
-/* Small tablet / large mobile: trim the right panel a touch further */
-@media (max-width: 860px){
-    .right-panel .feature-list{ display:none; }
-    .sensor-row{ gap:8px; }
-    .node-sensor span{ display:none; }
-}
-
-/* --- Mobile (<768px): show only the essentials — logo, status,
-   welcome, form, button — plus one simplified IoT strip instead of
-   the full diagram + telemetry card. --- */
-@media (max-width: 768px){
-    .left-panel{ padding:28px 20px; }
-
-    .right-panel{
-        padding:0 20px 32px;
-        min-height:auto;
-    }
-
-    .right-panel .architecture,
-    .right-panel .telemetry-card{
-        display:none;
-    }
-
-    .mobile-iot-strip{
-        display:block;
-    }
-
-    .floating-icons-left{
-        display:none;
-    }
-}
-
-@media (max-width: 400px){
-    .login-card{
-        padding:32px 22px 22px;
-        border-radius:16px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce){
-    .bg-glow, .float-icon, .float-icon-soft, .arch-node, .arch-line line, .fan-lines line,
-    .login-card, .logo, .logo-ring, .live-dot, .status-dot,
-    .telemetry-item strong.pulse, .btn-ripple{
-        animation:none !important;
-    }
-    .flow-dot{
-        display:none;
-    }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #111118 inset !important;
+    -webkit-text-fill-color: #eeeef5 !important;
+    caret-color: #eeeef5 !important;
+    transition: background-color 9999s ease-in-out 0s;
 }

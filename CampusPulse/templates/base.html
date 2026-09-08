@@ -5,15 +5,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{% block title %}CampusPulse{% endblock %}</title>
 
-    <!-- Google Font -->
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
+
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet"
@@ -21,126 +25,244 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+
+    {% block extra_css %}{% endblock %}
 </head>
+
 
 <body>
 
-<div class="wrapper">
+<!-- ================= TOP NAVIGATION ================= -->
 
-    <!-- Sidebar -->
+<header class="main-navbar">
 
-<!-- Sidebar -->
+    <!-- Brand -->
 
-<aside class="sidebar">
+    <a href="{% url 'dashboard' %}" class="brand">
 
-    <div class="logo">
-        <div class="system-status"></div>
-
-        <div class="logo-text">
-            <h3>📡 CampusPulse</h3>
-            <p>Smart Classroom</p>
+        <div class="brand-icon">
+            <i class="bi bi-activity"></i>
         </div>
-    </div>
 
-    <ul class="menu">
+        <div class="brand-text">
+            <span class="brand-name">CampusPulse</span>
+            <span class="brand-subtitle">Smart Classroom</span>
+        </div>
 
-        <li class="active">
-            <a href="#">
-                <i class="bi bi-grid-fill"></i>
-                Home
-            </a>
-        </li>
+    </a>
 
-        <li>
-            <a href="#">
-                <i class="bi bi-broadcast"></i>
-                Live Monitoring
-            </a>
-        </li>
 
-        <li>
-            <a href="#">
-                <i class="bi bi-graph-up-arrow"></i>
-                Analytics
-            </a>
-        </li>
+    <!-- Navigation -->
 
-        <li>
-            <a href="#">
-                <i class="bi bi-file-earmark-bar-graph-fill"></i>
-                Reports
-            </a>
-        </li>
+    <nav class="main-nav">
 
-        <li>
-            <a href="#">
-                <i class="bi bi-gear-fill"></i>
-                Settings
-            </a>
-        </li>
+        <a href="{% url 'dashboard' %}"
+           class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
 
-    </ul>
+            <i class="bi bi-grid-fill"></i>
+            <span>Home</span>
 
-    <div class="sidebar-footer">
-
-        <a href="{% url 'logout' %}" class="logout-link">
-            <i class="bi bi-box-arrow-right"></i>
-            Logout
         </a>
 
-    </div>
 
-</aside>
+        <a href="{% url 'live_monitoring' %}"
+           class="{% if request.resolver_match.url_name == 'live_monitoring' %}active{% endif %}">
 
-    <!-- Main Content -->
+            <i class="bi bi-broadcast"></i>
+            <span>Live Monitoring</span>
 
-    <main class="main-content">
+        </a>
 
-        <!-- Top Navigation -->
 
-        <div class="topbar">
+        <a href="{% url 'analytics' %}"
+           class="{% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
 
-    <div class="page-title">
-        <h2>Home</h2>
-    </div>
+            <i class="bi bi-graph-up-arrow"></i>
+            <span>Analytics</span>
 
-    <div class="top-icons">
+        </a>
 
-        <i class="bi bi-search"></i>
 
-        <i class="bi bi-bell-fill"></i>
+        <a href="{% url 'settings' %}"
+   class="{% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+    <i class="bi bi-gear"></i>
+    <span>Settings</span>
+</a>
 
-        <div class="profile">
+    </nav>
 
-            <i class="bi bi-person-circle"></i>
 
-            <div class="profile-text">
-                <span>Administrator</span>
+    <!-- ================= RIGHT SIDE ================= -->
+
+    <!--<div class="navbar-actions">-->
+
+        <!-- Search -->
+
+        <!--<button class="nav-icon-btn" title="Search" type="button">
+
+            <i class="bi bi-search"></i>
+
+        </button>-->
+
+
+        <!-- Notifications -->
+
+        <!--<button class="nav-icon-btn notification-btn"
+                title="Notifications"
+                type="button">
+
+            <i class="bi bi-bell"></i>
+
+            <span class="notification-dot"></span>
+
+        </button>-->
+
+    
+        <!-- ================= ADMIN PROFILE ================= -->
+
+        <div class="admin-profile-wrapper">
+
+            <!-- Profile Button -->
+
+            <button class="admin-profile"
+                    id="adminProfileBtn"
+                    type="button">
+
+                <div class="profile-avatar">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+
+                <div class="profile-info">
+
+                    <span class="profile-name">
+                        Administrator
+                    </span>
+
+                    <span class="profile-role">
+                        Super Admin
+                    </span>
+
+                </div>
+
+
+                <i class="bi bi-chevron-down profile-arrow"></i>
+
+            </button>
+
+
+            <!-- ================= PROFILE DROPDOWN ================= -->
+
+            <div class="profile-dropdown"
+                 id="profileDropdown">
+
+
+                <!-- Dropdown Header -->
+
+                <div class="profile-dropdown-header">
+
+                    <div class="profile-dropdown-avatar">
+
+                        <i class="bi bi-person-fill"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Administrator
+                        </strong>
+
+                        <span>
+                            Super Admin
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Divider -->
+
+                <div class="profile-dropdown-divider"></div>
+
+
+                <!-- My Profile -->
+
+                <a href="{% url 'profile' %}" class="profile-dropdown-item">
+    <i class="bi bi-person"></i>
+    <span>My Profile</span>
+</a>
+
+
+                <!-- Account Settings -->
+
+<a href="{% url 'account_settings' %}" class="profile-dropdown-item">
+    <i class="bi bi-gear"></i>
+    <span>Account Settings</span>
+</a>
+
+
+                <!-- Divider -->
+
+                <div class="profile-dropdown-divider"></div>
+
+
+                <!-- Logout -->
+
+                <a href="{% url 'logout' %}"
+                   class="profile-dropdown-item logout-item">
+
+                    <i class="bi bi-box-arrow-right"></i>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </a>
+
             </div>
 
         </div>
 
     </div>
 
-</div>
+</header>
 
-        <!-- Dynamic Content -->
 
-        {% block content %}
-        {% endblock %}
+<!-- ================= MAIN CONTENT ================= -->
 
-    </main>
+<main class="main-content">
 
-</div>
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+<!-- ================= SCRIPTS ================= -->
 
 <!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
+
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- Page-specific JavaScript -->
+{% block extra_js %}
+{% endblock %}
+
 
 <!-- Custom JS -->
 <script src="{% static 'js/script.js' %}"></script>
 
+
 </body>
+
 </html>

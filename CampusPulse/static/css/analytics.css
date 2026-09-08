@@ -1,0 +1,414 @@
+/* ==========================================================================
+   CampusPulse — Analytics View (Violet & Slate Theme)
+   ========================================================================== */
+
+:root {
+  --cp-card-bg-start: #191526;
+  --cp-card-bg-end: #150F1F;
+  --cp-border: rgba(255, 255, 255, 0.06);
+  --cp-border-focus: rgba(139, 124, 246, 0.45);
+
+  --cp-text: #F1EEFB;
+  --cp-text-muted: #8B85A0;
+  --cp-text-dim: #665F7A;
+
+  --cp-violet: #8B7CF6;
+  --cp-violet-deep: #7C3AED;
+  --cp-cyan: #38BDF8;
+  --cp-rose: #FB7185;
+  --cp-amber: #FBBF24;
+  --cp-teal: #2DD4BF;
+  --cp-mint: #5EE6A0;
+
+  --cp-font-display: 'Space Grotesk', sans-serif;
+  --cp-font-mono: 'JetBrains Mono', monospace;
+  --cp-font-body: 'Poppins', sans-serif;
+}
+
+.cp-analytics-container {
+  padding-top: 8px;
+  padding-bottom: 48px;
+}
+
+.cp-analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Filters Bar                                                            */
+/* ---------------------------------------------------------------------- */
+
+.cp-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.cp-filter-group {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--cp-border);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.cp-filter-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 14px;
+  font-family: var(--cp-font-body);
+  font-size: 12.5px;
+  color: var(--cp-text-muted);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.cp-filter-btn:hover {
+  color: var(--cp-text);
+}
+
+.cp-filter-btn.active {
+  background: rgba(139, 124, 246, 0.16);
+  color: var(--cp-violet);
+  font-weight: 600;
+}
+
+.cp-custom-range {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--cp-border);
+  border-radius: 10px;
+  padding: 6px 12px;
+}
+
+.cp-custom-range label {
+  font-family: var(--cp-font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--cp-text-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cp-custom-range input[type="date"] {
+  background: #0D0B14;
+  border: 1px solid var(--cp-border);
+  color: var(--cp-text);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: var(--cp-font-mono);
+  font-size: 11.5px;
+  color-scheme: dark;
+}
+
+.cp-apply-btn {
+  background: linear-gradient(135deg, var(--cp-violet) 0%, var(--cp-violet-deep) 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 6px 14px;
+  font-family: var(--cp-font-body);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(139, 124, 246, 0.25);
+  transition: all 0.2s ease;
+}
+
+.cp-apply-btn:hover {
+  filter: brightness(1.08);
+}
+
+.cp-classroom-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--cp-border);
+  border-radius: 10px;
+  padding: 6px 14px;
+}
+
+.cp-classroom-select i {
+  color: var(--cp-violet);
+  font-size: 14px;
+}
+
+.cp-classroom-select select {
+  background: transparent;
+  border: none;
+  color: var(--cp-text);
+  font-family: var(--cp-font-body);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.cp-classroom-select select option {
+  background: #14111F;
+  color: var(--cp-text);
+}
+
+.cp-no-data {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  color: var(--cp-amber);
+  font-family: var(--cp-font-mono);
+  font-size: 12.5px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Summary Cards Grid                                                     */
+/* ---------------------------------------------------------------------- */
+
+.cp-summary-cards {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important;
+  margin-bottom: 28px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Chart View Toggle Bar                                                  */
+/* ---------------------------------------------------------------------- */
+
+.cp-chart-toggle-bar {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--cp-border);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+  gap: 4px;
+}
+
+.cp-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--cp-text-muted);
+  padding: 8px 18px;
+  font-family: var(--cp-font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.cp-toggle-btn i {
+  font-size: 13px;
+}
+
+.cp-toggle-btn:hover {
+  color: var(--cp-text);
+}
+
+.cp-toggle-btn.active {
+  background: rgba(139, 124, 246, 0.16);
+  color: var(--cp-violet);
+  font-weight: 600;
+}
+
+.cp-panel {
+  display: none;
+}
+
+.cp-panel.active {
+  display: block;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Modular Section Cards                                                  */
+/* ---------------------------------------------------------------------- */
+
+.cp-section {
+  background: linear-gradient(180deg, var(--cp-card-bg-start) 0%, var(--cp-card-bg-end) 100%);
+  border: 1px solid var(--cp-border);
+  border-radius: 16px;
+  padding: 24px 26px;
+  margin-bottom: 24px;
+  position: relative;
+  box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.5);
+}
+
+.cp-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.cp-section h2 {
+  font-family: var(--cp-font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--cp-text);
+  margin: 0;
+}
+
+.cp-badge {
+  font-family: var(--cp-font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.cp-badge.occupancy { background: rgba(139, 124, 246, 0.12); color: var(--cp-violet); }
+.cp-badge.env       { background: rgba(251, 113, 133, 0.12); color: var(--cp-rose); }
+.cp-badge.light     { background: rgba(251, 191, 36, 0.12); color: var(--cp-amber); }
+.cp-badge.usage     { background: rgba(45, 212, 191, 0.12); color: var(--cp-teal); }
+
+.cp-chart-box {
+  position: relative;
+  width: 100%;
+  height: 330px;
+}
+
+.cp-chart-box-small {
+  height: 260px;
+  max-width: 520px;
+}
+
+.cp-note {
+  font-size: 12.5px;
+  color: var(--cp-text-muted);
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--cp-cyan);
+  border-radius: 6px;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Telemetry Waste Data Table                                             */
+/* ---------------------------------------------------------------------- */
+
+.cp-table-responsive {
+  overflow-x: auto;
+}
+
+.cp-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cp-table th {
+  text-align: left;
+  font-family: var(--cp-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--cp-text-dim);
+  padding: 0 14px 12px;
+  border-bottom: 1px solid var(--cp-border);
+}
+
+.cp-table td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-family: var(--cp-font-mono);
+  font-size: 12.5px;
+  color: var(--cp-text);
+}
+
+.cp-table tr:last-child td {
+  border-bottom: none;
+}
+
+.cp-table tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cp-table td:first-child {
+  font-weight: 600;
+  color: var(--cp-amber);
+}
+
+.cp-empty-msg {
+  text-align: center;
+  color: var(--cp-mint);
+  font-family: var(--cp-font-mono);
+  font-size: 12px;
+  background: rgba(94, 230, 160, 0.06);
+  border: 1px solid rgba(94, 230, 160, 0.2);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Insights Block                                                         */
+/* ---------------------------------------------------------------------- */
+
+.cp-insight-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cp-insight-list li {
+  color: var(--cp-text-muted);
+  padding-left: 20px;
+  position: relative;
+  font-size: 13px;
+}
+
+.cp-insight-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cp-violet);
+  box-shadow: 0 0 6px var(--cp-violet);
+}
+
+.cp-insight-list strong {
+  font-family: var(--cp-font-mono);
+  color: var(--cp-text);
+  font-weight: 600;
+}
+
+.cp-disclaimer {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--cp-border);
+  font-family: var(--cp-font-mono);
+  font-size: 11px;
+  color: var(--cp-text-dim);
+  line-height: 1.6;
+}

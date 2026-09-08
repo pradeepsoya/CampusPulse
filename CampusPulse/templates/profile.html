@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CampusPulse — My Profile{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+<div class="content cp-profile-container">
+
+    <div class="profile-page-header">
+
+        <div>
+            <h3>My Profile</h3>
+        </div>
+
+    </div>
+
+
+    <section class="profile-card">
+
+        <div class="profile-cover"></div>
+
+
+        <div class="profile-main">
+
+            <div class="large-profile-avatar">
+                <i class="bi bi-person-fill"></i>
+            </div>
+
+
+            <div class="profile-name-block">
+
+                <h2>Administrator</h2>
+
+                <span class="profile-role-badge">
+                    <i class="bi bi-shield-check"></i>
+                    Super Admin
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-divider"></div>
+
+
+        <div class="profile-details">
+
+            <div class="profile-detail">
+
+                <div class="detail-icon">
+                    <i class="bi bi-person"></i>
+                </div>
+
+                <div>
+                    <span>Username</span>
+                    <strong>Administrator</strong>
+                </div>
+
+            </div>
+
+
+            <div class="profile-detail">
+
+                <div class="detail-icon">
+                    <i class="bi bi-envelope"></i>
+                </div>
+
+                <div>
+                    <span>Email</span>
+                    <strong>Administrator account</strong>
+                </div>
+
+            </div>
+
+
+            <div class="profile-detail">
+
+                <div class="detail-icon">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+
+                <div>
+                    <span>Role</span>
+                    <strong>Super Administrator</strong>
+                </div>
+
+            </div>
+
+
+            <div class="profile-detail">
+
+                <div class="detail-icon">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+                <div>
+                    <span>Account Status</span>
+                    <strong class="account-active">
+                        Active
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-footer">
+
+            <a href="{% url 'account_settings' %}" class="profile-edit-btn">
+                <i class="bi bi-gear"></i>
+                Account Settings
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

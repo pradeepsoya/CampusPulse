@@ -1,0 +1,655 @@
+.cp-settings-container {
+    padding-bottom: 40px;
+}
+
+.settings-header,
+.profile-page-header,
+.account-page-header {
+    margin-bottom: 25px;
+}
+
+.settings-header h1,
+.profile-page-header h1,
+.account-page-header h1 {
+    margin: 0 0 6px;
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.settings-header p,
+.profile-page-header p,
+.account-page-header p {
+    margin: 0;
+    color: #8d8b9d;
+}
+
+
+/* Overview */
+
+.settings-overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.settings-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 19px;
+    border-radius: 14px;
+    background: #17171f;
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.settings-stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(139,124,246,.12);
+    color: #a99cff;
+    font-size: 19px;
+}
+
+.settings-stat-card span {
+    display: block;
+    color: #8e8b9c;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.settings-stat-card strong {
+    font-size: 20px;
+}
+
+.online-status {
+    color: #70d69a !important;
+    font-size: 14px !important;
+}
+
+.online-status span {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #55d98a;
+    margin-right: 5px;
+}
+
+
+/* Sections */
+
+.settings-section {
+    background: #17171f;
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 15px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+
+.settings-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.settings-section-header h2 {
+    margin: 0 0 5px;
+    font-size: 17px;
+}
+
+.settings-section-header h2 i {
+    margin-right: 7px;
+    color: #a99cff;
+}
+
+.settings-section-header p {
+    margin: 0;
+    color: #858291;
+    font-size: 12px;
+}
+
+.settings-action-btn {
+    border: 0;
+    border-radius: 9px;
+    padding: 9px 14px;
+    background: #8175e9;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+
+/* Classrooms */
+
+.classroom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.classroom-card {
+    padding: 17px;
+    border: 1px solid rgba(255,255,255,.06);
+    background: #121219;
+    border-radius: 12px;
+}
+
+.classroom-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.classroom-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(139,124,246,.12);
+    color: #a99cff;
+}
+
+.active-badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    background: rgba(71,205,130,.1);
+    color: #65d596;
+    font-size: 10px;
+}
+
+.classroom-card h3 {
+    margin: 15px 0 5px;
+    font-size: 18px;
+}
+
+.classroom-location {
+    color: #858291;
+    font-size: 12px;
+    margin: 0 0 17px;
+}
+
+.classroom-location i {
+    margin-right: 5px;
+}
+
+.classroom-details {
+    display: flex;
+    gap: 35px;
+    padding-top: 13px;
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.classroom-details span {
+    display: block;
+    font-size: 10px;
+    color: #777583;
+}
+
+.classroom-details strong {
+    font-size: 14px;
+}
+
+
+/* Automation */
+
+.automation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.automation-card {
+    display: flex;
+    gap: 13px;
+    padding: 16px;
+    background: #121219;
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 12px;
+}
+
+.automation-icon {
+    min-width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(139,124,246,.12);
+    color: #a99cff;
+}
+
+.automation-content {
+    flex: 1;
+}
+
+.automation-content h3 {
+    margin: 0 0 6px;
+    font-size: 13px;
+}
+
+.automation-content p {
+    margin: 0;
+    color: #777583;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.setting-value {
+    margin-top: 12px;
+}
+
+.setting-value strong {
+    font-size: 19px;
+}
+
+.setting-value span {
+    color: #858291;
+    font-size: 11px;
+}
+
+
+/* Switch */
+
+.switch {
+    position: relative;
+    width: 38px;
+    min-width: 38px;
+    height: 21px;
+    margin-top: 2px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    background: #33333e;
+    cursor: pointer;
+}
+
+.slider:before {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 3px;
+    top: 3px;
+    border-radius: 50%;
+    background: #aaa7b4;
+    transition: .2s;
+}
+
+.switch input:checked + .slider {
+    background: #7569dc;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(17px);
+    background: white;
+}
+
+
+/* Notifications */
+
+.notification-settings {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.notification-row:first-child {
+    border-top: 0;
+}
+
+.notification-row h3 {
+    margin: 0 0 4px;
+    font-size: 13px;
+}
+
+.notification-row p {
+    margin: 0;
+    color: #777583;
+    font-size: 11px;
+}
+
+
+/* System */
+
+.system-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.system-info-grid div {
+    padding: 14px;
+    background: #121219;
+    border-radius: 10px;
+}
+
+.system-info-grid span {
+    display: block;
+    font-size: 10px;
+    color: #777583;
+    margin-bottom: 5px;
+}
+
+.system-info-grid strong {
+    font-size: 12px;
+}
+
+
+/* Empty */
+
+.empty-settings {
+    text-align: center;
+    padding: 35px;
+    color: #777583;
+}
+
+.empty-settings i {
+    font-size: 30px;
+    color: #8175e9;
+}
+
+.empty-settings h3 {
+    color: #d9d7e0;
+    font-size: 15px;
+    margin: 10px 0 5px;
+}
+
+.empty-settings p {
+    font-size: 12px;
+}
+
+
+@media (max-width: 900px) {
+    .settings-overview,
+    .classroom-grid,
+    .automation-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .system-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =========================================================
+   ADD CLASSROOM MODAL
+   ========================================================= */
+
+#addClassroomModal .modal-dialog {
+    max-width: 500px;
+}
+
+#addClassroomModal .modal-content {
+    background: #17171f !important;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: #eeeef5;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* Header */
+
+#addClassroomModal .modal-header {
+    padding: 20px 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    align-items: flex-start;
+}
+
+#addClassroomModal .modal-title {
+    margin: 0;
+    color: #eeeef5;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+#addClassroomModal .modal-title i {
+    margin-right: 7px;
+    color: #a99cff;
+    font-size: 16px;
+}
+
+#addClassroomModal .modal-subtitle {
+    margin: 5px 0 0;
+    color: #777583;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* Close button */
+
+#addClassroomModal .btn-close {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin: 2px 0 0;
+    background: none;
+    border: 0;
+    opacity: 1;
+    position: relative;
+}
+
+#addClassroomModal .btn-close::before,
+#addClassroomModal .btn-close::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 2px;
+    top: 8px;
+    left: 0;
+    background: #777583;
+    border-radius: 2px;
+    transition: background 0.2s ease;
+}
+
+#addClassroomModal .btn-close::before {
+    transform: rotate(45deg);
+}
+
+#addClassroomModal .btn-close::after {
+    transform: rotate(-45deg);
+}
+
+#addClassroomModal .btn-close:hover::before,
+#addClassroomModal .btn-close:hover::after {
+    background: #eeeef5;
+}
+
+/* Body */
+
+#addClassroomModal .modal-body {
+    padding: 21px 22px 19px;
+}
+
+/* Form */
+
+.classroom-form-group {
+    margin-bottom: 15px;
+}
+
+.classroom-form-group:last-child {
+    margin-bottom: 0;
+}
+
+.classroom-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: #aaa7b4;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.classroom-form-group input {
+    width: 100%;
+    height: 40px;
+    box-sizing: border-box;
+
+    padding: 0 12px;
+
+    background: #111118 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px;
+
+    color: #eeeef5 !important;
+    font-family: inherit;
+    font-size: 12px;
+
+    outline: none;
+    box-shadow: none !important;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.classroom-form-group input:hover {
+    border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+.classroom-form-group input:focus {
+    background: #12121a !important;
+    border-color: #7569dc !important;
+    box-shadow: 0 0 0 3px rgba(117, 105, 220, 0.09) !important;
+}
+
+.classroom-form-group input::placeholder {
+    color: #555461;
+    opacity: 1;
+}
+
+/* Remove number spinner */
+
+.classroom-form-group input[type="number"]::-webkit-inner-spin-button,
+.classroom-form-group input[type="number"]::-webkit-outer-spin-button {
+    opacity: 0.4;
+}
+
+/* Footer */
+
+#addClassroomModal .modal-footer {
+    padding: 14px 22px 17px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 9px;
+}
+
+/* Cancel */
+
+.classroom-cancel-btn {
+    height: 36px;
+
+    padding: 0 15px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+
+    background: #111118;
+    color: #aaa7b4;
+
+    font-family: inherit;
+    font-size: 11px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.classroom-cancel-btn:hover {
+    background: #1d1d26;
+    border-color: rgba(255, 255, 255, 0.14);
+    color: #eeeef5;
+}
+
+/* Add button */
+
+.classroom-save-btn {
+    height: 36px;
+
+    padding: 0 16px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: #7569dc;
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+
+.classroom-save-btn:hover {
+    background: #8275e7;
+    box-shadow: 0 5px 16px rgba(117, 105, 220, 0.20);
+}
+
+.classroom-save-btn:active {
+    transform: scale(0.98);
+}
+
+.classroom-save-btn i {
+    margin-right: 5px;
+}
+
+/* Modal backdrop */
+
+.modal-backdrop.show {
+    opacity: 0.72;
+}
+
+/* Mobile */
+
+@media (max-width: 576px) {
+
+    #addClassroomModal .modal-dialog {
+        margin: 12px;
+    }
+
+    #addClassroomModal .modal-header {
+        padding: 18px;
+    }
+
+    #addClassroomModal .modal-body {
+        padding: 18px;
+    }
+
+    #addClassroomModal .modal-footer {
+        padding: 13px 18px 16px;
+    }
+}

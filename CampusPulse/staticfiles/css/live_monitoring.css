@@ -1,0 +1,95 @@
+.live-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.monitor-card {
+    background: #12161E;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.monitor-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #EAECEF;
+    margin-bottom: 18px;
+}
+
+.sensor-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.feed-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #1A202B;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #D5D9E0;
+}
+
+.feed-item span {
+    color: #7CFFB2;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.sensor-values {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.value-row {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 14px;
+}
+
+.value-row span {
+    color: #8B93A1;
+}
+
+.value-row strong {
+    color: #EAECEF;
+}
+
+.device-status {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.device-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.online {
+    color: #7CFFB2;
+    font-weight: 600;
+}
+
+.offline {
+    color: #FF6B6B;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .live-grid {
+        grid-template-columns: 1fr;
+    }
+}

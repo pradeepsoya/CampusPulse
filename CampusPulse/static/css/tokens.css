@@ -1,0 +1,39 @@
+:root {
+  --cp-bg: #0D0B14;
+  --cp-sidebar-bg: #14111F;
+  --cp-topbar-bg: #17131F;
+  --cp-surface-card: #17131F;
+  --cp-surface-card-alt: #191526;
+  --cp-surface-hover: #1F1A2E;
+  --cp-border: rgba(255,255,255,.06);
+  --cp-border-strong: rgba(255,255,255,.12);
+
+  --cp-text: #F1EEFB;
+  --cp-text-dim: #A79FC2;
+  --cp-text-muted: #8B85A0;
+  --cp-text-faint: #665F7A;
+
+  --cp-purple: #8B7CF6;
+  --cp-purple-light: #C084FC;
+  --cp-purple-gradient: linear-gradient(135deg, #8B7CF6 0%, #6D5BD0 100%);
+  --cp-purple-glow: rgba(139,124,246,.35);
+  --cp-purple-soft: rgba(139,124,246,.12);
+
+  --cp-cyan: #38BDF8;
+  --cp-rose: #FB7185;
+  --cp-amber: #FBBF24;
+  --cp-teal: #2DD4BF;
+  --cp-green: #5EE6A0;
+  --cp-green-glow: rgba(94,230,160,.6);
+  --cp-red: #FB7185;
+  --cp-red-glow: rgba(251,113,133,.6);
+
+  --cp-radius-lg: 18px;
+  --cp-radius-md: 12px;
+  --cp-radius-sm: 8px;
+  --cp-radius-pill: 999px;
+
+  --cp-font: 'Poppins', sans-serif;
+  --cp-font-display: 'Space Grotesk', sans-serif;
+  --cp-font-mono: 'JetBrains Mono', monospace;
+}

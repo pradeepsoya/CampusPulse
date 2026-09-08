@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CampusPulse — Live Monitoring{% endblock %}
+{% block page_title %}Live Monitoring{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/live_monitoring.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="content lm-container">
+    <!-- Top Breadcrumb & Status Bar -->
+    <div class="lm-header-bar">
+        <div class="lm-breadcrumb">
+            <span>Dashboard</span>
+            <i class="bi bi-chevron-right"></i>
+            <span class="current">Live Monitoring</span>
+        </div>
+
+        <div class="lm-top-indicators">
+            <div class="lm-live-badge">
+                <span class="pulse-dot"></span>
+                <span>SYSTEM ONLINE</span>
+            </div>
+            <div class="lm-sync-status">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>Telemetry: <strong id="sync-timer">0s ago</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header & Controls -->
+    <div class="dashboard-header lm-title-section">
+        <div>
+            <h1>Live Classroom Telemetry</h1>
+            <p>Real-time edge computing metrics, environment analytics, and actuator states.</p>
+        </div>
+
+        <div class="lm-actions">
+            <div class="lm-room-picker">
+                <i class="bi bi-door-open"></i>
+                <label for="room-selector" class="visually-hidden">Select classroom</label>
+                <select id="room-selector">
+    {% for classroom in classrooms %}
+        <option value="{{ classroom.classroom_id }}">
+            {{ classroom.room_number }} — {{ classroom.location }}
+        </option>
+    {% empty %}
+        <option value="" disabled selected>
+            No classrooms configured
+        </option>
+    {% endfor %}
+</select>
+            </div>
+
+            <button class="lm-btn-refresh" id="refresh-btn" type="button" title="Force Telemetry Sync" aria-label="Force telemetry sync">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Primary KPI Metric Cards (Matching Dashboard Theme) -->
+    <div class="cards lm-kpi-grid">
+        <div class="card occuppany-card">
+            <div class="icon"><i class="bi bi-people-fill"></i></div>
+            <h5>Classroom Occupancy</h5>
+            <h2 id="kpi-occupancy">Present</h2>
+            <p class="status-normal"><i class="bi bi-broadcast-pin"></i> PIR Motion Active</p>
+        </div>
+
+        <div class="card temperature-card">
+            <div class="icon"><i class="bi bi-thermometer-sun"></i></div>
+            <h5>Ambient Temperature</h5>
+            <h2 id="kpi-temp">28.4°C</h2>
+            <p class="status-normal">DHT22 Telemetry</p>
+        </div>
+
+        <div class="card humidity-card">
+            <div class="icon"><i class="bi bi-droplet-fill"></i></div>
+            <h5>Relative Humidity</h5>
+            <h2 id="kpi-humidity">67%</h2>
+            <p class="status-normal">DHT22 Telemetry</p>
+        </div>
+
+        <div class="card light-intensity-card">
+            <div class="icon"><i class="bi bi-brightness-high-fill"></i></div>
+            <h5>Light Intensity</h5>
+            <h2 id="kpi-light">420 Lux</h2>
+            <p class="status-normal">BH1750 Sensor</p>
+        </div>
+    </div>
+
+    <!-- Telemetry Panels Grid -->
+    <div class="lm-telemetry-grid">
+
+        <!-- Live Hardware Activity Feed -->
+        <div class="lm-card lm-span-2">
+            <div class="lm-card-header">
+                <div class="lm-header-title">
+                    <i class="bi bi-activity text-violet"></i>
+                    <h3>Live Activity Stream</h3>
+                </div>
+                <div class="lm-header-badges">
+                    <span class="lm-badge pulse"><span class="badge-dot"></span> Streaming</span>
+                </div>
+            </div>
+
+            <div class="lm-feed-container" id="activity-feed">
+                <div class="feed-item">
+                    <div class="feed-icon-box relay"><i class="bi bi-lightning-charge-fill"></i></div>
+                    <div class="feed-details">
+                        <span class="feed-msg">Automation triggered Relay #1 (Classroom Light Bank)</span>
+                        <span class="feed-sub">Command sent via MQTT &bull; Node ESP32-A2</span>
+                    </div>
+                    <span class="feed-timestamp">22:01:10</span>
+                </div>
+
+                <div class="feed-item">
+                    <div class="feed-icon-box light"><i class="bi bi-brightness-high-fill"></i></div>
+                    <div class="feed-details">
+                        <span class="feed-msg">BH1750 Ambient Light update: <strong>420 Lux</strong></span>
+                        <span class="feed-sub">Natural light sufficient &bull; Threshold &ge; 300 Lux</span>
+                    </div>
+                    <span class="feed-timestamp">22:01:09</span>
+                </div>
+
+                <div class="feed-item">
+                    <div class="feed-icon-box env"><i class="bi bi-droplet-half"></i></div>
+                    <div class="feed-details">
+                        <span class="feed-msg">DHT22 Relative Humidity reading: <strong>67%</strong></span>
+                        <span class="feed-sub">Indoor climate within standard range</span>
+                    </div>
+                    <span class="feed-timestamp">22:01:08</span>
+                </div>
+
+                <div class="feed-item">
+                    <div class="feed-icon-box temp"><i class="bi bi-thermometer-half"></i></div>
+                    <div class="feed-details">
+                        <span class="feed-msg">DHT22 Temperature reading: <strong>28.4°C</strong></span>
+                        <span class="feed-sub">Cooling threshold not exceeded (Limit: 30°C)</span>
+                    </div>
+                    <span class="feed-timestamp">22:01:07</span>
+                </div>
+
+                <div class="feed-item">
+                    <div class="feed-icon-box motion"><i class="bi bi-person-bounding-box"></i></div>
+                    <div class="feed-details">
+                        <span class="feed-msg">PIR Sensor triggered: Motion detected</span>
+                        <span class="feed-sub">Occupancy confirmed &bull; Keep-alive timer reset</span>
+                    </div>
+                    <span class="feed-timestamp">22:01:05</span>
+                </div>
+            </div>
+
+            <div class="lm-card-footer">
+                <span class="terminal-meta"><i class="bi bi-terminal"></i> Buffer: 50 packets cached</span>
+                <a href="{% url 'analytics' %}" class="lm-link">Open Analytics Archive <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- Infrastructure & Actuator Controls -->
+        <div class="lm-side-col">
+            <!-- Actuator Relays -->
+            <div class="lm-card">
+                <div class="lm-card-header">
+                    <div class="lm-header-title">
+                        <i class="bi bi-toggles text-cyan"></i>
+                        <h3>Actuator Controller</h3>
+                    </div>
+                    <span class="lm-badge-outline">Node R-01</span>
+                </div>
+
+                <div class="lm-actuator-list">
+                    <div class="actuator-row">
+                        <div class="actuator-meta">
+                            <div class="actuator-icon on"><i class="bi bi-lightbulb-fill"></i></div>
+                            <div>
+                                <span class="actuator-name">Lighting Circuit</span>
+                                <span class="actuator-desc">Channel 1 &bull; Auto Mode</span>
+                            </div>
+                        </div>
+                        <span class="pill-badge pill-on">Active</span>
+                    </div>
+
+                    <div class="actuator-row">
+                        <div class="actuator-meta">
+                            <div class="actuator-icon off"><i class="bi bi-fan"></i></div>
+                            <div>
+                                <span class="actuator-name">Fan Relays</span>
+                                <span class="actuator-desc">Channel 2 &bull; Standby</span>
+                            </div>
+                        </div>
+                        <span class="pill-badge pill-off">Standby</span>
+                    </div>
+
+                    <div class="actuator-row">
+                        <div class="actuator-meta">
+                            <div class="actuator-icon system"><i class="bi bi-cpu-fill"></i></div>
+                            <div>
+                                <span class="actuator-name">Automation Core</span>
+                                <span class="actuator-desc">Smart Rule Engine</span>
+                            </div>
+                        </div>
+                        <span class="pill-badge pill-active">Running</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edge Node Health & Infrastructure -->
+            <div class="lm-card">
+                <div class="lm-card-header">
+                    <div class="lm-header-title">
+                        <i class="bi bi-hdd-network text-teal"></i>
+                        <h3>Edge Node Health</h3>
+                    </div>
+                    <span class="lm-badge health-good">100% HEALTH</span>
+                </div>
+
+                <div class="lm-health-list">
+                    <div class="health-item">
+                        <span class="health-label">ESP32 Core Frequency</span>
+                        <strong class="health-val">240 MHz</strong>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-label">Wi-Fi RSSI Strength</span>
+                        <div class="health-val-group">
+                            <strong class="health-val text-mint">-54 dBm</strong>
+                            <span class="signal-indicator"><i class="bi bi-wifi"></i></span>
+                        </div>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-label">Django MQTT Broker</span>
+                        <strong class="health-val text-mint">Connected</strong>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-label">Database Round-Trip</span>
+                        <strong class="health-val">12 ms</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/live_monitoring.js' %}"></script>
+{% endblock %}
