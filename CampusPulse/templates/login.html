@@ -6,90 +6,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusPulse | Login</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
-<body>
+<body class="login-page">
 
-    <div class="bg-grid"></div>
-    <div class="bg-glow glow-a"></div>
-    <div class="bg-glow glow-b"></div>
+    <div class="bg-decor" aria-hidden="true"></div>
 
-    <div class="bg-icons">
-        <span class="bg-icon i1"><i class="bi bi-thermometer-half"></i></span>
-        <span class="bg-icon i2"><i class="bi bi-wifi"></i></span>
-        <span class="bg-icon i3"><i class="bi bi-lightbulb-fill"></i></span>
-        <span class="bg-icon i4"><i class="bi bi-person-bounding-box"></i></span>
-        <span class="bg-icon i5"><i class="bi bi-cpu-fill"></i></span>
-        <span class="bg-icon i6"><i class="bi bi-droplet-half"></i></span>
-    </div>
+    <div class="login-layout">
 
-    <main class="login-wrapper">
-        <div class="login-card">
+        <!-- ================= LEFT: SHOWCASE ================= -->
+        <aside class="showcase" aria-label="About CampusPulse">
 
             <div class="brand">
-                <span class="brand-icon"><i class="bi bi-building-gear"></i></span>
-                <h1>CampusPulse</h1>
-                <p class="brand-subtitle">Smart Classroom Monitoring &amp; Energy Management</p>
+                <span class="brand-icon" aria-hidden="true"><i class="bi bi-buildings"></i><i class="bi bi-leaf-fill brand-leaf"></i></span>
+                <div>
+                    <p class="brand-name">Campus<span>Pulse</span></p>
+                    <p class="brand-sub">Smart classroom intelligence</p>
+                </div>
             </div>
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert-box">
-                        <i class="bi bi-exclamation-circle-fill"></i>
-                        <span>{{ message }}</span>
+            <h2 class="hero-title">A smarter space.<br><span>A more sustainable future.</span></h2>
+            <p class="hero-text">Intelligent classroom monitoring, comfort insights,<br>and energy optimization — all in one place.</p>
+
+            <figure class="room" aria-label="Classroom illustration with sample sensor readings">
+                <svg class="room-art" viewBox="0 0 740 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustration of a classroom">
+                    <defs>
+                        <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stop-color="#2d4640"/><stop offset="1" stop-color="#1b2f29"/>
+                        </linearGradient>
+                        <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stop-color="#1d342d"/><stop offset="1" stop-color="#0f1d19"/>
+                        </linearGradient>
+                        <linearGradient id="win" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#a9cbb8"/><stop offset="1" stop-color="#6a9a85"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="740" height="300" fill="url(#wall)"/>
+                    <rect y="170" width="740" height="130" fill="url(#floor)"/>
+                    <!-- windows -->
+                    <g fill="url(#win)" opacity=".85">
+                        <rect x="14" y="40" width="70" height="120" rx="3"/><rect x="92" y="55" width="52" height="105" rx="3"/>
+                        <rect x="656" y="40" width="70" height="120" rx="3"/><rect x="596" y="55" width="52" height="105" rx="3"/>
+                    </g>
+                    <g stroke="#1b2f29" stroke-width="3"><path d="M49 40v120M14 100h70M118 55v105M92 108h52M691 40v120M656 100h70M622 55v105M596 108h52"/></g>
+                    <!-- ceiling lights -->
+                    <g fill="#d7efe4" opacity=".7"><rect x="150" y="14" width="90" height="8" rx="3"/><rect x="330" y="10" width="90" height="8" rx="3"/><rect x="510" y="14" width="90" height="8" rx="3"/></g>
+                    <!-- board -->
+                    <rect x="250" y="70" width="240" height="96" rx="4" fill="#3d5f55" stroke="#6f9a8c" stroke-width="3"/>
+                    <rect x="262" y="82" width="216" height="72" rx="2" fill="#e5efe9" opacity=".9"/>
+                    <!-- desks: back to front -->
+                    <g fill="#8a7a58">
+                        <rect x="130" y="188" width="120" height="9" rx="2"/><rect x="270" y="188" width="120" height="9" rx="2"/><rect x="410" y="188" width="120" height="9" rx="2"/><rect x="550" y="188" width="100" height="9" rx="2"/>
+                        <rect x="70" y="220" width="150" height="11" rx="2"/><rect x="250" y="220" width="150" height="11" rx="2"/><rect x="430" y="220" width="150" height="11" rx="2"/><rect x="610" y="220" width="120" height="11" rx="2"/>
+                        <rect x="0" y="262" width="190" height="14" rx="2"/><rect x="220" y="262" width="190" height="14" rx="2"/><rect x="440" y="262" width="190" height="14" rx="2"/><rect x="660" y="262" width="100" height="14" rx="2"/>
+                    </g>
+                    <g fill="#10211c">
+                        <rect x="165" y="200" width="50" height="14" rx="3"/><rect x="305" y="200" width="50" height="14" rx="3"/><rect x="445" y="200" width="50" height="14" rx="3"/>
+                        <rect x="115" y="236" width="60" height="18" rx="3"/><rect x="295" y="236" width="60" height="18" rx="3"/><rect x="475" y="236" width="60" height="18" rx="3"/>
+                    </g>
+                </svg>
+                <div class="room-shade"></div>
+
+                <span class="chip chip-temp"><i class="bi bi-thermometer-half" aria-hidden="true"></i> 26.4<small>°C</small></span>
+                <span class="chip chip-light"><i class="bi bi-sun" aria-hidden="true"></i> 320 <small>lux</small></span>
+                <span class="chip chip-hum"><i class="bi bi-droplet-half" aria-hidden="true"></i> 58<small>%</small></span>
+
+                <figcaption class="room-status">
+                    <span class="dot" aria-hidden="true"></span>
+                    <b>System overview</b>
+                    <span class="sep" aria-hidden="true"></span>
+                    Demo preview · Not live data
+                </figcaption>
+            </figure>
+
+            <ul class="features">
+                <li><span class="f-icon"><i class="bi bi-people" aria-hidden="true"></i></span>Occupancy<br>Monitoring</li>
+                <li><span class="f-icon"><i class="bi bi-fan" aria-hidden="true"></i></span>Automated<br>Light &amp; Fan Control</li>
+                <li><span class="f-icon"><i class="bi bi-leaf" aria-hidden="true"></i></span>Energy<br>Optimization</li>
+                <li><span class="f-icon"><i class="bi bi-bar-chart" aria-hidden="true"></i></span>Real-time<br>Analytics</li>
+            </ul>
+        </aside>
+
+        <!-- ================= RIGHT: LOGIN ================= -->
+        <main class="login-panel">
+            <div class="login-card">
+
+                <span class="brand-icon card-icon" aria-hidden="true"><i class="bi bi-buildings"></i><i class="bi bi-leaf-fill brand-leaf"></i></span>
+                <p class="mobile-brand" aria-hidden="true">Campus<span>Pulse</span></p>
+
+                <header class="card-head">
+                    <h1>Welcome back.</h1>
+                    <p>Sign in to access your classroom insights.</p>
+                </header>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert-box" role="alert">
+                            <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST" action="{% url 'login' %}" id="loginForm" novalidate>
+                    {% csrf_token %}
+
+                    <div class="field-group" id="usernameGroup">
+                        <label class="field-label" for="usernameField">Username</label>
+                        <div class="input-group">
+                            <i class="bi bi-person-fill" aria-hidden="true"></i>
+                            <input type="text" name="username" id="usernameField"
+                                   placeholder="Enter your username" autocomplete="username"
+                                   aria-describedby="usernameError" required autofocus>
+                        </div>
+                        <p class="field-error" id="usernameError" role="alert"></p>
                     </div>
-                {% endfor %}
-            {% endif %}
 
-            <form method="POST" action="{% url 'login' %}" novalidate>
-                {% csrf_token %}
+                    <div class="field-group" id="passwordGroup">
+                        <label class="field-label" for="passwordField">Password</label>
+                        <div class="input-group">
+                            <i class="bi bi-lock-fill" aria-hidden="true"></i>
+                            <input type="password" name="password" id="passwordField"
+                                   placeholder="Enter your password" autocomplete="current-password"
+                                   aria-describedby="passwordError capsWarning" required>
+                            <button type="button" class="eye-toggle-btn" id="toggleEyeBtn"
+                                    aria-label="Show password" aria-controls="passwordField">
+                                <i class="bi bi-eye-fill eye-show" aria-hidden="true"></i>
+                                <i class="bi bi-eye-slash-fill eye-hide d-none" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <p class="caps-warning" id="capsWarning" hidden>
+                            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> Caps Lock is on
+                        </p>
+                        <p class="field-error" id="passwordError" role="alert"></p>
+                    </div>
 
-                <label class="field-label" for="usernameField">Username / Email</label>
-                <div class="input-group">
-                    <i class="bi bi-person-fill"></i>
-                    <input
-                        type="text"
-                        name="username"
-                        id="usernameField"
-                        placeholder="Enter your username or email"
-                        autocomplete="username"
-                        required
-                        autofocus>
-                </div>
+                    <button type="submit" class="login-btn" id="loginBtn">
+                        <span class="btn-text">Sign in</span>
+                        <span class="btn-spinner d-none" aria-hidden="true"></span>
+                        <i class="bi bi-arrow-right btn-arrow" aria-hidden="true"></i>
+                    </button>
+                </form>
 
-                <label class="field-label" for="passwordField">Password</label>
-                <div class="input-group">
-                    <i class="bi bi-lock-fill"></i>
-                    <input
-                        type="password"
-                        name="password"
-                        id="passwordField"
-                        placeholder="Enter your password"
-                        autocomplete="current-password"
-                        required>
-                </div>
-
-
-                <button type="submit" class="login-btn">
-                    Sign In
-                    <i class="bi bi-arrow-right"></i>
-                </button>
-            </form>
-
-            <div class="divider"></div>
-
-           
-            <div class="card-footer">
-                <span class="status-dot"></span>
-                <span>System Online</span>
-                <span class="dot-sep">•</span>
-                <span>CampusPulse © 2026</span>
+                <p class="security-note">
+                    <i class="bi bi-shield-check" aria-hidden="true"></i>
+                    <span>Authorized administrators only.</span>
+                </p>
             </div>
+        </main>
+    </div>
 
-        </div>
-    </main>
-
+    <script src="{% static 'js/login.js' %}"></script>
 </body>
 </html>

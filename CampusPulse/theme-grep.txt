@@ -1,0 +1,14 @@
+﻿D:\projects\mini-campuspulse\CampusPulse\static\js\analytics.js:48: return getComputedStyle(document.documentElement)
+D:\projects\mini-campuspulse\CampusPulse\static\js\script.js:40: const root = document.documentElement;
+D:\projects\mini-campuspulse\CampusPulse\static\js\script.js:53: const savedTheme = localStorage.getItem("theme");
+D:\projects\mini-campuspulse\CampusPulse\static\js\script.js:55: savedTheme || root.getAttribute("data-theme") || "dark";
+D:\projects\mini-campuspulse\CampusPulse\static\js\script.js:57: root.setAttribute("data-theme", currentTheme);
+D:\projects\mini-campuspulse\CampusPulse\static\js\script.js:65: const current = root.getAttribute("data-theme") || "dark";
+D:\projects\mini-campuspulse\CampusPulse\static\js\script.js:68: root.setAttribute("data-theme", next);
+D:\projects\mini-campuspulse\CampusPulse\static\js\script.js:69: localStorage.setItem("theme", next);
+D:\projects\mini-campuspulse\CampusPulse\static\js\theme.js:4: const STORAGE_KEY = "campuspulse-theme";
+D:\projects\mini-campuspulse\CampusPulse\static\js\theme.js:5: const root = document.documentElement;
+D:\projects\mini-campuspulse\CampusPulse\static\js\theme.js:9: return localStorage.getItem(STORAGE_KEY) || "dark";
+D:\projects\mini-campuspulse\CampusPulse\static\js\theme.js:17: localStorage.setItem(STORAGE_KEY, theme);
+D:\projects\mini-campuspulse\CampusPulse\static\js\theme.js:26: root.setAttribute("data-theme", theme);
+D:\projects\mini-campuspulse\CampusPulse\static\js\theme.js:72: const currentTheme = root.getAttribute("data-theme") || "dark";

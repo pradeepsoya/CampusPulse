@@ -2,203 +2,635 @@
 {% load static %}
 
 {% block title %}CampusPulse — Analytics{% endblock %}
-{% block page_title %}Analytics{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/analytics.css' %}">
+{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/analytics.css' %}">
 
-<div class="content cp-analytics-container">
-  <div class="dashboard-header cp-analytics-header">
-    <div>
-      <h1>Analytics &amp; Energy Insights</h1>
-      <p>Historical trends from stored sensor telemetry and appliance duty cycles.</p>
+<div class="content cp-page cp-analytics-container">
+
+    <!-- =====================================================
+         TOP BAR
+         ===================================================== -->
+    <div class="cp-topbar">
+
+        <div class="cp-breadcrumb">
+            <span>Dashboard</span>
+            <i class="bi bi-chevron-right"></i>
+            <span class="current">Analytics</span>
+        </div>
+
+        <div class="cp-system-status">
+
+            <div class="cp-online">
+                <span class="cp-online-dot"></span>
+                System online
+            </div>
+
+            <div class="cp-sync">
+                Historical telemetry
+            </div>
+
+        </div>
+
     </div>
 
-    <!-- Filters -->
-    <div class="cp-filters">
-      <div class="cp-filter-group" id="range-buttons">
-        <button class="cp-filter-btn active" data-range="today">Today</button>
-        <button class="cp-filter-btn" data-range="7days">Last 7 Days</button>
-        <button class="cp-filter-btn" data-range="30days">Last 30 Days</button>
-        <button class="cp-filter-btn" data-range="custom">Custom Range</button>
-      </div>
 
-      <div class="cp-custom-range" id="custom-range-inputs" style="display:none;">
-        <label>From <input type="date" id="start-date"></label>
-        <label>To <input type="date" id="end-date"></label>
-        <button class="cp-apply-btn" id="apply-custom">Apply</button>
-      </div>
+    <!-- =====================================================
+         MAIN HEADER
+         ===================================================== -->
+    <div class="cp-main-header">
 
-      {% if classrooms %}
-      <div class="cp-classroom-select">
-        <i class="bi bi-door-open"></i>
-        <select id="classroom-select">
-          {% for c in classrooms %}
-          <option value="{{ c.classroom_id }}">{{ c.room_number }} — {{ c.location }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      {% endif %}
-    </div>
-  </div>
+        <div>
+            <h1>Classroom analytics</h1>
 
-  <div id="no-data-banner" class="cp-no-data" style="display:none;">
-    <i class="bi bi-exclamation-circle"></i> No sensor readings found for the selected period.
-  </div>
+            <p>
+                Historical occupancy, environmental trends,
+                light levels, and device usage.
+            </p>
+        </div>
 
-  <!-- Summary Cards Grid -->
-  <div class="cards cp-summary-cards">
-    <div class="card temperature-card">
-      <div class="icon"><i class="bi bi-thermometer-sun"></i></div>
-      <h5>Avg Temperature</h5>
-      <h2 id="avg-temp">--</h2>
-      <p class="status-normal">Calculated</p>
-    </div>
+        <div class="cp-filter-wrapper">
 
-    <div class="card humidity-card">
-      <div class="icon"><i class="bi bi-droplet-fill"></i></div>
-      <h5>Avg Humidity</h5>
-      <h2 id="avg-humidity">--</h2>
-      <p class="status-normal">Calculated</p>
-    </div>
+            <div class="cp-classroom-select">
 
-    <div class="card light-intensity-card">
-      <div class="icon"><i class="bi bi-brightness-high-fill"></i></div>
-      <h5>Avg Light Intensity</h5>
-      <h2 id="avg-light">--</h2>
-      <p class="status-normal">Calculated</p>
+                <i class="bi bi-building"></i>
+
+                <label
+                    for="classroom-select"
+                    class="visually-hidden">
+                    Select classroom
+                </label>
+
+                <select id="classroom-select">
+
+                    {% for classroom in classrooms %}
+
+                    <option value="{{ classroom.classroom_id }}">
+                        {{ classroom.room_number }} — {{ classroom.location }}
+                    </option>
+
+                    {% empty %}
+
+                    <option value="" disabled selected>
+                        No classrooms configured
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="card occuppany-card">
-      <div class="icon"><i class="bi bi-people-fill"></i></div>
-      <h5>Total Occupied</h5>
-      <h2 id="total-occupied">--</h2>
-      <p class="status-normal">Duration</p>
+
+    <!-- =====================================================
+         ANALYSIS RANGE
+         ===================================================== -->
+    <div class="cp-analytics-header">
+
+        <div>
+
+            <span class="cp-analysis-label">
+                Analysis range
+            </span>
+
+            <div class="cp-filters">
+
+                <div class="cp-filter-group">
+
+                    <button
+                        type="button"
+                        class="cp-filter-btn active"
+                        data-range="today">
+                        Today
+                    </button>
+
+                    <button
+                        type="button"
+                        class="cp-filter-btn"
+                        data-range="7days">
+                        7 days
+                    </button>
+
+                    <button
+                        type="button"
+                        class="cp-filter-btn"
+                        data-range="30days">
+                        30 days
+                    </button>
+
+                    <button
+                        type="button"
+                        class="cp-filter-btn"
+                        data-range="custom">
+                        Custom
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="cp-custom-range"
+                    id="custom-range-inputs">
+
+                    <label for="start-date">
+                        From
+
+                        <input
+                            type="date"
+                            id="start-date">
+                    </label>
+
+                    <label for="end-date">
+                        To
+
+                        <input
+                            type="date"
+                            id="end-date">
+                    </label>
+
+                    <button
+                        type="button"
+                        class="cp-apply-btn"
+                        id="apply-custom">
+                        Apply
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="card occuppany-card" style="--accent: #8B85A0;">
-      <div class="icon"><i class="bi bi-person-x"></i></div>
-      <h5>Total Unoccupied</h5>
-      <h2 id="total-unoccupied">--</h2>
-      <p class="status-normal" style="color: #8B85A0;">Duration</p>
+
+    <!-- =====================================================
+         NO DATA BANNER
+         ===================================================== -->
+    <div
+        class="cp-no-data"
+        id="no-data-banner">
+
+        <i class="bi bi-exclamation-circle"></i>
+
+        <span>
+            No telemetry data is available for the selected
+            classroom and date range.
+        </span>
+
     </div>
 
-    <div class="card light-status-card">
-      <div class="icon"><i class="bi bi-lightbulb-fill"></i></div>
-      <h5>Light ON Duration</h5>
-      <h2 id="light-on">--</h2>
-      <p class="status-normal">Active</p>
+
+    <!-- =====================================================
+         PRIMARY SUMMARY CARDS
+         ===================================================== -->
+    <div class="cards cp-summary-cards">
+
+        <div class="cp-summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-thermometer-sun"></i>
+            </div>
+
+            <h4>Average temperature</h4>
+
+            <p
+                class="summary-value"
+                id="avg-temp">
+                --
+            </p>
+
+        </div>
+
+
+        <div class="cp-summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-droplet-fill"></i>
+            </div>
+
+            <h4>Average humidity</h4>
+
+            <p
+                class="summary-value"
+                id="avg-humidity">
+                --
+            </p>
+
+        </div>
+
+
+        <div class="cp-summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-brightness-high-fill"></i>
+            </div>
+
+            <h4>Average light</h4>
+
+            <p
+                class="summary-value"
+                id="avg-light">
+                --
+            </p>
+
+        </div>
+
+
+        <div class="cp-summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+
+            <h4>Total occupied</h4>
+
+            <p
+                class="summary-value"
+                id="total-occupied">
+                0h 0m
+            </p>
+
+        </div>
+
     </div>
 
-    <div class="card fan-status-card">
-      <div class="icon"><i class="bi bi-fan"></i></div>
-      <h5>Fan ON Duration</h5>
-      <h2 id="fan-on">--</h2>
-      <p class="status-normal">Active</p>
+
+    <!-- =====================================================
+         SECONDARY SUMMARY CARDS
+         ===================================================== -->
+    <div class="cards cp-summary-cards">
+
+        <div class="cp-summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-person-dash"></i>
+            </div>
+
+            <h4>Total unoccupied</h4>
+
+            <p
+                class="summary-value"
+                id="total-unoccupied">
+                0h 0m
+            </p>
+
+        </div>
+
+
+        <div class="cp-summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-lightbulb-fill"></i>
+            </div>
+
+            <h4>Light usage</h4>
+
+            <p
+                class="summary-value"
+                id="light-on">
+                0h 0m
+            </p>
+
+        </div>
+
+
+        <div class="cp-summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-fan"></i>
+            </div>
+
+            <h4>Fan usage</h4>
+
+            <p
+                class="summary-value"
+                id="fan-on">
+                0h 0m
+            </p>
+
+        </div>
+
+
+        <div class="cp-summary-card data-source">
+
+            <div class="summary-icon">
+                <i class="bi bi-broadcast-pin"></i>
+            </div>
+
+            <h4>Data source</h4>
+
+            <p class="summary-value">
+                Live telemetry
+            </p>
+
+        </div>
+
     </div>
-  </div>
 
-  <!-- Chart View Toggle Bar -->
-  <div class="cp-chart-toggle-bar">
-    <button class="cp-toggle-btn active" data-target="panel-occupancy">
-      <i class="bi bi-people-fill"></i> Occupancy
-    </button>
-    <button class="cp-toggle-btn" data-target="panel-temp-humidity">
-      <i class="bi bi-thermometer-sun"></i> Temp &amp; Humidity
-    </button>
-    <button class="cp-toggle-btn" data-target="panel-light">
-      <i class="bi bi-brightness-high-fill"></i> Light Intensity
-    </button>
-    <button class="cp-toggle-btn" data-target="panel-usage">
-      <i class="bi bi-plug-fill"></i> Appliance Usage
-    </button>
-  </div>
 
-  <!-- Chart Panels -->
-  <div class="cp-chart-panels">
-    <section id="panel-occupancy" class="cp-panel cp-section active">
-      <div class="cp-section-header">
-        <h2>Classroom Occupancy Analysis</h2>
-        <span class="cp-badge occupancy">PIR Timeline</span>
-      </div>
-      <div class="cp-chart-box"><canvas id="occupancy-chart"></canvas></div>
+    <!-- =====================================================
+         CHART CONTROLS
+         ===================================================== -->
+    <div class="cp-analytics-controls">
+
+        <div>
+
+            <span class="cp-analysis-label">
+                Analytics views
+            </span>
+
+            <div class="cp-chart-toggle-bar">
+
+                <button
+                    type="button"
+                    class="cp-toggle-btn active"
+                    data-target="panel-occupancy">
+
+                    <i class="bi bi-people-fill"></i>
+                    Occupancy
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cp-toggle-btn"
+                    data-target="panel-temp-humidity">
+
+                    <i class="bi bi-thermometer-half"></i>
+                    Environment
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cp-toggle-btn"
+                    data-target="panel-light">
+
+                    <i class="bi bi-brightness-high-fill"></i>
+                    Light
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cp-toggle-btn"
+                    data-target="panel-usage">
+
+                    <i class="bi bi-bar-chart-fill"></i>
+                    Device usage
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         OCCUPANCY CHART
+         ===================================================== -->
+    <section
+        class="cp-section cp-panel active"
+        id="panel-occupancy">
+
+        <div class="cp-section-header">
+
+            <div class="cp-section-header-left">
+
+                <i class="bi bi-people-fill"></i>
+
+                <h2>Occupancy timeline</h2>
+
+            </div>
+
+            <span class="cp-badge occupancy">
+                PIR
+            </span>
+
+        </div>
+
+        <p class="cp-note">
+            Classroom occupancy derived from PIR motion
+            telemetry across the selected period.
+        </p>
+
+        <div class="cp-chart-box">
+
+            <canvas id="occupancy-chart"></canvas>
+
+        </div>
+
     </section>
 
-    <section id="panel-temp-humidity" class="cp-panel cp-section">
-      <div class="cp-section-header">
-        <h2>Temperature &amp; Humidity Trends</h2>
-        <span class="cp-badge env">DHT22 Telemetry</span>
-      </div>
-      <div class="cp-chart-box"><canvas id="temp-humidity-chart"></canvas></div>
+
+    <!-- =====================================================
+         TEMPERATURE + HUMIDITY
+         ===================================================== -->
+    <section
+        class="cp-section cp-panel"
+        id="panel-temp-humidity">
+
+        <div class="cp-section-header">
+
+            <div class="cp-section-header-left">
+
+                <i class="bi bi-thermometer-sun"></i>
+
+                <h2>Temperature &amp; humidity</h2>
+
+            </div>
+
+            <span class="cp-badge env">
+                DHT22
+            </span>
+
+        </div>
+
+        <p class="cp-note">
+            Environmental conditions recorded by the
+            classroom DHT22 sensor.
+        </p>
+
+        <div class="cp-chart-box">
+
+            <canvas id="temp-humidity-chart"></canvas>
+
+        </div>
+
     </section>
 
-    <section id="panel-light" class="cp-panel cp-section">
-      <div class="cp-section-header">
-        <h2>Light Intensity Analysis</h2>
-        <span class="cp-badge light">BH1750 Sensor</span>
-      </div>
-      <div class="cp-chart-box"><canvas id="light-chart"></canvas></div>
+
+    <!-- =====================================================
+         LIGHT INTENSITY
+         ===================================================== -->
+    <section
+        class="cp-section cp-panel"
+        id="panel-light">
+
+        <div class="cp-section-header">
+
+            <div class="cp-section-header-left">
+
+                <i class="bi bi-brightness-high-fill"></i>
+
+                <h2>Light intensity</h2>
+
+            </div>
+
+            <span class="cp-badge light">
+                BH1750
+            </span>
+
+        </div>
+
+        <p class="cp-note">
+            Ambient light intensity measured in Lux from
+            the BH1750 sensor.
+        </p>
+
+        <div class="cp-chart-box">
+
+            <canvas id="light-chart"></canvas>
+
+        </div>
+
     </section>
 
-    <section id="panel-usage" class="cp-panel cp-section">
-      <div class="cp-section-header">
-        <h2>Light &amp; Fan Usage</h2>
-        <span class="cp-badge usage">Relay Duty Hours</span>
-      </div>
-      <div class="cp-chart-box cp-chart-box-small"><canvas id="usage-chart"></canvas></div>
+
+    <!-- =====================================================
+         APPLIANCE USAGE
+         ===================================================== -->
+    <section
+        class="cp-section cp-panel"
+        id="panel-usage">
+
+        <div class="cp-section-header">
+
+            <div class="cp-section-header-left">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                <h2>Appliance usage</h2>
+
+            </div>
+
+            <span class="cp-badge usage">
+                Devices
+            </span>
+
+        </div>
+
+        <p class="cp-note">
+            Total recorded operating duration for classroom
+            lights and fans.
+        </p>
+
+        <div class="cp-chart-box cp-chart-box-small">
+
+            <canvas id="usage-chart"></canvas>
+
+        </div>
+
     </section>
-  </div>
 
-  <!-- Occupancy vs Appliance Table Section -->
-  <section class="cp-section">
-    <div class="cp-section-header">
-      <h2>Occupancy vs Appliance Usage</h2>
-    </div>
-    <p class="cp-note">
-      Appliance state is inferred from occupancy + environmental thresholds, with a 5-minute grace period after the room becomes vacant. Events below represent periods where an appliance was likely active while the room was unoccupied.
-    </p>
-    <div class="cp-table-responsive">
-      <table class="cp-table" id="waste-table">
-        <thead>
-          <tr>
-            <th>Appliance</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Duration</th>
-          </tr>
-        </thead>
-        <tbody id="waste-table-body"></tbody>
-      </table>
-    </div>
-    <p id="waste-empty" class="cp-empty-msg" style="display:none;">
-      <i class="bi bi-shield-check"></i> No unoccupied-but-ON events found in this period — optimal energy discipline.
-    </p>
-  </section>
 
-  <!-- Energy Insights Section -->
-  <section class="cp-section cp-insights">
-    <div class="cp-section-header">
-      <h2>Automation &amp; Energy Insights</h2>
+    
+
+
+        <section class="cp-section">
+
+            <div class="cp-section-header">
+
+                <div class="cp-section-header-left">
+
+                    <i class="bi bi-lightbulb-fill"></i>
+
+                    <h2>Energy insights</h2>
+
+                </div>
+
+                <span class="cp-badge usage">
+                    Analysis
+                </span>
+
+            </div>
+
+
+            <ul class="cp-insight-list">
+
+                <li>
+                    Total unoccupied time:
+                    <strong id="ins-unoccupied">
+                        0h 0m
+                    </strong>
+                </li>
+
+                <li>
+                    Light usage while unoccupied:
+                    <strong id="ins-light-waste">
+                        0h 0m
+                    </strong>
+                </li>
+
+                <li>
+                    Fan usage while unoccupied:
+                    <strong id="ins-fan-waste">
+                        0h 0m
+                    </strong>
+                </li>
+
+                <li>
+                    Periods with insufficient light:
+                    <strong id="ins-sufficient-light">
+                        --
+                    </strong>
+                </li>
+
+                <li>
+                    Light usage percentage:
+                    <strong id="ins-light-pct">
+                        0%
+                    </strong>
+                </li>
+
+                <li>
+                    Fan usage percentage:
+                    <strong id="ins-fan-pct">
+                        0%
+                    </strong>
+                </li>
+
+            </ul>
+
+
+            <p class="cp-disclaimer">
+                Insights are calculated from the telemetry
+                available for the selected classroom and
+                analysis period.
+            </p>
+
+        </section>
+
     </div>
-    <ul class="cp-insight-list">
-      <li>Classroom was unoccupied for <strong id="ins-unoccupied">--</strong> in this period.</li>
-      <li>Light remained ON for <strong id="ins-light-waste">--</strong> during unoccupied periods.</li>
-      <li>Fan remained ON for <strong id="ins-fan-waste">--</strong> during unoccupied periods.</li>
-      <li><strong id="ins-sufficient-light">--</strong> of readings had sufficient natural daylight (&ge; 300 Lux).</li>
-      <li>Overall appliance usage: Light ON <strong id="ins-light-pct">--</strong>, Fan ON <strong id="ins-fan-pct">--</strong>.</li>
-    </ul>
-    <p class="cp-disclaimer">
-      Note: Durations above are based on sensor-derived state inference. Physical power metering (kWh) is not logged since direct CT clamps are not currently installed.
-    </p>
-  </section>
+
 </div>
 
-<!-- Chart.js date adapter for time-based charts -->
-<script src="...Chart.js..."></script> <!-- wherever your base.html loads it -->
+{% endblock %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
-<script src="{% static 'js/analytics.js' %}"></script>
-
+{% block extra_js %}
 <script src="{% static 'js/analytics.js' %}"></script>
 {% endblock %}

@@ -1,414 +1,813 @@
 /* ==========================================================================
-   CampusPulse — Analytics View (Violet & Slate Theme)
+   CampusPulse — Analytics
+   Retheme onto the shared design system (theme.css tokens, Fraunces +
+   Inter). Same component language as the dashboard/live-monitoring pages
+   — flat surfaces, soft borders, accent-tinted icon chips — rather than
+   the old violet gradient-card look. Structure/classes unchanged so
+   analytics.js keeps working as-is.
+   Loaded after tokens.css/theme.css — same-specificity rules here win by
+   source order.
    ========================================================================== */
 
-:root {
-  --cp-card-bg-start: #191526;
-  --cp-card-bg-end: #150F1F;
-  --cp-border: rgba(255, 255, 255, 0.06);
-  --cp-border-focus: rgba(139, 124, 246, 0.45);
-
-  --cp-text: #F1EEFB;
-  --cp-text-muted: #8B85A0;
-  --cp-text-dim: #665F7A;
-
-  --cp-violet: #8B7CF6;
-  --cp-violet-deep: #7C3AED;
-  --cp-cyan: #38BDF8;
-  --cp-rose: #FB7185;
-  --cp-amber: #FBBF24;
-  --cp-teal: #2DD4BF;
-  --cp-mint: #5EE6A0;
-
-  --cp-font-display: 'Space Grotesk', sans-serif;
-  --cp-font-mono: 'JetBrains Mono', monospace;
-  --cp-font-body: 'Poppins', sans-serif;
+.cp-page {
+    padding: 28px 0 60px;
 }
 
 .cp-analytics-container {
-  padding-top: 8px;
-  padding-bottom: 48px;
+    width: 100%;
+    max-width: 100%;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Top bar                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.cp-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.cp-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--text-faint);
+}
+
+.cp-breadcrumb i {
+    font-size: 10px;
+}
+
+.cp-breadcrumb .current {
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+.cp-system-status {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.cp-online {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent-ink);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+.cp-online-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.cp-sync {
+    font-size: 12.5px;
+    color: var(--text-faint);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Main header                                                             */
+/* ---------------------------------------------------------------------- */
+
+.cp-main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.cp-main-header h1 {
+    margin: 0 0 6px;
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--text);
+}
+
+.cp-main-header p {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 13.5px;
+    max-width: 480px;
+    line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Filters                                                                 */
+/* ---------------------------------------------------------------------- */
 
 .cp-analytics-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 22px;
 }
 
-/* ---------------------------------------------------------------------- */
-/* Filters Bar                                                            */
-/* ---------------------------------------------------------------------- */
+.cp-analysis-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-faint);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
 
+.cp-filter-wrapper,
 .cp-filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
 }
 
 .cp-filter-group {
-  display: inline-flex;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--cp-border);
-  border-radius: 10px;
-  padding: 3px;
-  gap: 2px;
+    display: inline-flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px;
+    gap: 2px;
 }
 
 .cp-filter-btn {
-  background: transparent;
-  border: none;
-  padding: 6px 14px;
-  font-family: var(--cp-font-body);
-  font-size: 12.5px;
-  color: var(--cp-text-muted);
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+    padding: 7px 15px;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--text-dim);
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.15s ease;
 }
 
 .cp-filter-btn:hover {
-  color: var(--cp-text);
+    color: var(--text);
 }
 
 .cp-filter-btn.active {
-  background: rgba(139, 124, 246, 0.16);
-  color: var(--cp-violet);
-  font-weight: 600;
+    background: var(--text);
+    color: var(--bg);
+    font-weight: 600;
 }
 
+/* ---------------------------------------------------------------------- */
+/* Custom date range                                                      */
+/* ---------------------------------------------------------------------- */
+
 .cp-custom-range {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--cp-border);
-  border-radius: 10px;
-  padding: 6px 12px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 6px 4px 14px;
+    min-height: 38px;
+}
+
+.cp-custom-range.visible {
+    display: flex;
 }
 
 .cp-custom-range label {
-  font-family: var(--cp-font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--cp-text-dim);
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-faint);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .cp-custom-range input[type="date"] {
-  background: #0D0B14;
-  border: 1px solid var(--cp-border);
-  color: var(--cp-text);
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-family: var(--cp-font-mono);
-  font-size: 11.5px;
-  color-scheme: dark;
+    background: var(--border-soft);
+    border: 1px solid transparent;
+    color: var(--text);
+    padding: 5px 9px;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 12px;
+    color-scheme: light;
+    outline: none;
+}
+
+:root[data-theme="dark"] .cp-custom-range input[type="date"] {
+    color-scheme: dark;
+}
+
+.cp-custom-range input[type="date"]:focus {
+    border-color: var(--accent-line);
 }
 
 .cp-apply-btn {
-  background: linear-gradient(135deg, var(--cp-violet) 0%, var(--cp-violet-deep) 100%);
-  color: #FFFFFF;
-  border: none;
-  padding: 6px 14px;
-  font-family: var(--cp-font-body);
-  font-size: 12px;
-  font-weight: 600;
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(139, 124, 246, 0.25);
-  transition: all 0.2s ease;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 7px 16px;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: filter 0.15s ease;
 }
 
 .cp-apply-btn:hover {
-  filter: brightness(1.08);
+    filter: brightness(1.08);
 }
 
+/* ---------------------------------------------------------------------- */
+/* Classroom select                                                       */
+/* ---------------------------------------------------------------------- */
+
 .cp-classroom-select {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--cp-border);
-  border-radius: 10px;
-  padding: 6px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0 14px;
+    min-height: 38px;
 }
 
 .cp-classroom-select i {
-  color: var(--cp-violet);
-  font-size: 14px;
+    color: var(--accent-ink);
+    font-size: 13px;
 }
 
 .cp-classroom-select select {
-  background: transparent;
-  border: none;
-  color: var(--cp-text);
-  font-family: var(--cp-font-body);
-  font-size: 13px;
-  outline: none;
-  cursor: pointer;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
 }
 
 .cp-classroom-select select option {
-  background: #14111F;
-  color: var(--cp-text);
-}
-
-.cp-no-data {
-  background: rgba(251, 191, 36, 0.08);
-  border: 1px solid rgba(251, 191, 36, 0.25);
-  color: var(--cp-amber);
-  font-family: var(--cp-font-mono);
-  font-size: 12.5px;
-  padding: 12px 18px;
-  border-radius: 10px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    background: var(--surface);
+    color: var(--text);
 }
 
 /* ---------------------------------------------------------------------- */
-/* Summary Cards Grid                                                     */
+/* No-data banner                                                          */
+/* ---------------------------------------------------------------------- */
+
+.cp-no-data {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--warn-soft);
+    border: 1px solid var(--warn-line);
+    color: var(--warn);
+    font-size: 12.5px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Summary cards                                                           */
 /* ---------------------------------------------------------------------- */
 
 .cp-summary-cards {
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important;
-  margin-bottom: 28px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 0 14px;
+}
+
+.cp-summary-card {
+    --card-accent: var(--accent);
+    --card-accent-soft: var(--accent-soft);
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 16px 17px;
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+        "icon label"
+        "value value";
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 10px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.cp-summary-card:hover {
+    transform: translateY(-1px);
+    border-color: var(--card-accent);
+}
+
+.cp-summary-card .summary-icon {
+    grid-area: icon;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    background: var(--card-accent-soft);
+    color: var(--card-accent);
+}
+
+.cp-summary-card h4 {
+    grid-area: label;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--sans);
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--text-faint);
+}
+
+.cp-summary-card .summary-value {
+    grid-area: value;
+    margin: 0;
+    font-family: var(--serif);
+    color: var(--text);
+    font-size: 23px;
+    line-height: 1.1;
+    font-weight: 500;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.cp-summary-card.data-source .summary-value {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent-ink);
+}
+
+/* Per-card accents — tokens instead of hardcoded violet/rose/amber */
+
+.cp-summary-card:has(#avg-temp) {
+    --card-accent: var(--chart-temp);
+    --card-accent-soft: var(--chart-temp-fill);
+}
+
+.cp-summary-card:has(#avg-humidity) {
+    --card-accent: var(--chart-humidity);
+    --card-accent-soft: var(--info-soft);
+}
+
+.cp-summary-card:has(#avg-light) {
+    --card-accent: var(--chart-light);
+    --card-accent-soft: var(--warn-soft);
+}
+
+.cp-summary-card:has(#total-occupied) {
+    --card-accent: var(--accent);
+    --card-accent-soft: var(--accent-soft);
+}
+
+.cp-summary-card:has(#total-unoccupied) {
+    --card-accent: var(--text-faint);
+    --card-accent-soft: var(--border-soft);
+}
+
+.cp-summary-card:has(#light-on) {
+    --card-accent: var(--chart-light);
+    --card-accent-soft: var(--warn-soft);
+}
+
+.cp-summary-card:has(#fan-on) {
+    --card-accent: var(--info);
+    --card-accent-soft: var(--info-soft);
+}
+
+.cp-summary-card.data-source {
+    --card-accent: var(--accent-ink);
+    --card-accent-soft: var(--accent-soft);
 }
 
 /* ---------------------------------------------------------------------- */
-/* Chart View Toggle Bar                                                  */
+/* Chart view tabs                                                         */
 /* ---------------------------------------------------------------------- */
 
+.cp-analytics-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin: 10px 0 18px;
+}
+
 .cp-chart-toggle-bar {
-  display: inline-flex;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--cp-border);
-  border-radius: 10px;
-  padding: 4px;
-  margin-bottom: 20px;
-  gap: 4px;
+    display: inline-flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+    gap: 2px;
 }
 
 .cp-toggle-btn {
-  background: transparent;
-  border: none;
-  color: var(--cp-text-muted);
-  padding: 8px 18px;
-  font-family: var(--cp-font-body);
-  font-size: 12.5px;
-  font-weight: 500;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 8px 16px;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    font-weight: 500;
+    border-radius: 999px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s ease;
 }
 
 .cp-toggle-btn i {
-  font-size: 13px;
+    font-size: 13px;
 }
 
 .cp-toggle-btn:hover {
-  color: var(--cp-text);
+    color: var(--text);
 }
 
 .cp-toggle-btn.active {
-  background: rgba(139, 124, 246, 0.16);
-  color: var(--cp-violet);
-  font-weight: 600;
+    background: var(--text);
+    color: var(--bg);
+    font-weight: 600;
 }
 
+/* ---------------------------------------------------------------------- */
+/* Chart panels                                                            */
+/* ---------------------------------------------------------------------- */
+
 .cp-panel {
-  display: none;
+    display: none;
 }
 
 .cp-panel.active {
-  display: block;
+    display: block;
 }
 
-/* ---------------------------------------------------------------------- */
-/* Modular Section Cards                                                  */
-/* ---------------------------------------------------------------------- */
-
 .cp-section {
-  background: linear-gradient(180deg, var(--cp-card-bg-start) 0%, var(--cp-card-bg-end) 100%);
-  border: 1px solid var(--cp-border);
-  border-radius: 16px;
-  padding: 24px 26px;
-  margin-bottom: 24px;
-  position: relative;
-  box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px 26px;
+    margin-bottom: 16px;
+    position: relative;
+    box-shadow: var(--shadow);
 }
 
 .cp-section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.cp-section-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cp-section-header-left i {
+    color: var(--accent-ink);
+    font-size: 16px;
 }
 
 .cp-section h2 {
-  font-family: var(--cp-font-display);
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--cp-text);
-  margin: 0;
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Badges                                                                  */
+/* ---------------------------------------------------------------------- */
 
 .cp-badge {
-  font-family: var(--cp-font-mono);
-  font-size: 10.5px;
-  font-weight: 500;
-  padding: 3px 8px;
-  border-radius: 6px;
-  text-transform: uppercase;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.3px;
 }
 
-.cp-badge.occupancy { background: rgba(139, 124, 246, 0.12); color: var(--cp-violet); }
-.cp-badge.env       { background: rgba(251, 113, 133, 0.12); color: var(--cp-rose); }
-.cp-badge.light     { background: rgba(251, 191, 36, 0.12); color: var(--cp-amber); }
-.cp-badge.usage     { background: rgba(45, 212, 191, 0.12); color: var(--cp-teal); }
+.cp-badge.occupancy {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+}
+
+.cp-badge.env {
+    background: var(--bad-soft);
+    color: var(--bad);
+}
+
+.cp-badge.light {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
+.cp-badge.usage {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Notes                                                                   */
+/* ---------------------------------------------------------------------- */
+
+.cp-note {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    background: var(--border-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Charts                                                                   */
+/* ---------------------------------------------------------------------- */
 
 .cp-chart-box {
-  position: relative;
-  width: 100%;
-  height: 330px;
+    position: relative;
+    width: 100%;
+    height: 300px;
 }
 
 .cp-chart-box-small {
-  height: 260px;
-  max-width: 520px;
-}
-
-.cp-note {
-  font-size: 12.5px;
-  color: var(--cp-text-muted);
-  margin: 0 0 18px;
-  padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.25);
-  border-left: 3px solid var(--cp-cyan);
-  border-radius: 6px;
-  line-height: 1.5;
+    height: 250px;
+    max-width: 520px;
 }
 
 /* ---------------------------------------------------------------------- */
-/* Telemetry Waste Data Table                                             */
+/* Waste table                                                             */
 /* ---------------------------------------------------------------------- */
 
 .cp-table-responsive {
-  overflow-x: auto;
+    overflow-x: auto;
 }
 
 .cp-table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 .cp-table th {
-  text-align: left;
-  font-family: var(--cp-font-mono);
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  color: var(--cp-text-dim);
-  padding: 0 14px 12px;
-  border-bottom: 1px solid var(--cp-border);
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-faint);
+    padding: 0 12px 12px;
+    border-bottom: 1px solid var(--border);
 }
 
 .cp-table td {
-  padding: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  font-family: var(--cp-font-mono);
-  font-size: 12.5px;
-  color: var(--cp-text);
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 13px;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
 }
 
 .cp-table tr:last-child td {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 .cp-table tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+    background: var(--border-soft);
 }
 
 .cp-table td:first-child {
-  font-weight: 600;
-  color: var(--cp-amber);
-}
-
-.cp-empty-msg {
-  text-align: center;
-  color: var(--cp-mint);
-  font-family: var(--cp-font-mono);
-  font-size: 12px;
-  background: rgba(94, 230, 160, 0.06);
-  border: 1px solid rgba(94, 230, 160, 0.2);
-  border-radius: 8px;
-  padding: 14px;
-  margin: 12px 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+    font-weight: 600;
+    color: var(--accent-ink);
 }
 
 /* ---------------------------------------------------------------------- */
-/* Insights Block                                                         */
+/* Empty message                                                           */
+/* ---------------------------------------------------------------------- */
+
+.cp-empty-msg {
+    text-align: center;
+    color: var(--accent-ink);
+    font-size: 12.5px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 10px;
+    padding: 14px;
+    margin: 12px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Insights                                                                 */
 /* ---------------------------------------------------------------------- */
 
 .cp-insight-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
 }
 
 .cp-insight-list li {
-  color: var(--cp-text-muted);
-  padding-left: 20px;
-  position: relative;
-  font-size: 13px;
+    color: var(--text-dim);
+    padding-left: 20px;
+    position: relative;
+    font-size: 13.5px;
+    line-height: 1.5;
 }
 
 .cp-insight-list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--cp-violet);
-  box-shadow: 0 0 6px var(--cp-violet);
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
 }
 
 .cp-insight-list strong {
-  font-family: var(--cp-font-mono);
-  color: var(--cp-text);
-  font-weight: 600;
+    color: var(--text);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
 }
 
 .cp-disclaimer {
-  margin: 0;
-  padding-top: 14px;
-  border-top: 1px solid var(--cp-border);
-  font-family: var(--cp-font-mono);
-  font-size: 11px;
-  color: var(--cp-text-dim);
-  line-height: 1.6;
+    margin: 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px;
+    color: var(--text-faint);
+    line-height: 1.6;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bottom grid                                                             */
+/* ---------------------------------------------------------------------- */
+
+.cp-bottom-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+    gap: 16px;
+}
+
+.cp-bottom-grid .cp-section {
+    margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Page container                                                          */
+/* ---------------------------------------------------------------------- */
+
+.content.cp-page {
+    width: 100%;
+    max-width: 1400px;
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Responsive                                                               */
+/* ---------------------------------------------------------------------- */
+
+@media (min-width: 1500px) {
+    .cp-summary-cards {
+        gap: 14px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .cp-bottom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .cp-summary-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cp-main-header {
+        align-items: flex-start;
+    }
+
+    .cp-filter-wrapper {
+        width: 100%;
+    }
+
+    .cp-classroom-select {
+        width: 100%;
+    }
+
+    .cp-classroom-select select {
+        flex: 1;
+    }
+
+    .cp-filters,
+    .cp-filter-group {
+        width: 100%;
+    }
+
+    .cp-filter-btn {
+        flex: 1;
+        text-align: center;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
+
+@media (max-width: 700px) {
+    .cp-main-header h1 {
+        font-size: 22px;
+    }
+
+    .cp-summary-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .cp-section {
+        padding: 18px;
+    }
+
+    .cp-chart-box {
+        height: 260px;
+    }
+
+    .cp-chart-toggle-bar {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .cp-toggle-btn {
+        white-space: nowrap;
+    }
+
+    .cp-custom-range {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 360px) {
+    .cp-summary-cards {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }

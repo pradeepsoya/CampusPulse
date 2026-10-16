@@ -4,16 +4,18 @@
 {% block title %}CampusPulse — Settings{% endblock %}
 {% block page_title %}Settings{% endblock %}
 
-{% block content %}
-
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+{% endblock %}
+
+{% block content %}
 
 <div class="content cp-settings-container">
 
     <!-- Header -->
     <div class="settings-header">
         <div>
-            <h1>System Settings</h1>
+            <h1>System settings</h1>
             <p>Configure classrooms, sensors and automation behaviour.</p>
         </div>
     </div>
@@ -40,7 +42,7 @@
             </div>
 
             <div>
-                <span>Configured Sensors</span>
+                <span>Configured sensors</span>
                 <strong>{{ total_sensors }}</strong>
             </div>
         </div>
@@ -52,7 +54,7 @@
             </div>
 
             <div>
-                <span>API Connection</span>
+                <span>API connection</span>
                 <strong class="online-status">
                     <span></span> Online
                 </strong>
@@ -69,7 +71,7 @@
             <div>
                 <h2>
                     <i class="bi bi-door-open"></i>
-                    Classroom Configuration
+                    Classroom configuration
                 </h2>
 
                 <p>
@@ -82,7 +84,7 @@
         data-bs-toggle="modal"
         data-bs-target="#addClassroomModal">
     <i class="bi bi-plus-lg"></i>
-    Add Classroom
+    Add classroom
 </button>
         </div>
 
@@ -162,7 +164,7 @@
             <div>
                 <h2>
                     <i class="bi bi-robot"></i>
-                    Automation Rules
+                    Automation rules
                 </h2>
 
                 <p>
@@ -182,7 +184,7 @@
 
                 <div class="automation-content">
 
-                    <h3>Natural Light Threshold</h3>
+                    <h3>Natural light threshold</h3>
 
                     <p>
                         Turn classroom lighting off when sufficient
@@ -212,7 +214,7 @@
 
                 <div class="automation-content">
 
-                    <h3>Fan Temperature Threshold</h3>
+                    <h3>Fan temperature threshold</h3>
 
                     <p>
                         Activate the fan when classroom temperature
@@ -242,7 +244,7 @@
 
                 <div class="automation-content">
 
-                    <h3>Vacancy Grace Period</h3>
+                    <h3>Vacancy grace period</h3>
 
                     <p>
                         Allow appliances to remain active briefly
@@ -290,7 +292,7 @@
             <div class="notification-row">
 
                 <div>
-                    <h3>Sensor Offline</h3>
+                    <h3>Sensor offline</h3>
                     <p>Notify when a sensor stops sending readings.</p>
                 </div>
 
@@ -305,7 +307,7 @@
             <div class="notification-row">
 
                 <div>
-                    <h3>Appliance Active During Vacancy</h3>
+                    <h3>Appliance active during vacancy</h3>
                     <p>Notify when appliances remain active in an empty classroom.</p>
                 </div>
 
@@ -320,7 +322,7 @@
             <div class="notification-row">
 
                 <div>
-                    <h3>High Temperature</h3>
+                    <h3>High temperature</h3>
                     <p>Notify when classroom temperature exceeds the threshold.</p>
                 </div>
 
@@ -344,7 +346,7 @@
             <div>
                 <h2>
                     <i class="bi bi-info-circle"></i>
-                    System Information
+                    System information
                 </h2>
 
                 <p>
@@ -405,7 +407,7 @@
                 <div>
                     <h5 class="modal-title" id="addClassroomModalLabel">
                         <i class="bi bi-door-open"></i>
-                        Add Classroom
+                        Add classroom
                     </h5>
 
                     <p class="modal-subtitle">
@@ -428,7 +430,7 @@
 
                     <div class="classroom-form-group">
                         <label for="room_number">
-                            Room Number
+                            Room number
                         </label>
 
                         <input type="text"
@@ -479,7 +481,7 @@
                     <button type="submit"
                             class="classroom-save-btn">
                         <i class="bi bi-plus-lg"></i>
-                        Add Classroom
+                        Add classroom
                     </button>
 
                 </div>

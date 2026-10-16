@@ -13,7 +13,7 @@
 
     <!-- Page Header -->
     <div class="account-page-header">
-        <h1>Account Settings</h1>
+        <h1>Account settings</h1>
         <p>Manage your CampusPulse administrator account</p>
     </div>
 
@@ -34,7 +34,7 @@
                     </div>
 
                     <div>
-                        <h2>Account Information</h2>
+                        <h2>Account information</h2>
                         <p>Manage your CampusPulse administrator account details</p>
                     </div>
 
@@ -66,7 +66,7 @@
                         </div>
 
                         <div class="account-info-content">
-                            <span>Email Address</span>
+                            <span>Email address</span>
                             <strong>
                                 {{ current_email|default:"Not provided" }}
                             </strong>
@@ -83,7 +83,7 @@
                         </div>
 
                         <div class="account-info-content">
-                            <span>Account Type</span>
+                            <span>Account type</span>
                             <strong>Super Administrator</strong>
                         </div>
 
@@ -98,7 +98,7 @@
                         </div>
 
                         <div class="account-info-content">
-                            <span>Account Status</span>
+                            <span>Account status</span>
 
                             {% if is_active %}
                                 <strong class="status-active">
@@ -124,7 +124,7 @@
                         </div>
 
                         <div class="account-info-content">
-                            <span>Date Joined</span>
+                            <span>Date joined</span>
                             <strong>
                                 {{ date_joined|date:"d M Y" }}
                             </strong>
@@ -141,7 +141,7 @@
                         </div>
 
                         <div class="account-info-content">
-                            <span>Last Login</span>
+                            <span>Last login</span>
 
                             {% if last_login %}
                                 <strong>
@@ -201,16 +201,13 @@
                     </div>
 
 
-                    <button
-                        type="button"
+                    <a
+                        href="{% url 'password_change' %}"
                         class="change-password-btn"
-                        onclick="window.location.href='{% url 'password_change' %}'"
                     >
-                        <a href="{% url 'password_change' %}" class="change-password-btn">
-    <i class="bi bi-key"></i>
-    Change Password
-</a>
-                    </button>
+                        <i class="bi bi-key"></i>
+                        Change password
+                    </a>
 
                 </div>
 
@@ -243,7 +240,7 @@
                     </div>
 
                     <div>
-                        <h2>Security &amp; Session</h2>
+                        <h2>Security &amp; session</h2>
                         <p>Manage your account security</p>
                     </div>
 
@@ -286,7 +283,7 @@
 
                         <div class="security-option-content">
 
-                            <h3>Current Session</h3>
+                            <h3>Current session</h3>
 
                             <p>
                                 Signed in as {{ current_username }}.
@@ -310,7 +307,7 @@
 
                         <div class="security-option-content">
 
-                            <h3>Sign Out</h3>
+                            <h3>Sign out</h3>
 
                             <p>
                                 Sign out from your administrator account.
@@ -353,7 +350,7 @@
                 <div class="preference-row">
 
                     <div>
-                        <h3>Email Notifications</h3>
+                        <h3>Email notifications</h3>
                         <p>Receive important system updates</p>
                     </div>
 
@@ -374,7 +371,7 @@
                 <div class="preference-row">
 
                     <div>
-                        <h3>System Alerts</h3>
+                        <h3>System alerts</h3>
                         <p>Get notified about critical events</p>
                     </div>
 

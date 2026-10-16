@@ -2296,3 +2296,190 @@ body {
     max-width: 100%;
     box-sizing: border-box;
 }
+
+
+/* =========================================================
+   CAMPUSPULSE — GLOBAL LIGHT MODE OVERRIDES
+   Applies to dashboard and other pages using dashboard.css
+   ========================================================= */
+
+/* Main page */
+:root[data-theme="light"] body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Navbar */
+:root[data-theme="light"] .main-navbar {
+    background: rgba(250, 248, 243, 0.96);
+    border-bottom: 1px solid var(--border);
+}
+
+:root[data-theme="light"] .brand-name,
+:root[data-theme="light"] .dashboard-header h1,
+:root[data-theme="light"] .card h2,
+:root[data-theme="light"] .panel-header h3,
+:root[data-theme="light"] .room-info strong,
+:root[data-theme="light"] .device-main strong,
+:root[data-theme="light"] .activity-content strong,
+:root[data-theme="light"] .summary-value,
+:root[data-theme="light"] .alert-success strong {
+    color: var(--text);
+}
+
+/* Navigation links */
+:root[data-theme="light"] .main-nav a {
+    color: var(--text-dim);
+}
+
+:root[data-theme="light"] .main-nav a:hover {
+    background: var(--border-soft);
+    color: var(--text);
+}
+
+:root[data-theme="light"] .main-nav a.active {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+}
+
+/* Dashboard cards */
+:root[data-theme="light"] .card {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow);
+}
+
+:root[data-theme="light"] .card h5,
+:root[data-theme="light"] .dashboard-header p,
+:root[data-theme="light"] .panel-header p,
+:root[data-theme="light"] .panel-label,
+:root[data-theme="light"] .room-info span,
+:root[data-theme="light"] .device-main span,
+:root[data-theme="light"] .activity-content span,
+:root[data-theme="light"] .activity-item time,
+:root[data-theme="light"] .summary-label {
+    color: var(--text-dim);
+}
+
+/* Dashboard panels */
+:root[data-theme="light"] .dashboard-panel {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow);
+}
+
+/* Room, device and activity rows */
+:root[data-theme="light"] .room-item,
+:root[data-theme="light"] .device-item,
+:root[data-theme="light"] .activity-item {
+    border-bottom-color: var(--border-soft);
+}
+
+:root[data-theme="light"] .room-item:hover,
+:root[data-theme="light"] .device-item:hover {
+    background: var(--border-soft);
+}
+
+/* Admin profile */
+:root[data-theme="light"] .admin-profile {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+:root[data-theme="light"] .profile-name {
+    color: var(--text);
+}
+
+:root[data-theme="light"] .profile-role,
+:root[data-theme="light"] .profile-arrow {
+    color: var(--text-dim);
+}
+
+/* Profile dropdown */
+:root[data-theme="light"] .profile-dropdown {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow-lift);
+}
+
+:root[data-theme="light"] .profile-dropdown-header strong {
+    color: var(--text);
+}
+
+:root[data-theme="light"] .profile-dropdown-header span {
+    color: var(--text-dim);
+}
+
+:root[data-theme="light"] .profile-dropdown-item {
+    color: var(--text-dim);
+}
+
+:root[data-theme="light"] .profile-dropdown-item:hover {
+    background: var(--border-soft);
+    color: var(--text);
+}
+
+:root[data-theme="light"] .profile-dropdown-divider {
+    background: var(--border);
+}
+
+/* Account settings */
+:root[data-theme="light"] .account-card {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow);
+}
+
+:root[data-theme="light"] .account-page-header h1,
+:root[data-theme="light"] .account-profile-info h2,
+:root[data-theme="light"] .section-title h3,
+:root[data-theme="light"] .field-content strong,
+:root[data-theme="light"] .security-notice h4 {
+    color: var(--text);
+}
+
+:root[data-theme="light"] .account-page-header p,
+:root[data-theme="light"] .section-title p,
+:root[data-theme="light"] .field-content label {
+    color: var(--text-dim);
+}
+
+:root[data-theme="light"] .account-field {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+:root[data-theme="light"] .account-divider {
+    background: var(--border);
+}
+
+/* Theme toggle button and icons */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: var(--text-dim);
+}
+
+.theme-toggle i {
+    font-size: 16px;
+}
+
+:root[data-theme="light"] .theme-toggle {
+    color: var(--text);
+}
+
+/* Chart container */
+:root[data-theme="light"] .chart-container {
+    color: var(--text);
+}
+
+/* Empty states */
+:root[data-theme="light"] .room-empty-state {
+    color: var(--text-dim);
+}
+
+:root[data-theme="light"] .room-empty-state i {
+    color: var(--text-faint);
+}

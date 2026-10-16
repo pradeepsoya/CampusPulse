@@ -1,14 +1,20 @@
-.cp-account-container {
-    padding-bottom: 40px;
-}
+/* ==========================================================================
+   CampusPulse — Account Settings + Change Password
+   Retheme onto the shared design system (theme.css tokens, Fraunces +
+   Inter) — same surface/border/shadow/accent language as settings,
+   profile and analytics. Structure/classes unchanged.
+   Loaded after tokens.css/theme.css — same-specificity rules here win by
+   source order.
+   ========================================================================== */
 
 .account-section {
     max-width: 900px;
-    background: #17171f;
-    border: 1px solid rgba(255,255,255,.06);
-    border-radius: 15px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
     margin-bottom: 20px;
     padding: 22px;
+    box-shadow: var(--shadow);
 }
 
 .account-section-header {
@@ -25,20 +31,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(139,124,246,.12);
-    color: #a99cff;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
     font-size: 18px;
+    flex-shrink: 0;
 }
 
 .account-section-header h2 {
     margin: 0 0 4px;
+    font-family: var(--serif);
     font-size: 17px;
+    font-weight: 500;
+    color: var(--text);
 }
 
 .account-section-header p {
     margin: 0;
-    color: #777583;
-    font-size: 11px;
+    color: var(--text-faint);
+    font-size: 11.5px;
 }
 
 
@@ -55,7 +65,7 @@
 .form-group label {
     display: block;
     font-size: 11px;
-    color: #aaa7b4;
+    color: var(--text-dim);
     margin-bottom: 7px;
 }
 
@@ -66,17 +76,18 @@
 .password-input input {
     width: 100%;
     box-sizing: border-box;
-    background: #111118;
-    border: 1px solid rgba(255,255,255,.08);
-    color: #eee;
+    background: var(--border-soft);
+    border: 1px solid var(--border);
+    color: var(--text);
     border-radius: 8px;
     padding: 10px 40px 10px 12px;
     outline: none;
     font-size: 12px;
+    font-family: var(--sans);
 }
 
 .password-input input:focus {
-    border-color: #7569dc;
+    border-color: var(--accent);
 }
 
 .password-toggle {
@@ -86,18 +97,25 @@
     transform: translateY(-50%);
     background: transparent;
     border: 0;
-    color: #777583;
+    color: var(--text-faint);
     cursor: pointer;
 }
 
 .save-account-btn {
     border: 0;
-    border-radius: 8px;
-    background: #7569dc;
-    color: white;
-    padding: 10px 15px;
-    font-size: 11px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 11.5px;
+    font-weight: 600;
+    font-family: var(--sans);
     cursor: pointer;
+    transition: filter 0.15s ease;
+}
+
+.save-account-btn:hover {
+    filter: brightness(1.08);
 }
 
 .save-account-btn i {
@@ -117,7 +135,7 @@
     align-items: center;
     gap: 13px;
     padding: 16px 0;
-    border-top: 1px solid rgba(255,255,255,.05);
+    border-top: 1px solid var(--border);
 }
 
 .security-option:first-child {
@@ -131,40 +149,62 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #121219;
-    color: #9d94ed;
+    background: var(--border-soft);
+    color: var(--accent-ink);
+    flex-shrink: 0;
 }
 
 .security-option-content {
     flex: 1;
+    min-width: 0;
 }
 
 .security-option-content h3 {
     margin: 0 0 4px;
     font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
 }
 
 .security-option-content p {
     margin: 0;
-    color: #777583;
+    color: var(--text-faint);
     font-size: 11px;
+    line-height: 1.45;
 }
 
 .session-badge {
-    color: #67d596;
-    background: rgba(71,205,130,.1);
-    padding: 5px 9px;
-    border-radius: 20px;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    padding: 5px 10px;
+    border-radius: 999px;
     font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .logout-account-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     text-decoration: none;
-    color: #e47b87;
-    border: 1px solid rgba(228,123,135,.2);
-    padding: 7px 12px;
-    border-radius: 7px;
+    color: var(--bad);
+    border: 1px solid var(--bad-line);
+    padding: 7px 13px;
+    border-radius: 999px;
     font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+}
+
+.logout-account-btn:hover {
+    background: var(--bad-soft);
+}
+
+.logout-account-btn i {
+    font-size: 12px;
 }
 
 
@@ -175,7 +215,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 16px 0;
-    border-top: 1px solid rgba(255,255,255,.05);
+    border-top: 1px solid var(--border);
 }
 
 .preference-row:first-of-type {
@@ -185,11 +225,13 @@
 .preference-row h3 {
     margin: 0 0 4px;
     font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
 }
 
 .preference-row p {
     margin: 0;
-    color: #777583;
+    color: var(--text-faint);
     font-size: 11px;
 }
 
@@ -210,9 +252,10 @@
 .slider {
     position: absolute;
     inset: 0;
-    background: #33333e;
+    background: var(--border);
     border-radius: 20px;
     cursor: pointer;
+    transition: background 0.2s ease;
 }
 
 .slider:before {
@@ -223,18 +266,19 @@
     left: 3px;
     top: 3px;
     border-radius: 50%;
-    background: #aaa7b4;
-    transition: .2s;
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease;
 }
 
 .switch input:checked + .slider {
-    background: #7569dc;
+    background: var(--accent);
 }
 
 .switch input:checked + .slider:before {
     transform: translateX(17px);
-    background: white;
 }
+
 .account-info {
     display: flex;
     flex-direction: column;
@@ -245,7 +289,7 @@
     align-items: center;
     gap: 14px;
     padding: 17px 0;
-    border-top: 1px solid rgba(255,255,255,.05);
+    border-top: 1px solid var(--border);
 }
 
 .account-info-row:first-child {
@@ -259,8 +303,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(139,124,246,.1);
-    color: #a99cff;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    flex-shrink: 0;
 }
 
 .account-info-content {
@@ -269,14 +314,14 @@
 
 .account-info-content > span {
     display: block;
-    color: #777583;
+    color: var(--text-faint);
     font-size: 10px;
     margin-bottom: 5px;
 }
 
 .account-info-content strong {
     font-size: 13px;
-    color: #e5e3eb;
+    color: var(--text);
 }
 
 .password-display {
@@ -286,27 +331,29 @@
 
 .password-display input {
     flex: 1;
-    background: #111118;
-    border: 1px solid rgba(255,255,255,.08);
+    background: var(--border-soft);
+    border: 1px solid var(--border);
     border-right: 0;
-    border-radius: 7px 0 0 7px;
+    border-radius: 9px 0 0 9px;
     padding: 9px 11px;
-    color: #e5e3eb;
+    color: var(--text);
     font-size: 12px;
+    font-family: var(--sans);
     outline: none;
 }
 
 .password-display button {
     width: 40px;
-    border: 1px solid rgba(255,255,255,.08);
-    background: #111118;
-    color: #777583;
-    border-radius: 0 7px 7px 0;
+    border: 1px solid var(--border);
+    background: var(--border-soft);
+    color: var(--text-faint);
+    border-radius: 0 9px 9px 0;
     cursor: pointer;
+    transition: color 0.15s ease;
 }
 
 .password-display button:hover {
-    color: #a99cff;
+    color: var(--accent-ink);
 }
 
 
@@ -326,16 +373,18 @@
 }
 
 .account-page-header h1 {
-    margin: 0 0 5px;
-    font-size: 27px;
-    font-weight: 700;
-    color: #eeeef5;
+    margin: 0 0 6px;
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text);
 }
 
 .account-page-header p {
     margin: 0;
-    color: #777583;
-    font-size: 12px;
+    color: var(--text-faint);
+    font-size: 12.5px;
 }
 
 
@@ -387,9 +436,9 @@
 
     padding: 14px;
 
-    background: #111118;
-    border: 1px solid rgba(255,255,255,.055);
-    border-radius: 11px;
+    background: var(--border-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
 
     transition:
         border-color .2s ease,
@@ -397,8 +446,7 @@
 }
 
 .account-info-card:hover {
-    border-color: rgba(139,124,246,.22);
-    background: #13131b;
+    border-color: var(--accent-line);
 }
 
 
@@ -415,8 +463,8 @@
     align-items: center;
     justify-content: center;
 
-    background: rgba(139,124,246,.10);
-    color: #a99cff;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
 
     font-size: 17px;
 }
@@ -434,14 +482,14 @@
 
     margin-bottom: 5px;
 
-    color: #777583;
+    color: var(--text-faint);
     font-size: 10px;
 }
 
 .account-info-content strong {
     display: block;
 
-    color: #e5e3eb;
+    color: var(--text);
     font-size: 13px;
     font-weight: 600;
 
@@ -454,7 +502,7 @@
 /* Status */
 
 .status-active {
-    color: #67d596 !important;
+    color: var(--accent-ink) !important;
 }
 
 .status-active i {
@@ -464,7 +512,7 @@
 }
 
 .status-inactive {
-    color: #e47b87 !important;
+    color: var(--bad) !important;
 }
 
 
@@ -504,28 +552,36 @@
 .change-password-btn {
     height: 40px;
 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
     border: 0;
-    border-radius: 8px;
+    border-radius: 999px;
 
-    padding: 0 15px;
+    padding: 0 16px;
 
-    background: #7569dc;
+    background: var(--accent);
     color: #fff;
 
-    font-size: 11px;
-    font-weight: 500;
+    text-decoration: none;
+
+    font-family: var(--sans);
+    font-size: 11.5px;
+    font-weight: 600;
 
     cursor: pointer;
 
     white-space: nowrap;
 
     transition:
-        background .2s ease,
+        filter .2s ease,
         transform .15s ease;
 }
 
 .change-password-btn:hover {
-    background: #8478e9;
+    filter: brightness(1.08);
+    color: #fff;
 }
 
 .change-password-btn:active {
@@ -533,7 +589,7 @@
 }
 
 .change-password-btn i {
-    margin-right: 5px;
+    margin-right: 6px;
 }
 
 
@@ -547,17 +603,17 @@
     margin-top: 13px;
     padding: 11px 12px;
 
-    background: rgba(139,124,246,.055);
-    border: 1px solid rgba(139,124,246,.10);
-    border-radius: 8px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 10px;
 
-    color: #777583;
-    font-size: 10px;
+    color: var(--text-dim);
+    font-size: 10.5px;
     line-height: 1.5;
 }
 
 .password-note i {
-    color: #a99cff;
+    color: var(--accent-ink);
     margin-top: 1px;
 }
 
@@ -573,7 +629,7 @@
 }
 
 .security-option-content h3 {
-    color: #e5e3eb;
+    color: var(--text);
 }
 
 .security-option-content p {
@@ -604,7 +660,7 @@
 }
 
 .preference-row h3 {
-    color: #e5e3eb;
+    color: var(--text);
 }
 
 
@@ -667,6 +723,7 @@
     }
 
 }
+
 /* =========================================================
    CHANGE PASSWORD PAGE
    ========================================================= */
@@ -687,14 +744,16 @@
 
 .password-page-header h1 {
     margin: 0 0 6px;
-    color: #eeeef5;
+    font-family: var(--serif);
+    color: var(--text);
     font-size: 26px;
-    font-weight: 700;
+    font-weight: 500;
+    letter-spacing: -0.01em;
 }
 
 .password-page-header p {
     margin: 0;
-    color: #777583;
+    color: var(--text-faint);
     font-size: 13px;
 }
 
@@ -707,14 +766,14 @@
     width: min(680px, 100%);
     margin: 0 auto;
 
-    background: #17171f;
-    border: 1px solid rgba(255,255,255,.06);
-    border-radius: 15px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
 
     padding: 28px 30px;
     box-sizing: border-box;
 
-    box-shadow: 0 8px 30px rgba(0,0,0,.35);
+    box-shadow: var(--shadow-lift);
 }
 
 
@@ -737,28 +796,29 @@
     align-items: center;
     justify-content: center;
 
-    background: rgba(139,124,246,.12);
-    color: #a99cff;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
 
     font-size: 19px;
 }
 
 .password-card-header h2 {
     margin: 0 0 5px;
-    color: #eeeef5;
+    font-family: var(--serif);
+    color: var(--text);
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .password-card-header p {
     margin: 0;
-    color: #777583;
+    color: var(--text-faint);
     font-size: 12px;
 }
 
 .password-card-divider {
     height: 1px;
-    background: rgba(255,255,255,.06);
+    background: var(--border);
     margin: 22px 0 24px;
 }
 
@@ -778,7 +838,7 @@
 .password-form-group label {
     display: block;
     margin-bottom: 7px;
-    color: #aaa7b4;
+    color: var(--text-dim);
     font-size: 11px;
     font-weight: 500;
 }
@@ -801,33 +861,33 @@
 
     padding: 0 45px 0 13px;
 
-    background: #111118;
+    background: var(--border-soft);
 
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 9px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
 
-    color: #eeeef5;
+    color: var(--text);
 
     outline: none;
 
-    font-family: inherit;
+    font-family: var(--sans);
     font-size: 13px;
 
     transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
 .campus-password-input input:hover {
-    border-color: rgba(255,255,255,.13);
+    border-color: var(--accent-line);
 }
 
 .campus-password-input input:focus {
-    background: #12121a;
-    border-color: #7569dc;
-    box-shadow: 0 0 0 3px rgba(117,105,220,.15);
+    background: var(--surface);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .campus-password-input input::placeholder {
-    color: #555461;
+    color: var(--text-faint);
 }
 
 
@@ -851,10 +911,10 @@
     padding: 0;
 
     border: 0;
-    border-radius: 7px;
+    border-radius: 8px;
 
     background: transparent;
-    color: #777583;
+    color: var(--text-faint);
 
     cursor: pointer;
 
@@ -862,8 +922,8 @@
 }
 
 .campus-password-toggle:hover {
-    background: rgba(139,124,246,.10);
-    color: #a99cff;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
 }
 
 .campus-password-toggle i {
@@ -877,7 +937,7 @@
 
 .campus-password-error {
     margin-top: 6px;
-    color: #e47b87;
+    color: var(--bad);
     font-size: 11px;
     line-height: 1.5;
 }
@@ -885,7 +945,7 @@
 .campus-password-error ul {
     margin: 5px 0 0;
     padding-left: 16px;
-    color: #e47b87;
+    color: var(--bad);
     font-size: 11px;
     list-style: disc;
 }
@@ -898,11 +958,11 @@
     margin-bottom: 18px;
     padding: 12px 14px;
 
-    background: rgba(228,123,135,.06);
-    border: 1px solid rgba(228,123,135,.15);
-    border-radius: 8px;
+    background: var(--bad-soft);
+    border: 1px solid var(--bad-line);
+    border-radius: 10px;
 
-    color: #e47b87;
+    color: var(--bad);
     font-size: 12px;
 }
 
@@ -930,27 +990,27 @@
     margin: 6px 0 20px;
     padding: 13px 14px;
 
-    background: rgba(139,124,246,.055);
-    border: 1px solid rgba(139,124,246,.11);
-    border-radius: 9px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 11px;
 }
 
 .requirements-icon {
     flex-shrink: 0;
     margin-top: 2px;
-    color: #a99cff;
+    color: var(--accent-ink);
     font-size: 14px;
 }
 
 .requirements-content {
-    color: #777583;
+    color: var(--text-dim);
     font-size: 11px;
     line-height: 1.5;
 }
 
 .requirements-content h4 {
     margin: 0 0 6px;
-    color: #cfcdd8;
+    color: var(--text);
     font-size: 11.5px;
     font-weight: 600;
     text-transform: uppercase;
@@ -962,7 +1022,7 @@
     margin: 0;
     padding: 0 0 0 15px;
     list-style: disc;
-    color: #8b8895;
+    color: var(--text-faint);
     font-size: 11px;
     line-height: 1.6;
 }
@@ -996,22 +1056,22 @@
     padding: 0 16px;
     box-sizing: border-box;
 
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
 
-    background: #111118;
-    color: #aaa7b4;
+    background: var(--border-soft);
+    color: var(--text-dim);
 
     text-decoration: none;
+    font-family: var(--sans);
     font-size: 12px;
 
     transition: background .2s ease, border-color .2s ease, color .2s ease;
 }
 
 .password-cancel-btn:hover {
-    background: #1d1d26;
-    border-color: rgba(255,255,255,.14);
-    color: #eeeef5;
+    background: var(--border);
+    color: var(--text);
 }
 
 .password-submit-btn {
@@ -1024,22 +1084,23 @@
     padding: 0 18px;
 
     border: 0;
-    border-radius: 8px;
+    border-radius: 999px;
 
-    background: #7569dc;
+    background: var(--accent);
     color: #fff;
 
+    font-family: var(--sans);
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
 
     cursor: pointer;
 
-    transition: background .2s ease, box-shadow .2s ease, transform .15s ease;
+    transition: filter .2s ease, box-shadow .2s ease, transform .15s ease;
 }
 
 .password-submit-btn:hover {
-    background: #8275e7;
-    box-shadow: 0 5px 18px rgba(117,105,220,.25);
+    filter: brightness(1.08);
+    box-shadow: 0 5px 18px -4px var(--accent-line);
 }
 
 .password-submit-btn:active {

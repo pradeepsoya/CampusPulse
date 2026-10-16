@@ -1,0 +1,810 @@
+/* ==========================================================================
+   CampusPulse — Dashboard refresh
+   Restyles the dashboard page's own markup (hero, sensor cards, device
+   and room panels, alerts, activity) on top of theme.css's tokens.
+   Loaded after dashboard.css/tokens.css, so same-specificity rules here
+   win by source order — no !important needed.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Page header                                                            */
+/* ---------------------------------------------------------------------- */
+
+.dash {
+    padding-top: 28px;
+}
+
+.dashboard-header {
+    align-items: flex-start;
+}
+
+.dashboard-header h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    color: var(--text);
+}
+
+.dashboard-kicker {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: normal;
+    text-transform: none;
+    color: var(--text-faint);
+    gap: 8px;
+}
+
+.live-dot {
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+    animation: cp-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes cp-pulse {
+    0%, 100% { box-shadow: 0 0 0 3px var(--accent-soft); }
+    50% { box-shadow: 0 0 0 5px transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .live-dot { animation: none; }
+}
+
+.kicker-sep {
+    color: var(--border);
+}
+
+.live-meta.stale {
+    color: var(--warn);
+}
+
+.header-tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-time {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--sans);
+}
+
+.dashboard-time i {
+    color: var(--accent-ink);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Hero                                                                    */
+/* ---------------------------------------------------------------------- */
+
+.hero {
+    margin-top: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 30px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+    flex-wrap: wrap;
+}
+
+.hero[data-state="occupied"] {
+    border-color: var(--accent-line);
+}
+
+.hero.is-stale {
+    border-color: var(--warn-line);
+}
+
+.hero-main {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 220px;
+}
+
+.hero-kicker {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-faint);
+}
+
+.hero-kicker i {
+    color: var(--accent-ink);
+}
+
+.hero-state {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+}
+
+.hero-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+}
+
+.hero-chips {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--border-soft);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+}
+
+.chip.is-on {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border-color: var(--accent-line);
+}
+
+.chip.is-off {
+    background: var(--border-soft);
+    color: var(--text-faint);
+}
+
+.hero-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 110px;
+}
+
+.hero-stat-label {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--text-faint);
+}
+
+.hero-stat strong {
+    font-family: var(--serif);
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.hero-stat small {
+    font-size: 11.5px;
+    color: var(--text-faint);
+}
+
+/* Shared status utility — used on hero-comfort, hero-feed, pills */
+
+.is-ok { color: var(--accent-ink) !important; }
+.is-warn { color: var(--warn) !important; }
+.is-bad { color: var(--bad) !important; }
+
+/* ---------------------------------------------------------------------- */
+/* Sensor cards                                                           */
+/* ---------------------------------------------------------------------- */
+
+.section-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 36px 0 14px;
+}
+
+.section-link {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--accent-ink);
+    text-decoration: none;
+}
+
+.section-link:hover {
+    text-decoration: underline;
+}
+
+.cards {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 760px) {
+    .cards { grid-template-columns: 1fr; }
+}
+
+.cards .card {
+    --card-accent: var(--accent);
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    min-height: 0;
+    gap: 0;
+    box-shadow: var(--shadow);
+}
+
+.cards .card:hover {
+    transform: none;
+    border-color: var(--border);
+    box-shadow: var(--shadow-lift);
+}
+
+.cards .temperature-card { --card-accent: var(--chart-temp); }
+.cards .humidity-card    { --card-accent: var(--chart-humidity); }
+.cards .light-intensity-card { --card-accent: var(--chart-light); }
+
+.card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.card-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.card-label i {
+    color: var(--card-accent);
+    font-size: 13px;
+}
+
+.cards .card h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 28px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+.cards .card h2 .unit {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-faint);
+    margin-left: 3px;
+}
+
+/* ---- status pills ---- */
+
+.pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.pill.is-ok   { background: var(--accent-soft); color: var(--accent-ink) !important; border: 1px solid var(--accent-line); }
+.pill.is-warn { background: var(--warn-soft);   color: var(--warn) !important;       border: 1px solid var(--warn-line); }
+.pill.is-bad  { background: var(--bad-soft);    color: var(--bad) !important;        border: 1px solid var(--bad-line); }
+.pill.is-info { background: var(--info-soft);   color: var(--info) !important;       border: 1px solid var(--info-line); }
+.pill.is-off  { background: var(--border-soft); color: var(--text-faint) !important; border: 1px solid var(--border); }
+
+/* ---- sparkline ---- */
+
+.spark {
+    height: 40px;
+    color: var(--card-accent);
+    margin-bottom: 12px;
+}
+
+.spark svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.spark-empty {
+    font-size: 11.5px;
+    color: var(--text-faint);
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--text-faint);
+    padding-top: 12px;
+    border-top: 1px solid var(--border-soft);
+}
+
+/* Rising/falling is informational, not good or bad on its own —
+   kept neutral so it doesn't look like a status judgement. */
+.card-foot span.up,
+.card-foot span.down {
+    color: var(--text-dim);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Two-column layout: devices + rooms, alerts + activity                  */
+/* ---------------------------------------------------------------------- */
+
+.dash-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 36px;
+}
+
+.dash-split .section-heading {
+    margin-top: 0;
+}
+
+@media (max-width: 900px) {
+    .dash-split { grid-template-columns: 1fr; }
+}
+
+.dashboard-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+}
+
+/* ---- devices ---- */
+
+.device-item {
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.device-item:first-child { padding-top: 0; }
+
+.device-main strong {
+    color: var(--text);
+    font-size: 13.5px;
+}
+
+.device-main span {
+    color: var(--text-faint);
+    font-size: 11.5px;
+}
+
+.device-icon {
+    background: var(--border-soft);
+    color: var(--text-faint);
+}
+
+.device-icon.light { background: var(--warn-soft); color: var(--warn); }
+.device-icon.fan   { background: var(--info-soft); color: var(--info); }
+
+.device-state {
+    font-family: var(--sans);
+}
+
+.device-state.on  { background: var(--accent-soft); color: var(--accent-ink); }
+.device-state.off { background: var(--border-soft); color: var(--text-faint); }
+
+/* ---- rooms ---- */
+
+.room-item {
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.room-item:first-child { padding-top: 0; }
+
+.room-info strong { color: var(--text); font-size: 13px; }
+.room-info span { color: var(--text-faint); font-size: 11px; }
+
+.room-summary {
+    font-size: 11px;
+    color: var(--text-faint);
+    flex: 1;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.room-icon.occupied { background: var(--accent-soft); color: var(--accent-ink); }
+.room-icon.available { background: var(--border-soft); color: var(--text-faint); }
+.room-icon.unknown { background: var(--border-soft); color: var(--text-faint); }
+
+.room-status.occupied-status { color: var(--accent-ink); }
+.room-status.occupied-status span { background: var(--accent); box-shadow: none; }
+
+.room-status.available-status { color: var(--text-faint); }
+.room-status.available-status span { background: var(--text-faint); }
+
+.room-status.unknown-status { color: var(--text-faint); }
+.room-status.unknown-status span { background: var(--text-faint); }
+
+.room-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 30px 10px;
+    color: var(--text-faint);
+    text-align: center;
+}
+
+.room-empty-state i {
+    font-size: 22px;
+}
+
+.room-empty-state p {
+    font-size: 12.5px;
+}
+
+/* ---- alerts ---- */
+
+.alerts-panel .panel-header {
+    margin-bottom: 16px;
+}
+
+.panel-label {
+    color: var(--text-faint);
+}
+
+.panel-header h3 {
+    font-family: var(--sans);
+    font-weight: 600;
+    color: var(--text);
+}
+
+.alert-badge {
+    background: var(--border-soft);
+    color: var(--text-dim);
+}
+
+.system-alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.system-alert {
+    display: flex;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--border-soft);
+    border: 1px solid var(--border);
+}
+
+.system-alert strong {
+    display: block;
+    font-size: 12.5px;
+    color: var(--text);
+}
+
+.system-alert span {
+    font-size: 11.5px;
+    color: var(--text-dim);
+}
+
+.alert-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+}
+
+.system-alert.critical { background: var(--bad-soft); border-color: var(--bad-line); }
+.system-alert.critical .alert-icon { background: var(--bad); color: #fff; }
+
+.system-alert.warning { background: var(--warn-soft); border-color: var(--warn-line); }
+.system-alert.warning .alert-icon { background: var(--warn); color: #fff; }
+
+.system-alert.info { background: var(--info-soft); border-color: var(--info-line); }
+.system-alert.info .alert-icon { background: var(--info); color: #fff; }
+
+.live-insights:not(:empty) {
+    margin-top: 10px;
+}
+
+.alert-success {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+}
+
+.alert-success strong { color: var(--text); }
+.alert-success span { color: var(--text-dim); }
+
+.alert-check {
+    background: var(--accent);
+    color: #fff;
+}
+
+.alert-summary > div {
+    border-right: 1px solid var(--border);
+}
+
+.summary-value {
+    font-family: var(--serif);
+    font-weight: 500;
+    color: var(--text);
+}
+
+.summary-label {
+    color: var(--text-faint);
+}
+
+/* ---- activity ---- */
+
+.activity-item {
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.activity-item:first-child { padding-top: 0; }
+
+.activity-content strong { color: var(--text); font-size: 12.5px; }
+.activity-content span { color: var(--text-faint); font-size: 11px; }
+
+.activity-item time {
+    color: var(--text-faint);
+    font-family: var(--sans);
+}
+
+.activity-icon.purple { background: var(--act-purple-soft); color: var(--act-purple); }
+.activity-icon.yellow { background: var(--warn-soft); color: var(--warn); }
+.activity-icon.blue   { background: var(--info-soft); color: var(--info); }
+.activity-icon.teal   { background: var(--accent-soft); color: var(--accent-ink); }
+
+.panel-menu {
+    color: var(--text-faint);
+}
+.device-state.unknown {
+    color: var(--text-muted, #777);
+    background: rgba(128, 128, 128, 0.12);
+}
+
+.activity-empty-state {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--text-muted, #777);
+}
+
+.activity-empty-state i {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.activity-empty-state p {
+    margin: 0;
+}
+
+.activity-list {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+
+/* ==========================================================================
+   DESIGN POLISH PASS
+   ========================================================================== */
+
+/* Slightly lighter secondary text so it stays readable on both themes */
+.dash {
+    --faint-readable: color-mix(in srgb, var(--text-faint) 60%, var(--text-dim));
+    max-width: 1400px;
+}
+
+.hero-kicker,
+.hero-stat-label,
+.hero-stat small,
+.card-foot,
+.room-info span,
+.device-main span,
+.activity-content span,
+.activity-item time,
+.summary-label,
+.panel-label,
+.spark-empty,
+.dashboard-kicker {
+    color: var(--faint-readable);
+}
+
+/* One heading style for sections and panels */
+.section-heading {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+}
+
+.panel-header h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+}
+
+/* Hero: room state is primary, stats are secondary */
+.hero-state {
+    font-size: 40px;
+}
+
+.hero-stat strong {
+    font-size: 18px;
+}
+
+.hero-stats {
+    gap: 40px;
+}
+
+/* Theme toggle reads as a button */
+.theme-toggle {
+    border: 1px solid var(--border);
+    border-radius: 50%;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent-line);
+}
+
+/* Header status when sensors are offline */
+.kicker-status.is-offline {
+    color: var(--warn);
+}
+
+.live-dot.is-offline {
+    background: var(--warn);
+    box-shadow: 0 0 0 3px var(--warn-soft);
+    animation: none;
+}
+
+/* Stale data: dim the numbers and mark them as last known */
+.cards.is-stale .card h2 {
+    opacity: 0.6;
+}
+
+.cards.is-stale .card h2::after {
+    content: "last known";
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: normal;
+    margin-left: 10px;
+    color: var(--faint-readable);
+}
+
+/* Empty sparkline placeholder */
+.spark-empty.is-placeholder {
+    width: 100%;
+    border-bottom: 1px dashed var(--border);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Energy strip                                                           */
+/* ---------------------------------------------------------------------- */
+
+.energy-strip {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    padding: 18px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.energy-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 130px;
+}
+
+.energy-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--faint-readable);
+}
+
+.energy-label i {
+    color: var(--accent-ink);
+}
+
+.energy-stat strong {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.energy-stat small {
+    font-size: 11.5px;
+    color: var(--faint-readable);
+}
+
+.energy-tip {
+    flex: 1;
+    min-width: 260px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--border-soft);
+    border: 1px solid var(--border);
+}
+
+.energy-tip-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    background: var(--border);
+    color: var(--text-dim);
+}
+
+.energy-tip strong {
+    display: block;
+    font-size: 13px;
+    color: var(--text);
+}
+
+.energy-tip span {
+    font-size: 12px;
+    color: var(--text-dim);
+}
+
+.energy-tip.is-warn {
+    background: var(--warn-soft);
+    border-color: var(--warn-line);
+}
+
+.energy-tip.is-warn .energy-tip-icon {
+    background: var(--warn);
+    color: #fff;
+}
+
+.energy-tip.is-ok {
+    background: var(--accent-soft);
+    border-color: var(--accent-line);
+}
+
+.energy-tip.is-ok .energy-tip-icon {
+    background: var(--accent);
+    color: #fff;
+}

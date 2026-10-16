@@ -1,36 +1,57 @@
+/* ==========================================================================
+   CampusPulse — Settings
+   Retheme onto the shared design system (theme.css tokens, Fraunces +
+   Inter) — flat surfaces, soft borders, accent-tinted icon chips, same
+   language as dashboard/live-monitoring/analytics. Structure/classes
+   unchanged, including the Bootstrap modal, so settings.js (if any) and
+   the add-classroom form keep working as-is.
+   Loaded after tokens.css/theme.css — same-specificity rules here win by
+   source order.
+   ========================================================================== */
+
 .cp-settings-container {
-    padding-bottom: 40px;
+    padding: 28px 0 60px;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Header                                                                  */
+/* ---------------------------------------------------------------------- */
 
 .settings-header,
 .profile-page-header,
 .account-page-header {
-    margin-bottom: 25px;
+    margin-bottom: 26px;
 }
 
 .settings-header h1,
 .profile-page-header h1,
 .account-page-header h1 {
     margin: 0 0 6px;
-    font-size: 27px;
-    font-weight: 700;
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text);
 }
 
 .settings-header p,
 .profile-page-header p,
 .account-page-header p {
     margin: 0;
-    color: #8d8b9d;
+    color: var(--text-dim);
+    font-size: 13.5px;
 }
 
 
-/* Overview */
+/* ---------------------------------------------------------------------- */
+/* Overview                                                                */
+/* ---------------------------------------------------------------------- */
 
 .settings-overview {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 22px;
+    gap: 14px;
+    margin-bottom: 20px;
 }
 
 .settings-stat-card {
@@ -38,9 +59,10 @@
     align-items: center;
     gap: 15px;
     padding: 19px;
-    border-radius: 14px;
-    background: #17171f;
-    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
 }
 
 .settings-stat-icon {
@@ -50,25 +72,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(139,124,246,.12);
-    color: #a99cff;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
     font-size: 19px;
+    flex-shrink: 0;
 }
 
 .settings-stat-card span {
     display: block;
-    color: #8e8b9c;
+    color: var(--text-faint);
     font-size: 12px;
     margin-bottom: 4px;
 }
 
 .settings-stat-card strong {
-    font-size: 20px;
+    font-family: var(--serif);
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--text);
 }
 
 .online-status {
-    color: #70d69a !important;
+    color: var(--accent-ink) !important;
     font-size: 14px !important;
+    font-family: var(--sans);
 }
 
 .online-status span {
@@ -76,68 +103,85 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #55d98a;
+    background: var(--accent);
     margin-right: 5px;
 }
 
 
-/* Sections */
+/* ---------------------------------------------------------------------- */
+/* Sections                                                                */
+/* ---------------------------------------------------------------------- */
 
 .settings-section {
-    background: #17171f;
-    border: 1px solid rgba(255,255,255,.06);
-    border-radius: 15px;
-    padding: 22px;
-    margin-bottom: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
 }
 
 .settings-section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
 .settings-section-header h2 {
     margin: 0 0 5px;
+    font-family: var(--serif);
     font-size: 17px;
+    font-weight: 500;
+    color: var(--text);
 }
 
 .settings-section-header h2 i {
-    margin-right: 7px;
-    color: #a99cff;
+    margin-right: 8px;
+    color: var(--accent-ink);
 }
 
 .settings-section-header p {
     margin: 0;
-    color: #858291;
-    font-size: 12px;
+    color: var(--text-faint);
+    font-size: 12.5px;
 }
 
 .settings-action-btn {
     border: 0;
-    border-radius: 9px;
-    padding: 9px 14px;
-    background: #8175e9;
-    color: white;
-    font-size: 12px;
+    border-radius: 999px;
+    padding: 9px 16px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    font-weight: 600;
     cursor: pointer;
+    transition: filter 0.15s ease;
+}
+
+.settings-action-btn:hover {
+    filter: brightness(1.08);
 }
 
 
-/* Classrooms */
+/* ---------------------------------------------------------------------- */
+/* Classrooms                                                              */
+/* ---------------------------------------------------------------------- */
 
 .classroom-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    gap: 14px;
 }
 
 .classroom-card {
-    padding: 17px;
-    border: 1px solid rgba(255,255,255,.06);
-    background: #121219;
-    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    background: var(--border-soft);
+    border-radius: 14px;
 }
 
 .classroom-card-top {
@@ -153,25 +197,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(139,124,246,.12);
-    color: #a99cff;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
 }
 
 .active-badge {
-    padding: 4px 8px;
-    border-radius: 20px;
-    background: rgba(71,205,130,.1);
-    color: #65d596;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
     font-size: 10px;
+    font-weight: 600;
 }
 
 .classroom-card h3 {
     margin: 15px 0 5px;
-    font-size: 18px;
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--text);
 }
 
 .classroom-location {
-    color: #858291;
+    color: var(--text-faint);
     font-size: 12px;
     margin: 0 0 17px;
 }
@@ -184,21 +232,25 @@
     display: flex;
     gap: 35px;
     padding-top: 13px;
-    border-top: 1px solid rgba(255,255,255,.05);
+    border-top: 1px solid var(--border);
 }
 
 .classroom-details span {
     display: block;
     font-size: 10px;
-    color: #777583;
+    color: var(--text-faint);
 }
 
 .classroom-details strong {
     font-size: 14px;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
 }
 
 
-/* Automation */
+/* ---------------------------------------------------------------------- */
+/* Automation                                                              */
+/* ---------------------------------------------------------------------- */
 
 .automation-grid {
     display: grid;
@@ -209,10 +261,10 @@
 .automation-card {
     display: flex;
     gap: 13px;
-    padding: 16px;
-    background: #121219;
-    border: 1px solid rgba(255,255,255,.06);
-    border-radius: 12px;
+    padding: 17px;
+    background: var(--border-soft);
+    border: 1px solid var(--border);
+    border-radius: 14px;
 }
 
 .automation-icon {
@@ -222,8 +274,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(139,124,246,.12);
-    color: #a99cff;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
 }
 
 .automation-content {
@@ -232,13 +284,15 @@
 
 .automation-content h3 {
     margin: 0 0 6px;
-    font-size: 13px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
 }
 
 .automation-content p {
     margin: 0;
-    color: #777583;
-    font-size: 11px;
+    color: var(--text-faint);
+    font-size: 11.5px;
     line-height: 1.5;
 }
 
@@ -247,16 +301,22 @@
 }
 
 .setting-value strong {
+    font-family: var(--serif);
     font-size: 19px;
+    font-weight: 500;
+    color: var(--text);
 }
 
 .setting-value span {
-    color: #858291;
+    color: var(--text-faint);
     font-size: 11px;
+    margin-left: 3px;
 }
 
 
-/* Switch */
+/* ---------------------------------------------------------------------- */
+/* Switch                                                                   */
+/* ---------------------------------------------------------------------- */
 
 .switch {
     position: relative;
@@ -274,8 +334,9 @@
     position: absolute;
     inset: 0;
     border-radius: 30px;
-    background: #33333e;
+    background: var(--border);
     cursor: pointer;
+    transition: background 0.2s ease;
 }
 
 .slider:before {
@@ -286,21 +347,23 @@
     left: 3px;
     top: 3px;
     border-radius: 50%;
-    background: #aaa7b4;
-    transition: .2s;
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease;
 }
 
 .switch input:checked + .slider {
-    background: #7569dc;
+    background: var(--accent);
 }
 
 .switch input:checked + .slider:before {
     transform: translateX(17px);
-    background: white;
 }
 
 
-/* Notifications */
+/* ---------------------------------------------------------------------- */
+/* Notifications                                                           */
+/* ---------------------------------------------------------------------- */
 
 .notification-settings {
     display: flex;
@@ -311,8 +374,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     padding: 16px 0;
-    border-top: 1px solid rgba(255,255,255,.05);
+    border-top: 1px solid var(--border);
 }
 
 .notification-row:first-child {
@@ -321,17 +385,21 @@
 
 .notification-row h3 {
     margin: 0 0 4px;
-    font-size: 13px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
 }
 
 .notification-row p {
     margin: 0;
-    color: #777583;
-    font-size: 11px;
+    color: var(--text-faint);
+    font-size: 11.5px;
 }
 
 
-/* System */
+/* ---------------------------------------------------------------------- */
+/* System                                                                   */
+/* ---------------------------------------------------------------------- */
 
 .system-info-grid {
     display: grid;
@@ -340,44 +408,51 @@
 }
 
 .system-info-grid div {
-    padding: 14px;
-    background: #121219;
-    border-radius: 10px;
+    padding: 14px 16px;
+    background: var(--border-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
 }
 
 .system-info-grid span {
     display: block;
     font-size: 10px;
-    color: #777583;
+    color: var(--text-faint);
     margin-bottom: 5px;
 }
 
 .system-info-grid strong {
-    font-size: 12px;
+    font-size: 12.5px;
+    color: var(--text);
+    font-weight: 600;
 }
 
 
-/* Empty */
+/* ---------------------------------------------------------------------- */
+/* Empty                                                                    */
+/* ---------------------------------------------------------------------- */
 
 .empty-settings {
     text-align: center;
-    padding: 35px;
-    color: #777583;
+    padding: 40px 20px;
+    color: var(--text-faint);
 }
 
 .empty-settings i {
     font-size: 30px;
-    color: #8175e9;
+    color: var(--accent-ink);
 }
 
 .empty-settings h3 {
-    color: #d9d7e0;
-    font-size: 15px;
-    margin: 10px 0 5px;
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 500;
+    margin: 12px 0 5px;
 }
 
 .empty-settings p {
-    font-size: 12px;
+    font-size: 12.5px;
 }
 
 
@@ -393,8 +468,11 @@
     }
 }
 
+
 /* =========================================================
    ADD CLASSROOM MODAL
+   Retoned to follow light/dark mode instead of being
+   permanently dark.
    ========================================================= */
 
 #addClassroomModal .modal-dialog {
@@ -402,40 +480,41 @@
 }
 
 #addClassroomModal .modal-content {
-    background: #17171f !important;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    color: #eeeef5;
+    background: var(--surface) !important;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    color: var(--text);
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    box-shadow: var(--shadow-lift);
 }
 
 /* Header */
 
 #addClassroomModal .modal-header {
     padding: 20px 22px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--border);
     align-items: flex-start;
 }
 
 #addClassroomModal .modal-title {
     margin: 0;
-    color: #eeeef5;
-    font-size: 17px;
-    font-weight: 600;
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
     line-height: 1.3;
 }
 
 #addClassroomModal .modal-title i {
-    margin-right: 7px;
-    color: #a99cff;
+    margin-right: 8px;
+    color: var(--accent-ink);
     font-size: 16px;
 }
 
 #addClassroomModal .modal-subtitle {
     margin: 5px 0 0;
-    color: #777583;
-    font-size: 11px;
+    color: var(--text-faint);
+    font-size: 11.5px;
     line-height: 1.5;
 }
 
@@ -460,7 +539,7 @@
     height: 2px;
     top: 8px;
     left: 0;
-    background: #777583;
+    background: var(--text-faint);
     border-radius: 2px;
     transition: background 0.2s ease;
 }
@@ -475,7 +554,7 @@
 
 #addClassroomModal .btn-close:hover::before,
 #addClassroomModal .btn-close:hover::after {
-    background: #eeeef5;
+    background: var(--text);
 }
 
 /* Body */
@@ -497,8 +576,8 @@
 .classroom-form-group label {
     display: block;
     margin-bottom: 6px;
-    color: #aaa7b4;
-    font-size: 11px;
+    color: var(--text-dim);
+    font-size: 11.5px;
     font-weight: 500;
 }
 
@@ -509,13 +588,13 @@
 
     padding: 0 12px;
 
-    background: #111118 !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 8px;
+    background: var(--border-soft) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 9px;
 
-    color: #eeeef5 !important;
-    font-family: inherit;
-    font-size: 12px;
+    color: var(--text) !important;
+    font-family: var(--sans);
+    font-size: 12.5px;
 
     outline: none;
     box-shadow: none !important;
@@ -526,17 +605,17 @@
 }
 
 .classroom-form-group input:hover {
-    border-color: rgba(255, 255, 255, 0.14) !important;
+    border-color: var(--accent-line) !important;
 }
 
 .classroom-form-group input:focus {
-    background: #12121a !important;
-    border-color: #7569dc !important;
-    box-shadow: 0 0 0 3px rgba(117, 105, 220, 0.09) !important;
+    background: var(--surface) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-soft) !important;
 }
 
 .classroom-form-group input::placeholder {
-    color: #555461;
+    color: var(--text-faint);
     opacity: 1;
 }
 
@@ -544,14 +623,14 @@
 
 .classroom-form-group input[type="number"]::-webkit-inner-spin-button,
 .classroom-form-group input[type="number"]::-webkit-outer-spin-button {
-    opacity: 0.4;
+    opacity: 0.5;
 }
 
 /* Footer */
 
 #addClassroomModal .modal-footer {
     padding: 14px 22px 17px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--border);
 
     display: flex;
     justify-content: flex-end;
@@ -564,16 +643,17 @@
 .classroom-cancel-btn {
     height: 36px;
 
-    padding: 0 15px;
+    padding: 0 16px;
 
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
 
-    background: #111118;
-    color: #aaa7b4;
+    background: var(--border-soft);
+    color: var(--text-dim);
 
-    font-family: inherit;
-    font-size: 11px;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
 
     cursor: pointer;
 
@@ -584,9 +664,9 @@
 }
 
 .classroom-cancel-btn:hover {
-    background: #1d1d26;
-    border-color: rgba(255, 255, 255, 0.14);
-    color: #eeeef5;
+    background: var(--border);
+    border-color: var(--border);
+    color: var(--text);
 }
 
 /* Add button */
@@ -594,29 +674,29 @@
 .classroom-save-btn {
     height: 36px;
 
-    padding: 0 16px;
+    padding: 0 17px;
 
     border: 0;
-    border-radius: 8px;
+    border-radius: 999px;
 
-    background: #7569dc;
+    background: var(--accent);
     color: #ffffff;
 
-    font-family: inherit;
-    font-size: 11px;
-    font-weight: 500;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
 
     cursor: pointer;
 
     transition:
-        background 0.2s ease,
+        filter 0.2s ease,
         box-shadow 0.2s ease,
         transform 0.15s ease;
 }
 
 .classroom-save-btn:hover {
-    background: #8275e7;
-    box-shadow: 0 5px 16px rgba(117, 105, 220, 0.20);
+    filter: brightness(1.08);
+    box-shadow: 0 5px 16px rgba(28, 138, 110, 0.22);
 }
 
 .classroom-save-btn:active {
@@ -630,7 +710,7 @@
 /* Modal backdrop */
 
 .modal-backdrop.show {
-    opacity: 0.72;
+    opacity: 0.6;
 }
 
 /* Mobile */

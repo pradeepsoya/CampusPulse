@@ -67,3 +67,5 @@ def sensor_data_api(request):
             {"error": str(e)},
             status=400
         )
+
+

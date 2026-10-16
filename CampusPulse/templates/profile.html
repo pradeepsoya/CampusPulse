@@ -4,16 +4,18 @@
 {% block title %}CampusPulse — My Profile{% endblock %}
 {% block page_title %}My Profile{% endblock %}
 
-{% block content %}
-
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
 
 <div class="content cp-profile-container">
 
     <div class="profile-page-header">
 
         <div>
-            <h3>My Profile</h3>
+            <h1>My profile</h1>
         </div>
 
     </div>
@@ -37,7 +39,7 @@
 
                 <span class="profile-role-badge">
                     <i class="bi bi-shield-check"></i>
-                    Super Admin
+                    Super admin
                 </span>
 
             </div>
@@ -99,7 +101,7 @@
                 </div>
 
                 <div>
-                    <span>Account Status</span>
+                    <span>Account status</span>
                     <strong class="account-active">
                         Active
                     </strong>
@@ -114,7 +116,7 @@
 
             <a href="{% url 'account_settings' %}" class="profile-edit-btn">
                 <i class="bi bi-gear"></i>
-                Account Settings
+                Account settings
             </a>
 
         </div>

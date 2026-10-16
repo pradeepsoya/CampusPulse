@@ -1,14 +1,13 @@
 import bisect
 from datetime import datetime, timedelta
-
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.utils import timezone
-
-from sensors.models import SensorData, Classroom
+from sensors.models import SensorData, Classroom, Sensor
 
 
 # ---- existing views ----
@@ -18,11 +17,20 @@ def home(request):
     classrooms = Classroom.objects.all().order_by('room_number')
 
     room_data = []
+    recent_activity = []
+    critical_count = 0
+    warning_count = 0
+    online_count = 0
+
     for classroom in classrooms:
-        # Latest PIR reading for this classroom, if any
+        sensors = classroom.sensors.all()
+
         latest_occupancy = (
             SensorData.objects
-            .filter(sensor__classroom=classroom, sensor__sensor_type='PIR')
+            .filter(
+                sensor__classroom=classroom,
+                sensor__sensor_type='PIR'
+            )
             .order_by('-timestamp')
             .first()
         )
@@ -32,19 +40,142 @@ def home(request):
         elif latest_occupancy and latest_occupancy.occupancy_status == 'vacant':
             status = 'available'
         else:
-            status = 'unknown'  # no PIR data yet for this room
+            status = 'unknown'
 
         room_data.append({
+            'classroom_id': classroom.classroom_id,
             'room_number': classroom.room_number,
             'location': classroom.location,
             'status': status,
         })
 
+        # Count classrooms with recent sensor records.
+        latest_any = (
+            SensorData.objects
+            .filter(sensor__classroom=classroom)
+            .order_by('-timestamp')
+            .first()
+        )
+
+        if latest_any:
+            online_count += 1
+
+        # Generate alerts from the latest relevant readings.
+        for sensor in sensors:
+            latest = (
+                SensorData.objects
+                .filter(sensor=sensor)
+                .order_by('-timestamp')
+                .first()
+            )
+
+            if not latest:
+                continue
+
+            if (
+                sensor.sensor_type == 'DHT22'
+                and latest.temperature is not None
+                and latest.temperature > TEMP_THRESHOLD
+            ):
+                critical_count += 1
+
+            elif (
+                sensor.sensor_type == 'BH1750'
+                and latest.light_intensity is not None
+                and latest.light_intensity < LUX_THRESHOLD
+            ):
+                warning_count += 1
+
+    # Build recent activity from actual sensor records.
+    recent_records = (
+        SensorData.objects
+        .select_related('sensor', 'sensor__classroom')
+        .order_by('-timestamp')[:5]
+    )
+
+    for record in recent_records:
+        sensor_type = record.sensor.sensor_type
+        room_number = record.sensor.classroom.room_number
+        timestamp = timezone.localtime(record.timestamp)
+
+        activity = {
+            'timestamp': timestamp,
+            'time_ago': _time_ago(timestamp),
+            'room_number': room_number,
+            'icon': 'bi-activity',
+            'color': 'blue',
+            'title': 'Sensor reading received',
+            'description': f'{sensor_type} · {room_number}',
+        }
+
+        if sensor_type == 'PIR':
+            if record.occupancy_status == 'occupied':
+                activity.update({
+                    'title': f'{room_number} became occupied',
+                    'description': 'Motion detected',
+                    'icon': 'bi-people-fill',
+                    'color': 'purple',
+                })
+            elif record.occupancy_status == 'vacant':
+                activity.update({
+                    'title': f'{room_number} became vacant',
+                    'description': 'No motion detected',
+                    'icon': 'bi-people',
+                    'color': 'teal',
+                })
+
+        elif sensor_type == 'DHT22':
+            if record.temperature is not None:
+                activity.update({
+                    'title': 'Temperature reading received',
+                    'description': f'{record.temperature}°C',
+                    'icon': 'bi-thermometer-half',
+                    'color': 'blue',
+                })
+
+        elif sensor_type == 'BH1750':
+            if record.light_intensity is not None:
+                activity.update({
+                    'title': 'Light intensity updated',
+                    'description': f'{record.light_intensity} Lux',
+                    'icon': 'bi-brightness-high-fill',
+                    'color': 'yellow',
+                })
+
+        recent_activity.append(activity)
+
     context = {
         'room_data': room_data,
+        'recent_activity': recent_activity,
+        'critical_count': critical_count,
+        'warning_count': warning_count,
+        'online_count': online_count,
     }
-    return render(request, "dashboard.html", context)
 
+    return render(request, 'dashboard.html', context)
+
+
+def _time_ago(timestamp):
+    seconds = max(
+        0,
+        int((timezone.localtime() - timestamp).total_seconds())
+    )
+
+    if seconds < 60:
+        return 'just now' if seconds < 5 else f'{seconds} sec ago'
+
+    minutes = seconds // 60
+
+    if minutes < 60:
+        return f'{minutes} min ago'
+
+    hours = minutes // 60
+
+    if hours < 24:
+        return f'{hours} hr ago'
+
+    days = hours // 24
+    return f'{days} day ago'
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -199,7 +330,116 @@ LUX_THRESHOLD = 300          # below this lux = insufficient natural light
 TEMP_THRESHOLD = 28.0        # above this °C = fan considered necessary
 GRACE_PERIOD_MINUTES = 5     # appliance assumed to stay ON this long after room goes vacant
 
+@login_required(login_url='login')
+def live_monitoring_api(request):
+    classroom_id = request.GET.get('classroom_id')
 
+    if not classroom_id:
+        return JsonResponse(
+            {'error': 'classroom_id is required'},
+            status=400
+        )
+
+    try:
+        classroom_id = int(classroom_id)
+    except (TypeError, ValueError):
+        return JsonResponse(
+            {'error': 'Invalid classroom_id'},
+            status=400
+        )
+
+    if not Classroom.objects.filter(classroom_id=classroom_id).exists():
+        return JsonResponse(
+            {'error': 'Classroom not found'},
+            status=404
+        )
+
+    def latest_for(sensor_type):
+        return (
+            SensorData.objects
+            .filter(
+                sensor__classroom_id=classroom_id,
+                sensor__sensor_type=sensor_type
+            )
+            .order_by('-timestamp')
+            .first()
+        )
+
+    dht = latest_for('DHT22')
+    pir = latest_for('PIR')
+    bh = latest_for('BH1750')
+
+    # Keep timestamps separate so each sensor's freshness
+    # can be evaluated independently.
+    now = timezone.now()
+    stale_after_seconds = 15
+
+    def sensor_payload(record):
+        if record is None:
+            return {
+                'value': None,
+                'timestamp': None,
+                'status': 'no_data',
+            }
+
+        age_seconds = max(
+            0,
+            (now - record.timestamp).total_seconds()
+        )
+
+        status = (
+            'live'
+            if age_seconds <= stale_after_seconds
+            else 'offline'
+        )
+
+        return {
+            'value': record.timestamp.isoformat(),
+            'timestamp': record.timestamp.isoformat(),
+            'status': status,
+            'age_seconds': round(age_seconds, 1),
+        }
+
+    timestamps = [
+        record.timestamp
+        for record in (dht, pir, bh)
+        if record is not None
+    ]
+
+    latest_timestamp = max(timestamps) if timestamps else None
+
+    sensor_status = {
+        'DHT22': sensor_payload(dht),
+        'PIR': sensor_payload(pir),
+        'BH1750': sensor_payload(bh),
+    }
+
+    any_live = any(
+        item['status'] == 'live'
+        for item in sensor_status.values()
+    )
+
+    return JsonResponse({
+        'classroom_id': classroom_id,
+
+        'temperature': dht.temperature if dht else None,
+        'humidity': dht.humidity if dht else None,
+        'light_intensity': bh.light_intensity if bh else None,
+        'occupancy_status': pir.occupancy_status if pir else None,
+
+        'timestamp': (
+            timezone.localtime(latest_timestamp).isoformat()
+            if latest_timestamp else None
+        ),
+
+        'sensor_status': sensor_status,
+        'system_status': 'online' if any_live else 'offline',
+
+        # These remain unknown until actual device-state data exists.
+        'fan_status': None,
+        'light_status': None,
+    })
+    
 @login_required(login_url='login')
 def analytics(request):
     classrooms = Classroom.objects.all()
@@ -448,9 +688,7 @@ def settings_view(request):
 
     total_classrooms = classrooms.count()
 
-    total_sensors = SensorData.objects.values(
-        'sensor'
-    ).distinct().count()
+    total_sensors = Sensor.objects.count()
 
     return render(request, "settings.html", {
         "classrooms": classrooms,

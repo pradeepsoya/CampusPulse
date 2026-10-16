@@ -25,8 +25,11 @@ SECRET_KEY = 'django-insecure-43$hl*w^qufp*4!orcojpydwz6p^q4r8x1aot9u$ns*@6ps13x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "10.198.63.46",
+]
 
 # Application definition
 
@@ -76,12 +79,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'campuspulse',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3308',   
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': r'D:\CampusPulse_Recovery\campuspulse_recovered.sqlite3',
     }
 }
 

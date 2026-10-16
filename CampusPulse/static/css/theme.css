@@ -1,0 +1,269 @@
+/* ==========================================================================
+   CampusPulse — Theme
+   Design tokens (light + dark) and the global chrome that uses them
+   (navbar, profile dropdown, page background). Loaded on every page via
+   base.html so the toggle changes the whole app, not just one screen.
+   ========================================================================== */
+
+:root {
+    --bg: #FAF8F3;
+    --surface: #FFFFFF;
+    --border: #EBE7DD;
+    --border-soft: #F1EEE5;
+
+    --text: #272620;
+    --text-dim: #6E6A60;
+    --text-faint: #A8A399;
+
+    --accent: #1C8A6E;
+    --accent-ink: #0F5B48;
+    --accent-soft: #E3F1EB;
+    --accent-line: #BFE1D3;
+
+    --warn: #B5752E;
+    --warn-soft: #F7EADA;
+    --warn-line: #E8CBA2;
+
+    --bad: #B5432F;
+    --bad-soft: #F7E3DD;
+    --bad-line: #E8BBA9;
+
+    --info: #3B7BA8;
+    --info-soft: #E7EFF5;
+    --info-line: #BFD6E6;
+
+    --chart-temp: #C96A4D;
+    --chart-humidity: #4A8FA6;
+    --chart-light: #C9A227;
+    --chart-temp-fill: rgba(201, 106, 77, 0.06);
+
+    --act-purple: #8B6F9E;
+    --act-purple-soft: #F1EAF4;
+
+    --tooltip-bg: #272620;
+
+    --shadow: 0 1px 2px rgba(40, 35, 20, 0.04), 0 8px 24px -8px rgba(40, 35, 20, 0.08);
+    --shadow-lift: 0 2px 4px rgba(40, 35, 20, 0.05), 0 16px 32px -12px rgba(40, 35, 20, 0.12);
+
+    --serif: 'Fraunces', serif;
+    --sans: 'Inter', sans-serif;
+
+    color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+    --bg: #1C1B17;
+    --surface: #242320;
+    --border: #35332C;
+    --border-soft: #2B2A25;
+
+    --text: #F2EFE7;
+    --text-dim: #B3AEA2;
+    --text-faint: #7C786D;
+
+    --accent: #2FBF95;
+    --accent-ink: #5FE0B8;
+    --accent-soft: rgba(47, 191, 149, 0.14);
+    --accent-line: rgba(47, 191, 149, 0.32);
+
+    --warn: #E0A04A;
+    --warn-soft: rgba(224, 160, 74, 0.14);
+    --warn-line: rgba(224, 160, 74, 0.32);
+
+    --bad: #E2695C;
+    --bad-soft: rgba(226, 105, 92, 0.14);
+    --bad-line: rgba(226, 105, 92, 0.32);
+
+    --info: #6FB3DE;
+    --info-soft: rgba(111, 179, 222, 0.14);
+    --info-line: rgba(111, 179, 222, 0.32);
+
+    --chart-temp: #E08868;
+    --chart-humidity: #6FB8CE;
+    --chart-light: #E0C250;
+    --chart-temp-fill: rgba(224, 136, 104, 0.08);
+
+    --act-purple: #C6A9D6;
+    --act-purple-soft: rgba(198, 169, 214, 0.14);
+
+    --tooltip-bg: #0F0E0C;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px -8px rgba(0, 0, 0, 0.4);
+    --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.25), 0 16px 32px -12px rgba(0, 0, 0, 0.5);
+
+    color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Global surfaces — reclaims body/page from the old hardcoded dark theme */
+/* ---------------------------------------------------------------------- */
+
+html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+}
+
+body,
+.main-navbar,
+.dashboard-panel,
+.card,
+.profile-dropdown {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+*:focus-visible {
+    outline: 2px solid var(--accent-ink);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Navbar                                                                  */
+/* ---------------------------------------------------------------------- */
+
+.main-navbar {
+    background: rgba(250, 248, 243, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+}
+
+:root[data-theme="dark"] .main-navbar {
+    background: rgba(28, 27, 23, 0.92);
+}
+
+.brand {
+    color: var(--text);
+}
+
+.brand-icon {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent-ink);
+    box-shadow: none;
+}
+
+.brand-name {
+    font-family: var(--serif);
+    font-weight: 500;
+    color: var(--text);
+}
+
+.brand-subtitle {
+    font-family: var(--sans);
+    color: var(--text-faint);
+}
+
+.main-nav a {
+    color: var(--text-dim);
+}
+
+.main-nav a:hover {
+    background: var(--border-soft);
+    color: var(--text);
+}
+
+.main-nav a.active {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+}
+
+.main-nav a.active i {
+    color: var(--accent-ink);
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-icon-btn {
+    color: var(--text-faint);
+    border-color: transparent;
+}
+
+.nav-icon-btn:hover {
+    background: var(--border-soft);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+/* ---- theme toggle icon swap ---- */
+
+.theme-toggle .theme-icon-moon { display: none; }
+.theme-toggle .theme-icon-sun { display: inline; }
+
+:root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: inline; }
+
+/* ---------------------------------------------------------------------- */
+/* Admin profile + dropdown                                                */
+/* ---------------------------------------------------------------------- */
+
+.admin-profile {
+    background: var(--border-soft);
+    border: 1px solid var(--border);
+}
+
+.admin-profile:hover {
+    background: var(--border);
+}
+
+.profile-avatar {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+}
+
+.profile-name {
+    color: var(--text);
+}
+
+.profile-role {
+    color: var(--text-faint);
+}
+
+.profile-arrow {
+    color: var(--text-faint);
+}
+
+.profile-dropdown {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lift);
+    color: var(--text);
+}
+
+.profile-dropdown-avatar {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+}
+
+.profile-dropdown-header strong {
+    color: var(--text);
+}
+
+.profile-dropdown-header span {
+    color: var(--text-faint);
+}
+
+.profile-dropdown-divider {
+    background: var(--border);
+}
+
+.profile-dropdown-item {
+    color: var(--text-dim);
+}
+
+.profile-dropdown-item:hover {
+    background: var(--border-soft);
+    color: var(--text);
+}
+
+.profile-dropdown-item.logout-item {
+    color: var(--bad);
+}
+
+.profile-dropdown-item.logout-item:hover {
+    background: var(--bad-soft);
+}

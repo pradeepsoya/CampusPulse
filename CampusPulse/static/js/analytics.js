@@ -1,12 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const rangeButtons = document.querySelectorAll(".cp-filter-btn");
-  const customInputs = document.getElementById("custom-range-inputs");
-  const classroomSelect = document.getElementById("classroom-select");
-  const applyCustomBtn = document.getElementById("apply-custom");
+  // ==========================================================
+  // ELEMENTS
+  // ==========================================================
 
-  const toggleButtons = document.querySelectorAll(".cp-toggle-btn");
-  const chartPanels = document.querySelectorAll(".cp-panel");
+  const rangeButtons =
+    document.querySelectorAll(".cp-filter-btn");
+
+  const customInputs =
+    document.getElementById("custom-range-inputs");
+
+  const classroomSelect =
+    document.getElementById("classroom-select");
+
+  const applyCustomBtn =
+    document.getElementById("apply-custom");
+
+  const toggleButtons =
+    document.querySelectorAll(".cp-toggle-btn");
+
+  const chartPanels =
+    document.querySelectorAll(".cp-panel");
+
+
+  // ==========================================================
+  // STATE
+  // ==========================================================
 
   let currentRange = "today";
   let currentStart = null;
@@ -18,21 +37,84 @@ document.addEventListener("DOMContentLoaded", () => {
   let usageChart = null;
 
 
-  // --------------------------------------------------
-  // Chart.js global styling
-  // --------------------------------------------------
+  // ==========================================================
+  // THEME-AWARE COLOR HELPERS
+  // Reads the live design tokens from theme.css instead of
+  // hardcoded hex values, so charts match light/dark mode.
+  // ==========================================================
 
-  Chart.defaults.color = "#78788c";
-  Chart.defaults.borderColor = "rgba(255, 255, 255, 0.05)";
-  Chart.defaults.font.family = "'Plus Jakarta Sans', 'Inter', sans-serif";
+  function cssVar(name) {
+
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(name)
+      .trim();
+  }
 
 
-  // --------------------------------------------------
-  // Format timestamp for chart labels
-  // --------------------------------------------------
+  function hexToRgba(hex, alpha) {
+
+    const clean = hex.replace("#", "");
+
+    const bigint = parseInt(
+      clean.length === 3
+        ? clean.split("").map(c => c + c).join("")
+        : clean,
+      16
+    );
+
+    if (Number.isNaN(bigint)) {
+      return `rgba(0, 0, 0, ${alpha})`;
+    }
+
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+
+  function chartPalette() {
+
+    return {
+      text: cssVar("--text-faint"),
+      grid: cssVar("--border-soft"),
+      accent: cssVar("--accent"),
+      accentSoft: cssVar("--accent-soft"),
+      temp: cssVar("--chart-temp"),
+      tempFill: cssVar("--chart-temp-fill"),
+      humidity: cssVar("--chart-humidity"),
+      light: cssVar("--chart-light"),
+      info: cssVar("--info")
+    };
+  }
+
+
+  function applyChartDefaults() {
+
+    if (typeof Chart === "undefined") {
+      return;
+    }
+
+    const palette = chartPalette();
+
+    Chart.defaults.color = palette.text;
+    Chart.defaults.borderColor = palette.grid;
+    Chart.defaults.font.family = "'Inter', sans-serif";
+  }
+
+
+  // ==========================================================
+  // FORMAT TIME
+  // ==========================================================
 
   function formatTime(timestamp) {
+
     const date = new Date(timestamp);
+
+    if (Number.isNaN(date.getTime())) {
+      return "--";
+    }
 
     return date.toLocaleTimeString([], {
       hour: "2-digit",
@@ -42,7 +124,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function formatDateTime(timestamp) {
+
     const date = new Date(timestamp);
+
+    if (Number.isNaN(date.getTime())) {
+      return "--";
+    }
 
     return date.toLocaleString([], {
       day: "2-digit",
@@ -53,266 +140,745 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  // --------------------------------------------------
-  // Classroom / range API URL
-  // --------------------------------------------------
+  // ==========================================================
+  // VALUE HELPERS
+  // ==========================================================
+
+  function numericValue(value) {
+
+    if (
+      value === null ||
+      value === undefined ||
+      value === ""
+    ) {
+      return null;
+    }
+
+    const number = Number(value);
+
+    return Number.isFinite(number)
+      ? number
+      : null;
+  }
+
+
+  function normalizeOccupancy(status) {
+
+    if (
+      status === null ||
+      status === undefined
+    ) {
+      return null;
+    }
+
+    const value =
+      String(status)
+        .trim()
+        .toLowerCase();
+
+    if (
+      value === "occupied" ||
+      value === "present" ||
+      value === "detected"
+    ) {
+      return "occupied";
+    }
+
+    if (
+      value === "vacant" ||
+      value === "unoccupied" ||
+      value === "absent"
+    ) {
+      return "vacant";
+    }
+
+    return null;
+  }
+
+
+  // ==========================================================
+  // BUILD API URL
+  // ==========================================================
 
   function buildUrl() {
 
-    const params = new URLSearchParams({
-      range: currentRange
-    });
+    const params =
+      new URLSearchParams();
+
+    params.set(
+      "range",
+      currentRange
+    );
+
 
     if (
       currentRange === "custom" &&
       currentStart &&
       currentEnd
     ) {
-      params.set("start", currentStart);
-      params.set("end", currentEnd);
+
+      params.set(
+        "start",
+        currentStart
+      );
+
+      params.set(
+        "end",
+        currentEnd
+      );
     }
+
 
     if (
       classroomSelect &&
       classroomSelect.value
     ) {
+
       params.set(
         "classroom_id",
         classroomSelect.value
       );
     }
 
+
     return `/api/analytics-data/?${params.toString()}`;
   }
 
 
-  // --------------------------------------------------
-  // Load analytics
-  // --------------------------------------------------
+  // ==========================================================
+  // LOAD ANALYTICS
+  // ==========================================================
 
   async function loadAnalytics() {
 
     try {
 
-      const res = await fetch(buildUrl());
+      console.log(
+        "Loading analytics:",
+        buildUrl()
+      );
+
+
+      const res = await fetch(
+        buildUrl(),
+        {
+          method: "GET",
+          cache: "no-store",
+          headers: {
+            "Accept": "application/json"
+          }
+        }
+      );
+
 
       if (!res.ok) {
+
         throw new Error(
           `Analytics API returned ${res.status}`
         );
       }
 
-      const data = await res.json();
 
-      console.log("Analytics data:", data);
+      const data =
+        await res.json();
 
-      renderSummary(data.summary);
 
-      renderNoDataBanner(data.has_data);
-
-      renderOccupancyChart(
-        data.occupancy_timeline || []
+      console.log(
+        "Analytics API response:",
+        data
       );
 
-      renderTempHumidityChart(
-        data.temperature_trend || [],
-        data.humidity_trend || []
+
+      applyChartDefaults();
+
+
+      renderSummary(
+        data.summary || {}
       );
 
-      renderLightChart(
-        data.light_trend || []
+
+      renderNoDataBanner(
+        Boolean(data.has_data)
       );
 
-      renderUsageChart(
-        data.usage_bar || {
-          light_on_hours: 0,
-          fan_on_hours: 0
-        }
-      );
 
-      renderWasteTable(
-        data.waste_events || []
-      );
+      // Each chart is isolated so one chart error
+      // cannot stop the remaining charts.
+      try {
 
-      renderInsights(
-        data.insights || {}
-      );
+        renderOccupancyChart(
+          Array.isArray(
+            data.occupancy_timeline
+          )
+            ? data.occupancy_timeline
+            : []
+        );
 
-    } catch (err) {
+      } catch (error) {
+
+        console.error(
+          "Occupancy chart error:",
+          error
+        );
+      }
+
+
+      try {
+
+        renderTempHumidityChart(
+          Array.isArray(
+            data.temperature_trend
+          )
+            ? data.temperature_trend
+            : [],
+
+          Array.isArray(
+            data.humidity_trend
+          )
+            ? data.humidity_trend
+            : []
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Temperature/Humidity chart error:",
+          error
+        );
+      }
+
+
+      try {
+
+        renderLightChart(
+          Array.isArray(
+            data.light_trend
+          )
+            ? data.light_trend
+            : []
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Light chart error:",
+          error
+        );
+      }
+
+
+      try {
+
+        renderUsageChart(
+          data.usage_bar || {}
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Usage chart error:",
+          error
+        );
+      }
+
+
+      try {
+
+        renderWasteTable(
+          Array.isArray(
+            data.waste_events
+          )
+            ? data.waste_events
+            : []
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Waste table error:",
+          error
+        );
+      }
+
+
+      try {
+
+        renderInsights(
+          data.insights || {}
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Insights error:",
+          error
+        );
+      }
+
+    }
+
+    catch (err) {
 
       console.error(
         "Error loading analytics data:",
         err
       );
 
+      renderNoDataBanner(false);
     }
   }
 
 
-  // --------------------------------------------------
-  // No data banner
-  // --------------------------------------------------
+  // ==========================================================
+  // NO DATA BANNER
+  // ==========================================================
 
   function renderNoDataBanner(hasData) {
 
     const banner =
-      document.getElementById("no-data-banner");
+      document.getElementById(
+        "no-data-banner"
+      );
 
-    if (!banner) return;
+    if (!banner) {
+      return;
+    }
 
     banner.style.display =
-      hasData ? "none" : "block";
+      hasData ? "none" : "flex";
   }
 
 
-  // --------------------------------------------------
-  // Summary cards
-  // --------------------------------------------------
+  // ==========================================================
+  // SUMMARY
+  // ==========================================================
 
-  function renderSummary(s) {
+  function renderSummary(summary) {
 
-    document.getElementById("avg-temp").textContent =
-      s.avg_temperature != null
-        ? `${s.avg_temperature} °C`
-        : "--";
+    const avgTemp =
+      document.getElementById(
+        "avg-temp"
+      );
 
-    document.getElementById("avg-humidity").textContent =
-      s.avg_humidity != null
-        ? `${s.avg_humidity} %`
-        : "--";
+    const avgHumidity =
+      document.getElementById(
+        "avg-humidity"
+      );
 
-    document.getElementById("avg-light").textContent =
-      s.avg_light != null
-        ? `${s.avg_light} Lux`
-        : "--";
+    const avgLight =
+      document.getElementById(
+        "avg-light"
+      );
 
-    document.getElementById("total-occupied").textContent =
-      s.total_occupied_fmt || "0h 0m";
+    const totalOccupied =
+      document.getElementById(
+        "total-occupied"
+      );
 
-    document.getElementById("total-unoccupied").textContent =
-      s.total_unoccupied_fmt || "0h 0m";
+    const totalUnoccupied =
+      document.getElementById(
+        "total-unoccupied"
+      );
 
-    document.getElementById("light-on").textContent =
-      s.light_on_fmt || "0h 0m";
+    const lightOn =
+      document.getElementById(
+        "light-on"
+      );
 
-    document.getElementById("fan-on").textContent =
-      s.fan_on_fmt || "0h 0m";
+    const fanOn =
+      document.getElementById(
+        "fan-on"
+      );
+
+
+    if (avgTemp) {
+
+      const value =
+        numericValue(
+          summary.avg_temperature
+        );
+
+      avgTemp.textContent =
+        value !== null
+          ? `${value.toFixed(1)} °C`
+          : "--";
+    }
+
+
+    if (avgHumidity) {
+
+      const value =
+        numericValue(
+          summary.avg_humidity
+        );
+
+      avgHumidity.textContent =
+        value !== null
+          ? `${value.toFixed(1)} %`
+          : "--";
+    }
+
+
+    if (avgLight) {
+
+      const value =
+        numericValue(
+          summary.avg_light
+        );
+
+      avgLight.textContent =
+        value !== null
+          ? `${value.toFixed(1)} Lux`
+          : "--";
+    }
+
+
+    if (totalOccupied) {
+
+      totalOccupied.textContent =
+        summary.total_occupied_fmt ||
+        "0h 0m";
+    }
+
+
+    if (totalUnoccupied) {
+
+      totalUnoccupied.textContent =
+        summary.total_unoccupied_fmt ||
+        "0h 0m";
+    }
+
+
+    if (lightOn) {
+
+      lightOn.textContent =
+        summary.light_on_fmt ||
+        "0h 0m";
+    }
+
+
+    if (fanOn) {
+
+      fanOn.textContent =
+        summary.fan_on_fmt ||
+        "0h 0m";
+    }
   }
 
 
-  // --------------------------------------------------
-  // Occupancy chart
-  // --------------------------------------------------
+  // ==========================================================
+  // OCCUPANCY / MOTION CHART
+  // ==========================================================
 
   function renderOccupancyChart(timeline) {
 
     if (occupancyChart) {
+
       occupancyChart.destroy();
+      occupancyChart = null;
     }
 
+
     const canvas =
-      document.getElementById("occupancy-chart");
+      document.getElementById(
+        "occupancy-chart"
+      );
 
-    if (!canvas) return;
+    if (!canvas) {
+      return;
+    }
 
-    const labels = timeline.map(
-      p => formatTime(p.timestamp)
-    );
 
-    const values = timeline.map(
-      p => p.status === "occupied" ? 1 : 0
-    );
+    if (
+      !Array.isArray(timeline) ||
+      timeline.length === 0
+    ) {
 
-    occupancyChart = new Chart(canvas, {
+      console.warn(
+        "No occupancy data returned."
+      );
 
-      type: "line",
+      return;
+    }
 
-      data: {
-        labels: labels,
 
-        datasets: [{
-          label: "Occupancy",
-          data: values,
+    // --------------------------------------------------------
+    // Normalize occupancy states
+    // --------------------------------------------------------
 
-          stepped: true,
+    const points =
+      timeline
+        .map(point => {
 
-          borderColor: "#8b5cf6",
-          backgroundColor: "rgba(139, 92, 246, 0.15)",
+          const status =
+            normalizeOccupancy(
+              point.status
+            );
 
-          fill: true,
-
-          pointRadius: 2,
-          pointHoverRadius: 5,
-
-          borderWidth: 2
-        }]
-      },
-
-      options: {
-
-        responsive: true,
-        maintainAspectRatio: false,
-
-        scales: {
-
-          x: {
-            ticks: {
-              maxRotation: 0,
-              autoSkip: true,
-              maxTicksLimit: 12
-            }
-          },
-
-          y: {
-
-            min: -0.1,
-            max: 1.1,
-
-            ticks: {
-
-              stepSize: 1,
-
-              callback: value => {
-
-                if (value === 1)
-                  return "Occupied";
-
-                if (value === 0)
-                  return "Vacant";
-
-                return "";
-              }
-            }
+          if (
+            !point.timestamp ||
+            !status
+          ) {
+            return null;
           }
-        },
 
-        plugins: {
+          const date =
+            new Date(point.timestamp);
 
-          legend: {
-            display: false
-          },
-
-          tooltip: {
-
-            callbacks: {
-
-              label: context => {
-
-                return context.raw === 1
-                  ? "Occupied"
-                  : "Vacant";
-              }
-            }
+          if (
+            Number.isNaN(
+              date.getTime()
+            )
+          ) {
+            return null;
           }
-        }
+
+          return {
+            timestamp: point.timestamp,
+            time: date.getTime(),
+            status: status
+          };
+        })
+        .filter(Boolean)
+        .sort(
+          (a, b) =>
+            a.time - b.time
+        );
+
+
+    if (points.length === 0) {
+
+      console.warn(
+        "Occupancy data contains no valid states."
+      );
+
+      return;
+    }
+
+
+    // --------------------------------------------------------
+    // Collapse consecutive identical states
+    // --------------------------------------------------------
+
+    const simplified = [];
+
+
+    points.forEach(point => {
+
+      const previous =
+        simplified[
+          simplified.length - 1
+        ];
+
+
+      if (
+        !previous ||
+        previous.status !== point.status
+      ) {
+
+        simplified.push(point);
       }
+
     });
+
+
+    // --------------------------------------------------------
+    // Labels + values
+    // --------------------------------------------------------
+
+    const labels =
+      simplified.map(
+        point =>
+          formatTime(
+            point.timestamp
+          )
+      );
+
+
+    const values =
+      simplified.map(
+        point =>
+          point.status === "occupied"
+            ? 1
+            : 0
+      );
+
+
+    if (
+      typeof Chart === "undefined"
+    ) {
+
+      console.error(
+        "Chart.js is not loaded."
+      );
+
+      return;
+    }
+
+
+    // --------------------------------------------------------
+    // Create chart
+    // --------------------------------------------------------
+
+    const palette = chartPalette();
+
+    occupancyChart =
+      new Chart(
+        canvas,
+        {
+
+          type: "line",
+
+          data: {
+
+            labels: labels,
+
+            datasets: [{
+
+              label: "Occupancy",
+
+              data: values,
+
+              stepped: true,
+
+              borderColor: palette.accent,
+
+              backgroundColor: palette.accentSoft,
+
+              fill: true,
+
+              pointRadius: 3,
+
+              pointHoverRadius: 6,
+
+              borderWidth: 2.5,
+
+              tension: 0
+
+            }]
+          },
+
+
+          options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+
+            interaction: {
+
+              intersect: false,
+
+              mode: "index"
+            },
+
+
+            scales: {
+
+              x: {
+
+                type: "category",
+
+                ticks: {
+
+                  maxRotation: 0,
+
+                  minRotation: 0,
+
+                  autoSkip: true,
+
+                  maxTicksLimit: 12
+                }
+
+              },
+
+
+              y: {
+
+                min: -0.1,
+
+                max: 1.1,
+
+
+                ticks: {
+
+                  stepSize: 1,
+
+                  callback: value => {
+
+                    if (
+                      Number(value) === 1
+                    ) {
+                      return "Occupied";
+                    }
+
+                    if (
+                      Number(value) === 0
+                    ) {
+                      return "Vacant";
+                    }
+
+                    return "";
+                  }
+
+                }
+
+              }
+
+            },
+
+
+            plugins: {
+
+              legend: {
+                display: false
+              },
+
+
+              tooltip: {
+
+                backgroundColor: cssVar("--tooltip-bg"),
+
+                callbacks: {
+
+                  label: context => {
+
+                    return Number(
+                      context.raw
+                    ) === 1
+                      ? "Occupied"
+                      : "Vacant";
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+
+        }
+      );
+
+
+    setTimeout(() => {
+
+      if (occupancyChart) {
+
+        occupancyChart.resize();
+
+        occupancyChart.update("none");
+      }
+
+    }, 100);
   }
 
 
-  // --------------------------------------------------
-  // Temperature + Humidity chart
-  // --------------------------------------------------
+  // ==========================================================
+  // TEMPERATURE + HUMIDITY
+  // ==========================================================
 
   function renderTempHumidityChart(
     tempPoints,
@@ -320,291 +886,685 @@ document.addEventListener("DOMContentLoaded", () => {
   ) {
 
     if (tempHumidityChart) {
+
       tempHumidityChart.destroy();
+
+      tempHumidityChart = null;
     }
+
 
     const canvas =
       document.getElementById(
         "temp-humidity-chart"
       );
 
-    if (!canvas) return;
+    if (!canvas) {
+      return;
+    }
 
 
-    const tempLabels = tempPoints.map(
-      p => formatTime(p.timestamp)
-    );
+    if (
+      tempPoints.length === 0 &&
+      humidityPoints.length === 0
+    ) {
+      return;
+    }
 
-    const humidityLabels = humidityPoints.map(
-      p => formatTime(p.timestamp)
-    );
+
+    // --------------------------------------------------------
+    // Create common labels
+    // --------------------------------------------------------
+
+    const allPoints = [
+      ...tempPoints,
+      ...humidityPoints
+    ]
+      .filter(
+        point =>
+          point &&
+          point.timestamp
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.timestamp).getTime() -
+          new Date(b.timestamp).getTime()
+      );
 
 
-    tempHumidityChart = new Chart(canvas, {
+    const labelMap = new Map();
 
-      type: "line",
 
-      data: {
+    allPoints.forEach(point => {
 
-        labels: tempLabels,
+      const time =
+        new Date(
+          point.timestamp
+        ).getTime();
 
-        datasets: [
+      if (
+        !Number.isNaN(time) &&
+        !labelMap.has(time)
+      ) {
 
-          {
-            label: "Temperature (°C)",
+        labelMap.set(
+          time,
+          formatTime(
+            point.timestamp
+          )
+        );
+      }
 
-            data: tempPoints.map(
-              p => p.value
-            ),
+    });
 
-            borderColor: "#f43f5e",
-            backgroundColor: "transparent",
 
-            pointRadius: 2,
-            pointHoverRadius: 5,
+    const sortedTimes =
+      Array.from(
+        labelMap.keys()
+      ).sort(
+        (a, b) => a - b
+      );
 
-            borderWidth: 2.5,
 
-            tension: 0.35,
+    const labels =
+      sortedTimes.map(
+        time =>
+          labelMap.get(time)
+      );
 
-            yAxisID: "yTemp"
+
+    // --------------------------------------------------------
+    // Map values to the correct label
+    // --------------------------------------------------------
+
+    const tempMap = new Map();
+
+    tempPoints.forEach(point => {
+
+      const value =
+        numericValue(
+          point.value
+        );
+
+      const time =
+        new Date(
+          point.timestamp
+        ).getTime();
+
+      if (
+        value !== null &&
+        !Number.isNaN(time)
+      ) {
+
+        tempMap.set(
+          time,
+          value
+        );
+      }
+
+    });
+
+
+    const humidityMap = new Map();
+
+    humidityPoints.forEach(point => {
+
+      const value =
+        numericValue(
+          point.value
+        );
+
+      const time =
+        new Date(
+          point.timestamp
+        ).getTime();
+
+      if (
+        value !== null &&
+        !Number.isNaN(time)
+      ) {
+
+        humidityMap.set(
+          time,
+          value
+        );
+      }
+
+    });
+
+
+    const temperatureValues =
+      sortedTimes.map(
+        time =>
+          tempMap.has(time)
+            ? tempMap.get(time)
+            : null
+      );
+
+
+    const humidityValues =
+      sortedTimes.map(
+        time =>
+          humidityMap.has(time)
+            ? humidityMap.get(time)
+            : null
+      );
+
+
+    // --------------------------------------------------------
+    // Create chart
+    // --------------------------------------------------------
+
+    const palette = chartPalette();
+
+    tempHumidityChart =
+      new Chart(
+        canvas,
+        {
+
+          type: "line",
+
+          data: {
+
+            labels: labels,
+
+            datasets: [
+
+              {
+
+                label:
+                  "Temperature (°C)",
+
+                data:
+                  temperatureValues,
+
+                borderColor:
+                  palette.temp,
+
+                backgroundColor:
+                  palette.tempFill,
+
+                pointRadius: 0,
+
+                pointHoverRadius: 5,
+
+                borderWidth: 2.5,
+
+                tension: 0.35,
+
+                spanGaps: true,
+
+                yAxisID: "yTemp"
+
+              },
+
+
+              {
+
+                label:
+                  "Humidity (%)",
+
+                data:
+                  humidityValues,
+
+                borderColor:
+                  palette.humidity,
+
+                backgroundColor:
+                  "transparent",
+
+                pointRadius: 0,
+
+                pointHoverRadius: 5,
+
+                borderWidth: 2.5,
+
+                tension: 0.35,
+
+                spanGaps: true,
+
+                yAxisID: "yHum"
+
+              }
+
+            ]
+
           },
 
-          {
-            label: "Humidity (%)",
 
-            data: humidityPoints.map(
-              p => p.value
-            ),
+          options: {
 
-            borderColor: "#38bdf8",
-            backgroundColor: "transparent",
+            responsive: true,
 
-            pointRadius: 2,
-            pointHoverRadius: 5,
+            maintainAspectRatio: false,
 
-            borderWidth: 2.5,
 
-            tension: 0.35,
+            interaction: {
 
-            yAxisID: "yHum"
-          }
+              intersect: false,
 
-        ]
-      },
-
-      options: {
-
-        responsive: true,
-        maintainAspectRatio: false,
-
-        scales: {
-
-          x: {
-
-            ticks: {
-              maxRotation: 0,
-              autoSkip: true,
-              maxTicksLimit: 12
-            }
-          },
-
-          yTemp: {
-
-            type: "linear",
-
-            position: "left",
-
-            title: {
-              display: true,
-              text: "°C"
-            }
-          },
-
-          yHum: {
-
-            type: "linear",
-
-            position: "right",
-
-            title: {
-              display: true,
-              text: "%"
+              mode: "index"
             },
 
-            grid: {
-              drawOnChartArea: false
+
+            scales: {
+
+              x: {
+
+                type: "category",
+
+                ticks: {
+
+                  maxRotation: 0,
+
+                  autoSkip: true,
+
+                  maxTicksLimit: 12
+                }
+
+              },
+
+
+              yTemp: {
+
+                type: "linear",
+
+                position: "left",
+
+
+                title: {
+
+                  display: true,
+
+                  text: "°C"
+                }
+
+              },
+
+
+              yHum: {
+
+                type: "linear",
+
+                position: "right",
+
+
+                title: {
+
+                  display: true,
+
+                  text: "%"
+                },
+
+
+                grid: {
+
+                  drawOnChartArea: false
+                }
+
+              }
+
+            },
+
+
+            plugins: {
+
+              legend: {
+
+                display: true,
+
+                position: "top"
+              },
+
+              tooltip: {
+
+                backgroundColor: cssVar("--tooltip-bg")
+
+              }
+
             }
+
           }
+
         }
-      }
-    });
+      );
   }
 
 
-  // --------------------------------------------------
-  // Light intensity chart
-  // --------------------------------------------------
+  // ==========================================================
+  // LIGHT INTENSITY
+  // ==========================================================
 
   function renderLightChart(lightPoints) {
 
     if (lightChart) {
+
       lightChart.destroy();
+
+      lightChart = null;
     }
 
+
     const canvas =
-      document.getElementById("light-chart");
+      document.getElementById(
+        "light-chart"
+      );
 
-    if (!canvas) return;
-
-
-    const labels = lightPoints.map(
-      p => formatTime(p.timestamp)
-    );
-
-    const values = lightPoints.map(
-      p => p.value
-    );
+    if (!canvas) {
+      return;
+    }
 
 
-    lightChart = new Chart(canvas, {
+    if (
+      !Array.isArray(lightPoints) ||
+      lightPoints.length === 0
+    ) {
 
-      type: "line",
+      console.warn(
+        "No light data returned."
+      );
 
-      data: {
+      return;
+    }
 
-        labels: labels,
 
-        datasets: [{
+    const validPoints =
+      lightPoints
+        .map(point => {
 
-          label: "Light Intensity (Lux)",
+          const value =
+            numericValue(
+              point.value
+            );
 
-          data: values,
+          if (
+            !point.timestamp ||
+            value === null
+          ) {
+            return null;
+          }
 
-          borderColor: "#a855f7",
-          backgroundColor: "rgba(168, 85, 247, 0.12)",
+          return {
+            timestamp:
+              point.timestamp,
 
-          fill: true,
+            time:
+              new Date(
+                point.timestamp
+              ).getTime(),
 
-          pointRadius: 2,
-          pointHoverRadius: 5,
+            value:
+              value
+          };
 
-          borderWidth: 2.5,
+        })
+        .filter(point =>
+          point !== null &&
+          !Number.isNaN(point.time)
+        )
+        .sort(
+          (a, b) =>
+            a.time - b.time
+        );
 
-          tension: 0.35
-        }]
-      },
 
-      options: {
+    if (
+      validPoints.length === 0
+    ) {
+      return;
+    }
 
-        responsive: true,
-        maintainAspectRatio: false,
 
-        scales: {
+    const labels =
+      validPoints.map(
+        point =>
+          formatTime(
+            point.timestamp
+          )
+      );
 
-          x: {
 
-            ticks: {
-              maxRotation: 0,
-              autoSkip: true,
-              maxTicksLimit: 12
-            }
+    const values =
+      validPoints.map(
+        point =>
+          point.value
+      );
+
+
+    // --------------------------------------------------------
+    // Create chart
+    // --------------------------------------------------------
+
+    const palette = chartPalette();
+
+    lightChart =
+      new Chart(
+        canvas,
+        {
+
+          type: "line",
+
+          data: {
+
+            labels: labels,
+
+            datasets: [{
+
+              label:
+                "Light intensity (Lux)",
+
+              data: values,
+
+              borderColor:
+                palette.light,
+
+              backgroundColor:
+                hexToRgba(palette.light, 0.12),
+
+              fill: true,
+
+              pointRadius: 0,
+
+              pointHoverRadius: 5,
+
+              borderWidth: 2.5,
+
+              tension: 0.35
+
+            }]
           },
 
-          y: {
 
-            title: {
-              display: true,
-              text: "Lux"
+          options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+
+            interaction: {
+
+              intersect: false,
+
+              mode: "index"
             },
 
-            beginAtZero: true
+
+            scales: {
+
+              x: {
+
+                type: "category",
+
+                ticks: {
+
+                  maxRotation: 0,
+
+                  autoSkip: true,
+
+                  maxTicksLimit: 12
+                }
+
+              },
+
+
+              y: {
+
+                beginAtZero: true,
+
+
+                title: {
+
+                  display: true,
+
+                  text: "Lux"
+                }
+
+              }
+
+            },
+
+            plugins: {
+
+              tooltip: {
+
+                backgroundColor: cssVar("--tooltip-bg")
+
+              }
+
+            }
+
           }
+
         }
-      }
-    });
+      );
   }
 
 
-  // --------------------------------------------------
-  // Appliance usage chart
-  // --------------------------------------------------
+  // ==========================================================
+  // APPLIANCE USAGE
+  // ==========================================================
 
   function renderUsageChart(usage) {
 
     if (usageChart) {
+
       usageChart.destroy();
+
+      usageChart = null;
     }
 
+
     const canvas =
-      document.getElementById("usage-chart");
+      document.getElementById(
+        "usage-chart"
+      );
 
-    if (!canvas) return;
+    if (!canvas) {
+      return;
+    }
 
 
-    usageChart = new Chart(canvas, {
+    const lightHours =
+      numericValue(
+        usage.light_on_hours
+      ) ?? 0;
 
-      type: "bar",
 
-      data: {
+    const fanHours =
+      numericValue(
+        usage.fan_on_hours
+      ) ?? 0;
 
-        labels: [
-          "Light",
-          "Fan"
-        ],
 
-        datasets: [{
+    const palette = chartPalette();
 
-          label: "Hours ON",
+    usageChart =
+      new Chart(
+        canvas,
+        {
 
-          data: [
-            usage.light_on_hours || 0,
-            usage.fan_on_hours || 0
-          ],
+          type: "bar",
 
-          backgroundColor: [
-            "#8b5cf6",
-            "#38bdf8"
-          ],
+          data: {
 
-          borderRadius: 8,
+            labels: [
+              "Light",
+              "Fan"
+            ],
 
-          barThickness: 48
-        }]
-      },
+            datasets: [{
 
-      options: {
+              label: "Hours ON",
 
-        responsive: true,
-        maintainAspectRatio: false,
+              data: [
+                lightHours,
+                fanHours
+              ],
 
-        scales: {
+              backgroundColor: [
+                palette.light,
+                palette.info
+              ],
 
-          y: {
+              borderRadius: 8,
 
-            beginAtZero: true,
+              barThickness: 48
 
-            title: {
-              display: true,
-              text: "Hours"
+            }]
+          },
+
+
+          options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+
+            scales: {
+
+              y: {
+
+                beginAtZero: true,
+
+
+                title: {
+
+                  display: true,
+
+                  text: "Hours"
+                }
+
+              }
+
+            },
+
+
+            plugins: {
+
+              legend: {
+
+                display: false
+              },
+
+              tooltip: {
+
+                backgroundColor: cssVar("--tooltip-bg")
+
+              }
+
             }
-          }
-        },
 
-        plugins: {
-
-          legend: {
-            display: false
           }
+
         }
-      }
-    });
+      );
   }
 
 
-  // --------------------------------------------------
-  // Waste table
-  // --------------------------------------------------
+  // ==========================================================
+  // WASTE TABLE
+  // ==========================================================
 
   function renderWasteTable(events) {
 
@@ -613,226 +1573,385 @@ document.addEventListener("DOMContentLoaded", () => {
         "waste-table-body"
       );
 
+
     const emptyMsg =
       document.getElementById(
         "waste-empty"
       );
 
-    if (!body || !emptyMsg) return;
+
+    if (!body || !emptyMsg) {
+      return;
+    }
+
 
     body.innerHTML = "";
 
 
-    if (!events || events.length === 0) {
+    if (
+      !Array.isArray(events) ||
+      events.length === 0
+    ) {
 
-      emptyMsg.style.display = "block";
+      emptyMsg.style.display =
+        "flex";
 
       return;
     }
 
 
-    emptyMsg.style.display = "none";
+    emptyMsg.style.display =
+      "none";
 
 
-    events.forEach(ev => {
+    events.forEach(event => {
 
       const tr =
-        document.createElement("tr");
+        document.createElement(
+          "tr"
+        );
+
 
       tr.innerHTML = `
-        <td>${ev.appliance}</td>
-        <td>${formatDateTime(ev.start)}</td>
-        <td>${formatDateTime(ev.end)}</td>
-        <td>${ev.duration}</td>
+        <td>${event.appliance || "--"}</td>
+        <td>${formatDateTime(event.start)}</td>
+        <td>${formatDateTime(event.end)}</td>
+        <td>${event.duration || "--"}</td>
       `;
 
+
       body.appendChild(tr);
+
     });
+
   }
 
 
-  // --------------------------------------------------
-  // Energy insights
-  // --------------------------------------------------
+  // ==========================================================
+  // ENERGY INSIGHTS
+  // ==========================================================
 
-  function renderInsights(ins) {
+  function renderInsights(insights) {
 
-    document.getElementById(
-      "ins-unoccupied"
-    ).textContent =
-      ins.total_unoccupied_fmt || "0h 0m";
-
-
-    document.getElementById(
-      "ins-light-waste"
-    ).textContent =
-      ins.light_on_while_unoccupied_fmt || "0h 0m";
-
-
-    document.getElementById(
-      "ins-fan-waste"
-    ).textContent =
-      ins.fan_on_while_unoccupied_fmt || "0h 0m";
-
-
-    document.getElementById(
-      "ins-sufficient-light"
-    ).textContent =
-      ins.sufficient_light_pct != null
-        ? `${ins.sufficient_light_pct}%`
-        : "--";
-
-
-    document.getElementById(
-      "ins-light-pct"
-    ).textContent =
-      `${ins.light_usage_pct || 0}%`;
-
-
-    document.getElementById(
-      "ins-fan-pct"
-    ).textContent =
-      `${ins.fan_usage_pct || 0}%`;
-  }
-
-
-  // --------------------------------------------------
-  // Range buttons
-  // --------------------------------------------------
-
-  rangeButtons.forEach(btn => {
-
-    btn.addEventListener("click", () => {
-
-      rangeButtons.forEach(
-        b => b.classList.remove("active")
+    const unoccupied =
+      document.getElementById(
+        "ins-unoccupied"
       );
 
-      btn.classList.add("active");
 
-      currentRange =
-        btn.dataset.range;
+    const lightWaste =
+      document.getElementById(
+        "ins-light-waste"
+      );
 
-      customInputs.style.display =
-        currentRange === "custom"
-          ? "flex"
-          : "none";
 
-      if (currentRange !== "custom") {
-        loadAnalytics();
+    const fanWaste =
+      document.getElementById(
+        "ins-fan-waste"
+      );
+
+
+    const insufficientLight =
+      document.getElementById(
+        "ins-sufficient-light"
+      );
+
+
+    const lightPercentage =
+      document.getElementById(
+        "ins-light-pct"
+      );
+
+
+    const fanPercentage =
+      document.getElementById(
+        "ins-fan-pct"
+      );
+
+
+    if (unoccupied) {
+
+      unoccupied.textContent =
+        insights.total_unoccupied_fmt ||
+        "0h 0m";
+    }
+
+
+    if (lightWaste) {
+
+      lightWaste.textContent =
+        insights.light_on_while_unoccupied_fmt ||
+        "0h 0m";
+    }
+
+
+    if (fanWaste) {
+
+      fanWaste.textContent =
+        insights.fan_on_while_unoccupied_fmt ||
+        "0h 0m";
+    }
+
+
+    if (insufficientLight) {
+
+      insufficientLight.textContent =
+        insights.sufficient_light_pct != null
+          ? `${insights.sufficient_light_pct}%`
+          : "--";
+    }
+
+
+    if (lightPercentage) {
+
+      lightPercentage.textContent =
+        `${insights.light_usage_pct || 0}%`;
+    }
+
+
+    if (fanPercentage) {
+
+      fanPercentage.textContent =
+        `${insights.fan_usage_pct || 0}%`;
+    }
+  }
+
+
+  // ==========================================================
+  // RANGE BUTTONS
+  // ==========================================================
+
+  rangeButtons.forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        rangeButtons.forEach(
+          item =>
+            item.classList.remove(
+              "active"
+            )
+        );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        currentRange =
+          button.dataset.range;
+
+
+        if (customInputs) {
+
+          customInputs.classList.toggle(
+            "visible",
+            currentRange === "custom"
+          );
+        }
+
+
+        if (
+          currentRange !== "custom"
+        ) {
+
+          loadAnalytics();
+        }
+
       }
-    });
+    );
+
   });
 
 
-  // --------------------------------------------------
-  // Custom date range
-  // --------------------------------------------------
+  // ==========================================================
+  // CUSTOM RANGE
+  // ==========================================================
 
   applyCustomBtn?.addEventListener(
     "click",
     () => {
 
-      currentStart =
+      const startInput =
         document.getElementById(
           "start-date"
-        ).value;
+        );
 
-      currentEnd =
+
+      const endInput =
         document.getElementById(
           "end-date"
-        ).value;
+        );
+
+
+      currentStart =
+        startInput?.value || null;
+
+
+      currentEnd =
+        endInput?.value || null;
+
 
       if (
-        currentStart &&
-        currentEnd
+        !currentStart ||
+        !currentEnd
       ) {
-        loadAnalytics();
+
+        alert(
+          "Please select both dates."
+        );
+
+        return;
       }
+
+
+      if (
+        currentStart > currentEnd
+      ) {
+
+        alert(
+          "Start date cannot be after end date."
+        );
+
+        return;
+      }
+
+
+      currentRange = "custom";
+
+      loadAnalytics();
+
     }
   );
 
 
-  // --------------------------------------------------
-  // Classroom filter
-  // --------------------------------------------------
+  // ==========================================================
+  // CLASSROOM FILTER
+  // ==========================================================
 
   classroomSelect?.addEventListener(
     "change",
-    loadAnalytics
+    () => {
+
+      loadAnalytics();
+
+    }
   );
 
 
-  // --------------------------------------------------
-  // Chart toggle panels
-  // --------------------------------------------------
+  // ==========================================================
+  // CHART TOGGLES
+  // ==========================================================
 
-  toggleButtons.forEach(btn => {
+  toggleButtons.forEach(button => {
 
-    btn.addEventListener("click", () => {
+    button.addEventListener(
+      "click",
+      () => {
 
-      toggleButtons.forEach(
-        b => b.classList.remove("active")
-      );
-
-      chartPanels.forEach(
-        p => p.classList.remove("active")
-      );
-
-
-      btn.classList.add("active");
-
-
-      const targetPanel =
-        document.getElementById(
-          btn.dataset.target
+        toggleButtons.forEach(
+          item =>
+            item.classList.remove(
+              "active"
+            )
         );
 
 
-      if (targetPanel) {
+        chartPanels.forEach(
+          panel =>
+            panel.classList.remove(
+              "active"
+            )
+        );
 
-        targetPanel.classList.add("active");
+
+        button.classList.add(
+          "active"
+        );
+
+
+        const targetPanel =
+          document.getElementById(
+            button.dataset.target
+          );
+
+
+        if (!targetPanel) {
+          return;
+        }
+
+
+        targetPanel.classList.add(
+          "active"
+        );
 
 
         setTimeout(() => {
 
           if (
-            btn.dataset.target === "panel-occupancy" &&
+            button.dataset.target ===
+              "panel-occupancy" &&
             occupancyChart
           ) {
+
             occupancyChart.resize();
           }
 
+
           if (
-            btn.dataset.target === "panel-temp-humidity" &&
+            button.dataset.target ===
+              "panel-temp-humidity" &&
             tempHumidityChart
           ) {
+
             tempHumidityChart.resize();
           }
 
+
           if (
-            btn.dataset.target === "panel-light" &&
+            button.dataset.target ===
+              "panel-light" &&
             lightChart
           ) {
+
             lightChart.resize();
           }
 
+
           if (
-            btn.dataset.target === "panel-usage" &&
+            button.dataset.target ===
+              "panel-usage" &&
             usageChart
           ) {
+
             usageChart.resize();
           }
 
         }, 50);
+
       }
-    });
+    );
+
   });
 
 
-  // --------------------------------------------------
-  // Initial load
-  // --------------------------------------------------
+  // ==========================================================
+  // THEME CHANGE — rebuild charts with the new palette
+  // ==========================================================
+
+  window.addEventListener(
+    "campuspulse:theme-change",
+    () => {
+      loadAnalytics();
+    }
+  );
+
+
+  // ==========================================================
+  // INITIAL LOAD
+  // ==========================================================
 
   loadAnalytics();
 
